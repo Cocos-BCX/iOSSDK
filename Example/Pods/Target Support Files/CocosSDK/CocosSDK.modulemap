@@ -1,0 +1,6 @@
+framework module CocosSDK {
+  umbrella header "CocosSDK-umbrella.h"
+
+  export *
+  module * { export * }
+}

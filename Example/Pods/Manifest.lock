@@ -1,0 +1,51 @@
+PODS:
+  - AFNetworking (3.2.1):
+    - AFNetworking/NSURLSession (= 3.2.1)
+    - AFNetworking/Reachability (= 3.2.1)
+    - AFNetworking/Security (= 3.2.1)
+    - AFNetworking/Serialization (= 3.2.1)
+    - AFNetworking/UIKit (= 3.2.1)
+  - AFNetworking/NSURLSession (3.2.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.2.1)
+  - AFNetworking/Security (3.2.1)
+  - AFNetworking/Serialization (3.2.1)
+  - AFNetworking/UIKit (3.2.1):
+    - AFNetworking/NSURLSession
+  - CocosSDK (0.1.0):
+    - AFNetworking
+    - FMDB
+    - Secp256k1_A (= 0.1.2)
+    - SocketRocket
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
+  - Secp256k1_A (0.1.2)
+  - SocketRocket (0.5.1)
+
+DEPENDENCIES:
+  - CocosSDK (from `../`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - AFNetworking
+    - FMDB
+    - Secp256k1_A
+    - SocketRocket
+
+EXTERNAL SOURCES:
+  CocosSDK:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
+  CocosSDK: b85848116d7ef6c9cfa28e423064e6427306e2c6
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  Secp256k1_A: 23a5382968d6f00ac21288f7baab2bc7942261ff
+  SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
+
+PODFILE CHECKSUM: 894788e1de7c949f351e117ccea0e6fcbc4ca4fc
+
+COCOAPODS: 1.7.0
