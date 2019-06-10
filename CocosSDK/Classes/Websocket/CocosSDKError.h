@@ -45,6 +45,7 @@ typedef NS_ENUM(NSInteger,SDKErrorCode) {
     SDKErrorCodeKeyImportError = 150,
     // Account exists
     SDKErrorCodeAccountExists = 159,
+    SDKErrorCodeCreateAccountExists = 400,
     SDKErrorCodeBroadcastInsufficientBalance = 100000,//余额不足
     SDKErrorCodeBroadcastMissingRequiredActiveAuthority = 3030001,//缺少校验权限
     SDKErrorCodeApiNotFound,
