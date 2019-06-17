@@ -21,6 +21,7 @@ NSString * const kCocosLookupAssetSymbols = @"lookup_asset_symbols";
 // API_DATABASE = 0x01;
 NSString * const kCocosGetBlock = @"get_block";
 NSString * const kCocosGetBlockHeader = @"get_block_header";
+NSString * const kCocosGetTransactionBlock = @"get_transaction_in_block_info";
 NSString * const kCocosGetLimitOrders = @"get_limit_orders";
 NSString * const kCocosGetObjects = @"get_objects";
 NSString * const kCocosGetRequiredFees = @"get_required_fees";

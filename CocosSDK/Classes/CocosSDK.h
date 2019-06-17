@@ -513,6 +513,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)Cocos_GetBlockHeaderWithBlockNum:(NSNumber *)blockNum
                                  Success:(SuccessBlock)successBlock
                                    Error:(Error)errorBlock;
+/** Get Transaction In Block Info  */
+- (void)Cocos_GetTransactionBlockWithHash:(NSString *)tansferHash
+                                  Success:(SuccessBlock)successBlock
+                                    Error:(Error)errorBlock;
+/** Get Block */
+- (void)Cocos_GetBlockWithBlockNum:(NSNumber *)blockNum
+                           Success:(SuccessBlock)successBlock
+                             Error:(Error)errorBlock;
 #pragma mark - Expanding Method
 /**
  operation fee

@@ -117,52 +117,13 @@
 //        } Error:^(NSError *error) {
 //            NSLog(@"GetAccountHistoryOpreations %@",error);
 //        }];
-        
-//        [[CocosSDK shareInstance] Cocos_GetAccountHistoryOpreations:@"1.2.926" Operation_type:0 Limit:10 Success:^(id responseObject) {
-//            NSLog(@"GetAccountHistoryOpreations %@",responseObject);
-//        } Error:^(NSError *error) {
-//            NSLog(@"GetAccountHistoryOpreations %@",error);
-//        }];
-        
-//        // 解密备注
-//        NSDictionary *memoDic = @{
-//          @"nonce":@"746916355",
-//      @"message":@"45037a0e594db5e566930f0884db7184aee3eeca42814f8ad8e90f4112b99e9e",
-//          @"from":@"COCOS61qJmvPif4seDKUjEkoL9qUP9cSvwBvgme5djcK8thuUS6o4Mg",
-//          @"to":@"COCOS76g2PGAudrC2JPpoKpVWMgqCoBC1Cp2ZuaF6RwghEHrfxKnrms",
-//                                  };
-//        [[CocosSDK shareInstance] Cocos_DecryptMemo:memoDic Private:nil Success:^(id responseObject) {
-//            NSLog(@"DecryptMemo %@",responseObject);
-//        } Error:^(NSError *error) {
-//            NSLog(@"DecryptMemo %@",error);
-//        }];
-        // 查询账户信息
-//        [[CocosSDK shareInstance] Cocos_GetAccount:@"testetsteteteteteetet" Success:^(id responseObject) {
-//            NSLog(@"Success:%@",responseObject);
-//        } Error:^(NSError *error) {
-//            NSLog(@"Error:%@",error);
-//        }];
-        
-//        // 通过ID 查询资产
-//        [[CocosSDK shareInstance] Cocos_GetAsset:@"1.3.1" Success:^(id responseObject) {
-//            NSLog(@"通过ID Success:%@",responseObject);
-//        } Error:^(NSError *error) {
-//            NSLog(@"Error:%@",error);
-//        }];
-//
-//        // 通过名称 查询资产
-//        [[CocosSDK shareInstance] Cocos_GetAsset:@"DNW" Success:^(id responseObject) {
-//            NSLog(@"通过名称Success:%@",responseObject);
-//        } Error:^(NSError *error) {
-//            NSLog(@"Error:%@",error);
-//        }];
-        
-        // 查询币种信息
-//        [[CocosSDK shareInstance] Cocos_GetAssets:@[@"1.3.3",@"1.3.5",@"1.3.6"] Success:^(id responseObject) {
-//            NSLog(@"Success:%@",responseObject);
-//        } Error:^(NSError *error) {
-//            NSLog(@"Error:%@",error);
-//        }];
+
+        [[CocosSDK shareInstance] Cocos_CallContract:@"contract.dicegame" ContractMethodParam:@[@"52",@"50"] ContractMethod:@"bet" CallerAccount:@"gnkhandsome1" feePayingAsset:@"1.3.0" Password:@"1111qqqq" Success:^(id responseObject) {
+            NSLog(@"Cocos_CallContract \n%@",responseObject);
+            
+        } Error:^(NSError *error) {
+            NSLog(@"Cocos_CallContract erroe  \n%@",error);
+        }];
     });
 
 }
@@ -345,7 +306,7 @@
 // 转账
 - (IBAction)transferClick:(id)sender {
     
-    [[CocosSDK shareInstance] Cocos_TransferFromAccount:@"test1" ToAccount:@"syling" Password:@"12345678" TransferAsset:@"COCOS" AssetAmount:@"10" FeePayingAsset:@"COCOS" Memo:@"" Success:^(id responseObject) {
+    [[CocosSDK shareInstance] Cocos_TransferFromAccount:@"syling" ToAccount:@"gnkhandsome1" Password:@"1111aaaa" TransferAsset:@"COCOS" AssetAmount:@"10" FeePayingAsset:@"COCOS" Memo:@"" Success:^(id responseObject) {
         NSLog(@"transferClick success :%@",responseObject);
     } Error:^(NSError *error) {
         NSLog(@"transferClick error :%@",error);

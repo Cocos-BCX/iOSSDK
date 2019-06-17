@@ -23,6 +23,7 @@ UIKIT_EXTERN NSString * const kCocosLookupAssetSymbols;
 // API_DATABASE
 UIKIT_EXTERN NSString * const kCocosGetBlock;//!< 检索完整的已签名块。-> 引用的块，如果未找到匹配的块，则返回值 null
 UIKIT_EXTERN NSString * const kCocosGetBlockHeader;//!< 检索块头。 -> 引用块的标头，如果未找到匹配块，则返回值 null
+UIKIT_EXTERN NSString * const kCocosGetTransactionBlock;//!<  使用该接口传入hash获取该交易的区块信息
 UIKIT_EXTERN NSString * const kCocosGetLimitOrders;
 UIKIT_EXTERN NSString * const kCocosGetObjects;
 UIKIT_EXTERN NSString * const kCocosGetRequiredFees;

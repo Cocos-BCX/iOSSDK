@@ -791,8 +791,47 @@
     
 }
 
+/** Get Transaction In Block Info  */
+- (void)Cocos_GetTransactionBlockWithHash:(NSString *)tansferHash
+                                  Success:(SuccessBlock)successBlock
+                                    Error:(Error)errorBlock
+{
+    UploadParams *uploadParams = [[UploadParams alloc] init];
+    
+    uploadParams.methodName = kCocosGetTransactionBlock;
+    
+    uploadParams.totalParams = @[tansferHash];
+    
+    CallBackModel *callBackModel = [[CallBackModel alloc] init];
+    
+    callBackModel.successResult = successBlock;
+    
+    callBackModel.errorResult = errorBlock;
+    
+    [self sendWithChainApi:(WebsocketBlockChainApiDataBase) method:(WebsocketBlockChainMethodApiCall) params:uploadParams callBack:callBackModel];
+}
 
-#warning TODO 合约相关
+/** Get Block */
+- (void)Cocos_GetBlockWithBlockNum:(NSNumber *)blockNum
+                           Success:(SuccessBlock)successBlock
+                             Error:(Error)errorBlock
+{
+    UploadParams *uploadParams = [[UploadParams alloc] init];
+    
+    uploadParams.methodName = kCocosGetBlock;
+    
+    uploadParams.totalParams = @[blockNum];
+    
+    CallBackModel *callBackModel = [[CallBackModel alloc] init];
+    
+    callBackModel.successResult = successBlock;
+    
+    callBackModel.errorResult = errorBlock;
+    
+    [self sendWithChainApi:(WebsocketBlockChainApiDataBase) method:(WebsocketBlockChainMethodApiCall) params:uploadParams callBack:callBackModel];
+    
+}
+
 // Get Contract Info
 - (void)Cocos_GetContract:(NSString *)contractIdOrName
                   Success:(SuccessBlock)successBlock
@@ -946,7 +985,20 @@
                         SignedTransaction *signedTran = [[SignedTransaction alloc] init];
                         signedTran.operations = @[content];
                         // 8. Call contract
-                        [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
+                        [self signedTransaction:signedTran activePrivate:private Success:^(id transactionhash) {
+                            // 9. Get Transfer Block with hash
+                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                [self Cocos_GetTransactionBlockWithHash:transactionhash Success:^(id blockResponse) {
+                                    // 10. Get Block with Block Num
+                                    [self Cocos_GetBlockWithBlockNum:blockResponse[@"block_num"] Success:^(id responseObject) {
+                                        [self CallContractSuccessResponseWithTrxHash:transactionhash blockNum:blockResponse[@"block_num"] resultData:responseObject succeed:^(NSMutableDictionary *callContractRes) {
+                                            
+                                            !successBlock?:successBlock(callContractRes);
+                                        }];
+                                    } Error:errorBlock];
+                                } Error:errorBlock];
+                            });
+                        } Error:errorBlock];
                     } Error:errorBlock];
                 }else if (keyDic[@"owner_key"]){
                     NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
@@ -958,9 +1010,166 @@
             } Error:errorBlock];
         } Error:errorBlock];
     } Error:errorBlock];
-    
 }
 
+/** 成功调用合约返回值 */
+- (void)CallContractSuccessResponseWithTrxHash:(NSString *)trxhash
+                                      blockNum:(NSNumber *)blockNum
+                                    resultData:(NSDictionary *)resultData
+                                       succeed:(void (^)(NSMutableDictionary *callContractRes))block
+{
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        // 遍历找到此交易的数组
+        NSArray *transactionsArray = resultData[@"transactions"];
+        
+        // 查到有用的数组
+        NSArray *resultArray = [NSArray array];
+        for (NSArray *transferArray in transactionsArray) {
+            if ([[transferArray firstObject] isEqualToString:trxhash]) {
+                resultArray = transferArray;
+                break;
+            }
+        }
+        NSDictionary *resultDic = [resultArray lastObject];
+        NSArray *operationArray = resultDic[@"operation_results"];
+        NSDictionary *operationDic = [[operationArray lastObject] lastObject];
+        // 拼接dataDic
+        NSMutableDictionary *dataDic = [NSMutableDictionary dictionary];
+        dataDic[@"contract_id"] = operationDic[@"contract_id"];
+        dataDic[@"real_running_time"] = operationDic[@"real_running_time"];
+        dataDic[@"existed_pv"] = operationDic[@"existed_pv"];
+        dataDic[@"process_value"] = operationDic[@"process_value"];
+        dataDic[@"additional_cost"]= operationDic[@"additional_cost"];
+        
+        NSArray *affectedsArray = operationDic[@"contract_affecteds"];
+        NSMutableArray *resAffecteds = [NSMutableArray array];
+        
+        for (NSArray *subAffecteds in affectedsArray) {
+            
+            dispatch_semaphore_t disp = dispatch_semaphore_create(0);
+            //1 .网络获取  返回数据加入缓存 存入数据库(假如 是转接的会话，必须需要全量获取，防止出现断层)
+            NSMutableDictionary *affectedDic = [NSMutableDictionary dictionary];
+            affectedDic[@"block_num"] = blockNum;
+            NSDictionary *affected_dic = [subAffecteds lastObject];
+            affectedDic[@"raw_data"] = affected_dic;
+            NSString *account = affected_dic[@"affected_account"];
+            
+            if ([subAffecteds.firstObject intValue] == 0) {
+                affectedDic[@"type"] = @"contract_affecteds_asset";
+                affectedDic[@"type_name"] = @"资产";
+                NSDictionary *assetDic = affected_dic[@"affected_asset"];
+                [self Cocos_GetAccount:account Success:^(id accountRes) {
+                    NSString *accountName = accountRes[@"name"];
+                    [self Cocos_GetAsset:assetDic[@"asset_id"] Success:^(id affectedRes) {
+                        NSNumber *amount = assetDic[@"amount"];
+                        
+                        long tempAmount = 0;
+                        if ([amount intValue]<0) {
+                            tempAmount = - [amount longValue];
+                        }else{
+                            tempAmount = [amount longValue];
+                        }
+                        ChainAssetObject *affectedModel = [ChainAssetObject generateFromObject:affectedRes];
+                        
+                        ChainAssetAmountObject *chainAssetAmount = [[ChainAssetAmountObject alloc] initFromAssetId:affectedModel.identifier amount:tempAmount];
+                        NSString *assetsAmount = [affectedModel getRealAmountFromAssetAmount:chainAssetAmount];
+                        
+                        NSString *ass_amount = [NSString stringWithFormat:@"%@%@ %@",([amount intValue]<0)?@"-":@"+",assetsAmount,affectedModel.symbol];
+                        affectedDic[@"result"] = @{
+                                                   @"affected_account":accountName,
+                                                   @"aseet_amount":ass_amount
+                                                   };
+                        affectedDic[@"result_text"] = [NSString stringWithFormat:@"%@ %@",accountName,ass_amount];
+                        // 1 .发送信号 去数据库获取
+                        dispatch_semaphore_signal(disp);
+                        
+                    } Error:^(NSError *error) {
+                        dispatch_semaphore_signal(disp);
+                    }];
+                } Error:^(NSError *error) {
+                    dispatch_semaphore_signal(disp);
+                }];
+            }else if ([subAffecteds.firstObject intValue] == 1) {
+                
+                [self Cocos_GetAccount:account Success:^(id accountRes) {
+                    NSString *accountName = accountRes[@"name"];
+                    NSString *affected_item = affected_dic[@"affected_item"];
+                    affectedDic[@"result"] = @{
+                                               @"affected_account":accountName,
+                                               @"affected_item":affected_item
+                                               };
+                    if ([affected_dic[@"action"] integerValue] == 0) {
+                        affectedDic[@"type"] = @"contract_affecteds_nh_transfer_from";
+                        affectedDic[@"type_name"] = @"NH资产转出";
+                        
+                        affectedDic[@"result_text"] = [NSString stringWithFormat:@"%@ 的NH资产 %@ 转出",accountName,affected_item];
+                    }else if ([affected_dic[@"action"] integerValue] == 1) {
+                        affectedDic[@"type"] = @"contract_affecteds_nh_transfer_to";
+                        affectedDic[@"type_name"] = @"NH资产转入";
+                        affectedDic[@"result_text"] = [NSString stringWithFormat:@"NH资产 %@ 转入 %@ ",affected_item,accountName];
+                    }else if ([affected_dic[@"action"] integerValue] == 2) {
+                        affectedDic[@"type"] = @"contract_affecteds_nh_modifined";
+                        affectedDic[@"type_name"] = @"NH资产数据修改";
+                        
+                        NSArray *modified = affected_dic[@"modified"];
+                        NSDictionary *modifiDic = @{modified.firstObject:modified.lastObject};
+                        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:modifiDic options:0 error:0];
+                        NSString *dataStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                        
+                        affectedDic[@"result"] = @{
+                                                   @"affected_account":accountName,
+                                                   @"affected_item":affected_item,
+                                                   @"modified":dataStr
+                                                   };
+                        affectedDic[@"result_text"] = [NSString stringWithFormat:@"%@ 的NH资产 4.2.1151 修改数据 %@",accountName,dataStr];
+                    }
+                    dispatch_semaphore_signal(disp);
+                } Error:^(NSError *error) {
+                    dispatch_semaphore_signal(disp);
+                }];
+                
+            }else if ([subAffecteds.firstObject intValue] == 2) {
+                dispatch_semaphore_signal(disp);
+            }else if ([subAffecteds.firstObject intValue] == 3) {
+                affectedDic[@"type"] = @"contract_affecteds_log";
+                affectedDic[@"type_name"] = @"日志";
+                [self Cocos_GetAccount:account Success:^(id accountRes) {
+                    NSString *accountName = accountRes[@"name"];
+                    NSString *message = affected_dic[@"message"];
+                    affectedDic[@"result"] = @{
+                                               @"affected_account":accountName,
+                                               @"message":message
+                                               };
+                    affectedDic[@"result_text"] = [NSString stringWithFormat:@"%@ %@",accountName,message];
+                    // 1 .发送信号 去数据库获取
+                    dispatch_semaphore_signal(disp);
+                } Error:^(NSError *error) {
+                    dispatch_semaphore_signal(disp);
+                }];
+            }else{
+                dispatch_semaphore_signal(disp);
+            }
+            
+            // 2. 等待信号
+            dispatch_semaphore_wait(disp, DISPATCH_TIME_FOREVER);
+            [resAffecteds addObject:affectedDic];
+        }
+        dataDic[@"contract_affecteds"] = resAffecteds;
+        
+        NSMutableDictionary *response = [NSMutableDictionary dictionary];
+        response[@"code"] = @1;
+        response[@"trx_data"] = @{
+                                  @"trx_id":trxhash,
+                                  @"block_num":blockNum
+                                  };
+        response[@"data"] = @[dataDic];
+        
+        // 主线程回调
+        dispatch_async(dispatch_get_main_queue(), ^{
+            !block?:block(response);
+        });
+    });
+}
 // Get NH Asset's details
 - (void)Cocos_LookupNHAsset:(NSArray *)assetidOrhashArray
                     Success:(SuccessBlock)successBlock
