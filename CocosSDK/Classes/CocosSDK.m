@@ -34,7 +34,7 @@
 /** Get SDK's version */
 - (NSString *)Cocos_SdkCurentVersion
 {
-    return @"0.1.0";
+    return @"1.0.1";
 }
 
 /** Open debug log */
@@ -1283,7 +1283,7 @@
         operation.nh_asset = [ChainObjectId createFromString:NHAssetID];
         operation.requiredAuthority = fromModel.active.publicKeys;
         // 3. Inquiry fee
-        [self Cocos_OperationFees:operation OperationType:52 FeePayingAsset:feePayingAssetID Success:successBlock Error:errorBlock];
+        [self Cocos_OperationFees:operation OperationType:51 FeePayingAsset:feePayingAssetID Success:successBlock Error:errorBlock];
     } Error:errorBlock];
 }
 
@@ -1311,7 +1311,7 @@
                 operation.nh_asset = [ChainObjectId createFromString:NHAssetID];
                 operation.requiredAuthority = fromModel.active.publicKeys;
                 // 3. Inquiry fee
-                [self Cocos_OperationFees:operation OperationType:52 FeePayingAsset:feePayingAssetID Success:^(NSArray * feeObject) {
+                [self Cocos_OperationFees:operation OperationType:51 FeePayingAsset:feePayingAssetID Success:^(NSArray * feeObject) {
                     // 4. Stitching fee
                     NSDictionary *feeDic = feeObject.firstObject;
                     operation.fee = [ChainAssetAmountObject generateFromObject:feeDic];

@@ -118,14 +118,19 @@
 //            NSLog(@"GetAccountHistoryOpreations %@",error);
 //        }];
 
-        [[CocosSDK shareInstance] Cocos_CallContract:@"contract.dicegame" ContractMethodParam:@[@"52",@"50"] ContractMethod:@"bet" CallerAccount:@"gnkhandsome1" feePayingAsset:@"1.3.0" Password:@"1111qqqq" Success:^(id responseObject) {
-            NSLog(@"Cocos_CallContract \n%@",responseObject);
-            
+//        [[CocosSDK shareInstance] Cocos_CallContract:@"contract.dicegame" ContractMethodParam:@[] ContractMethod:@"bet" CallerAccount:@"gnkhandsome1" feePayingAsset:@"1.3.0" Password:@"1111qqqq" Success:^(id responseObject) {
+//            NSLog(@"Cocos_CallContract \n%@",responseObject);
+//
+//        } Error:^(NSError *error) {
+//            NSLog(@"Cocos_CallContract erroe  \n%@",error);
+//        }];
+        
+        [[CocosSDK shareInstance] Cocos_TransferNHAsset:@"syling" ToAccount:@"gnkhandsome1" NHAssetID:@"4.2.56" Password:@"1111aaaa" FeePayingAsset:@"1.3.0" Success:^(id responseObject) {
+            NSLog(@"Cocos_TransferNHAsset \n%@",responseObject);
         } Error:^(NSError *error) {
-            NSLog(@"Cocos_CallContract erroe  \n%@",error);
+            NSLog(@"Cocos_TransferNHAsset error  \n%@",error);
         }];
     });
-
 }
 
 #pragma mark - 钱包模式
