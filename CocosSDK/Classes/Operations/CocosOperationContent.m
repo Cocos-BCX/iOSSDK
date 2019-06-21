@@ -17,7 +17,7 @@ typedef NS_ENUM(NSInteger,CocosOperationType) {
     CocosOperationTypeTransfer = 0,
     CocosOperationTypeCallContract = 44,
     CocosOperationTypeTransferNHAsset = 51,
-    CocosOperationTypeBuyNHAsset = 55,
+    CocosOperationTypeBuyNHAsset = 54,
     CocosOperationTypeLimitOrderCreate,
 };
 

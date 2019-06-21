@@ -1365,7 +1365,7 @@
                     operation.price_asset_id = priceModel.identifier;
                     operation.price_asset_symbol = priceModel.symbol;
                     // 6. Inquiry fee
-                    [self Cocos_OperationFees:operation OperationType:55 FeePayingAsset:[feeAssetModel.identifier generateToTransferObject] Success:successBlock Error:errorBlock];
+                    [self Cocos_OperationFees:operation OperationType:54 FeePayingAsset:[feeAssetModel.identifier generateToTransferObject] Success:successBlock Error:errorBlock];
                 } Error:errorBlock];
             } Error:errorBlock];
         } Error:errorBlock];
@@ -1412,7 +1412,7 @@
                             operation.price_asset_id = priceModel.identifier;
                             operation.price_asset_symbol = priceModel.symbol;
                             // 6. Inquiry fee
-                            [self Cocos_OperationFees:operation OperationType:55 FeePayingAsset:[feeAssetModel.identifier generateToTransferObject] Success:^(NSArray *feeObject) {
+                            [self Cocos_OperationFees:operation OperationType:54 FeePayingAsset:[feeAssetModel.identifier generateToTransferObject] Success:^(NSArray *feeObject) {
                                 // 7. Stitching fee
                                 NSDictionary *feeDic = feeObject.firstObject;
                                 operation.fee = [ChainAssetAmountObject generateFromObject:feeDic];
