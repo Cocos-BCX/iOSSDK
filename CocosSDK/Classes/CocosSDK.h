@@ -224,6 +224,27 @@ NS_ASSUME_NONNULL_BEGIN
          Password:(NSString *)password
           Success:(SuccessBlock)successBlock
             Error:(Error)errorBlock;
+/**
+ Upgrade Membership Fee
+
+ @param account account
+ @param feePayingAsset feePayingAsset
+ */
+- (void)Cocos_UpgradeMemberFeeAccount:(NSString *)account
+                       FeePayingAsset:(NSString *)feePayingAsset
+                              Success:(SuccessBlock)successBlock
+                                Error:(Error)errorBlock;
+/**
+ Upgrade Membership
+ 
+ @param account account
+ @param feePayingAsset feePayingAsset
+ */
+- (void)Cocos_UpgradeMemberAccount:(NSString *)account
+                          password:(NSString *)password
+                    FeePayingAsset:(NSString *)feePayingAsset
+                           Success:(SuccessBlock)successBlock
+                             Error:(Error)errorBlock;
 
 #pragma mark - Asset query operation
 /**
@@ -504,7 +525,84 @@ NS_ASSUME_NONNULL_BEGIN
                 FeePayingAsset:(NSString *)feePayingAssetID
                   Success:(SuccessBlock)successBlock
                     Error:(Error)errorBlock;
+/**
+ Delete NH assets Fee
+ 
+ @param account          account
+ @param feePayingAsset   feePayingAssetID
+ @param nhAssetID        nhAssetID
+ */
+- (void)Cocos_DeleteNHAssetFeeAccount:(NSString *)account
+                       FeePayingAsset:(NSString *)feePayingAsset
+                            nhAssetID:(NSString *)nhAssetID
+                        Success:(SuccessBlock)successBlock
+                          Error:(Error)errorBlock;
+/**
+ Delete NH assets
 
+ @param account         account
+ @param password        password
+ @param feePayingAsset  feePayingAsset
+ @param nhAssetID       nhAssetID
+ */
+- (void)Cocos_DeleteNHAssetAccount:(NSString *)account
+                          Password:(NSString *)password
+                    FeePayingAsset:(NSString *)feePayingAsset
+                         nhAssetID:(NSString *)nhAssetID
+                           Success:(SuccessBlock)successBlock
+                             Error:(Error)errorBlock;
+/**
+ Cancel Sell NH assets Fee
+ 
+ @param account          account
+ @param feePayingAsset   feePayingAssetID
+ @param orderId          orderId
+ */
+- (void)Cocos_CancelNHAssetFeeAccount:(NSString *)account
+                       FeePayingAsset:(NSString *)feePayingAsset
+                              OrderId:(NSString *)orderId
+                              Success:(SuccessBlock)successBlock
+                                Error:(Error)errorBlock;
+/**
+ Cancel Sell NH assets
+ 
+ @param account         account
+ @param password        password
+ @param feePayingAsset  feePayingAsset
+ @param orderId         orderId
+ */
+- (void)Cocos_CancelNHAssetAccount:(NSString *)account
+                          Password:(NSString *)password
+                    FeePayingAsset:(NSString *)feePayingAsset
+                         OrderId:(NSString *)orderId
+                           Success:(SuccessBlock)successBlock
+                             Error:(Error)errorBlock;
+/**
+ Sell NH assets Fee
+ 
+ @param account          account
+ @param feePayingAsset   feePayingAssetID
+ @param orderId          orderId
+ */
+- (void)Cocos_SellNHAssetFeeAccount:(NSString *)account
+                       FeePayingAsset:(NSString *)feePayingAsset
+                              OrderId:(NSString *)orderId
+                              Success:(SuccessBlock)successBlock
+                                Error:(Error)errorBlock;
+/**
+ Sell NH assets
+ 
+ @param account         account
+ @param password        password
+ @param feePayingAsset  feePayingAsset
+ @param orderId         orderId
+ */
+- (void)Cocos_SellNHAssetAccount:(NSString *)account
+                          Password:(NSString *)password
+                    FeePayingAsset:(NSString *)feePayingAsset
+                           OrderId:(NSString *)orderId
+                           Success:(SuccessBlock)successBlock
+                             Error:(Error)errorBlock;
 
 /** Get global variable parameter(latest blocks news etc.) */
 - (void)Cocos_GetDynamicGlobalPropertiesWithSuccess:(SuccessBlock)successBlock Error:(Error)errorBlock;

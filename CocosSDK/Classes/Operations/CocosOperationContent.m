@@ -10,13 +10,21 @@
 #import "CocosCallContractOperation.h"
 #import "CocosTransferNHOperation.h"
 #import "CocosBuyNHOrderOperation.h"
+#import "CocosUpgradeMemberOperation.h"
+#import "CocosDeleteNHOperation.h"
+#import "CocosSellNHAssetCancelOperation.h"
+#import "CocosSellNHAssetOperation.h"
 #import "CocosPackData.h"
 
 typedef NS_ENUM(NSInteger,CocosOperationType) {
     CocosOperationTypeNotFind = -1,
     CocosOperationTypeTransfer = 0,
+    CocosOperationTypeUpgradeMember = 7,
     CocosOperationTypeCallContract = 44,
+    CocosOperationTypeDeleteNHAsset = 50,
     CocosOperationTypeTransferNHAsset = 51,
+    CocosOperationTypeSellNHAsset = 52,
+    CocosOperationTypeSellNHAssetCancel = 53,
     CocosOperationTypeBuyNHAsset = 54,
     CocosOperationTypeLimitOrderCreate,
 };
@@ -32,6 +40,10 @@ typedef NS_ENUM(NSInteger,CocosOperationType) {
                 NSStringFromClass([CocosCallContractOperation class]):@(CocosOperationTypeCallContract),
                 NSStringFromClass([CocosTransferNHOperation class]):@(CocosOperationTypeTransferNHAsset),
                 NSStringFromClass([CocosBuyNHOrderOperation class]):@(CocosOperationTypeBuyNHAsset),
+                NSStringFromClass([CocosUpgradeMemberOperation class]):@(CocosOperationTypeUpgradeMember),
+                NSStringFromClass([CocosDeleteNHOperation class]):@(CocosOperationTypeDeleteNHAsset),
+                NSStringFromClass([CocosSellNHAssetCancelOperation class]):@(CocosOperationTypeSellNHAssetCancel),
+                NSStringFromClass([CocosSellNHAssetOperation class]):@(CocosOperationTypeSellNHAsset),
                 };
     }
     return dic;

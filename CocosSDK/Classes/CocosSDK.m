@@ -75,7 +75,7 @@
 {
     // 1.1 Validation parameters
     if (IsStrEmpty(accountName) || IsStrEmpty(password)) {
-        NSError *error = [NSError errorWithDomain:@"Parameter 'accountName' or 'password'  is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
+        NSError *error = [NSError errorWithDomain:@"Parameter ‘accountName‘ or ‘password‘  is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
         !errorBlock?:errorBlock(error);
         return;
     }
@@ -137,7 +137,7 @@
 {
     // 1.Validation parameters
     if (IsStrEmpty(private_key) || IsStrEmpty(tempPassword)) {
-        NSError *error = [NSError errorWithDomain:@"Parameter 'private' or 'tempPassword' is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
+        NSError *error = [NSError errorWithDomain:@"Parameter ‘private‘ or ‘tempPassword‘ is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
         !errorBlock?:errorBlock(error);
         return;
     }
@@ -181,7 +181,7 @@
 {
     // 1. Validation parameters
     if (IsStrEmpty(accountName)) {
-        NSError *error = [NSError errorWithDomain:@"Parameter 'accountName' is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
+        NSError *error = [NSError errorWithDomain:@"Parameter ‘accountName‘ is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
         !errorBlock?:errorBlock(error);
         return;
     }
@@ -206,7 +206,7 @@
 {
     // 1. Validation parameters
     if (IsStrEmpty(accountName)) {
-        NSError *error = [NSError errorWithDomain:@"Parameter 'accountName' is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
+        NSError *error = [NSError errorWithDomain:@"Parameter ‘accountName‘ is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
         !errorBlock?:errorBlock(error);
         return;
     }
@@ -280,7 +280,7 @@
 {
     // 1. Validation parameters
     if (IsStrEmpty(accountName) || IsStrEmpty(password)) {
-        NSError *error = [NSError errorWithDomain:@"Parameter 'accountName' or 'password' is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
+        NSError *error = [NSError errorWithDomain:@"Parameter ‘accountName‘ or ‘password‘ is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
         !errorBlock?:errorBlock(error);
         return;
     }
@@ -317,7 +317,7 @@
 {
     // 1. Validation parameters
     if (IsStrEmpty(accountName) || IsStrEmpty(password)) {
-        NSError *error = [NSError errorWithDomain:@"Parameter 'accountName' is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
+        NSError *error = [NSError errorWithDomain:@"Parameter ‘accountName‘ is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
         !errorBlock?:errorBlock(error);
         return;
     }
@@ -351,7 +351,7 @@
 {
     // 1. Validation parameters
     if (IsStrEmpty(accountName)) {
-        NSError *error = [NSError errorWithDomain:@"Parameter 'accountName' is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
+        NSError *error = [NSError errorWithDomain:@"Parameter ‘accountName‘ is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
         !errorBlock?:errorBlock(error);
         return;
     }
@@ -373,7 +373,7 @@
 {
     // 1. Validation parameters
     if (IsStrEmpty(accountIdOrName)) {
-        NSError *error = [NSError errorWithDomain:@"Parameter 'accountIdOrName' is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
+        NSError *error = [NSError errorWithDomain:@"Parameter ‘accountIdOrName‘ is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
         !errorBlock?:errorBlock(error);
         return;
     }
@@ -415,7 +415,7 @@
 {
     // 1. Validation parameters
     if (IsStrEmpty(accountID)) {
-        NSError *error = [NSError errorWithDomain:@"Parameter 'accountID' is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
+        NSError *error = [NSError errorWithDomain:@"Parameter ‘accountID‘ is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
         !errorBlock?:errorBlock(error);
         return;
     }
@@ -457,6 +457,31 @@
     [self sendWithChainApi:(WebsocketBlockChainApiHistory) method:(WebsocketBlockChainMethodApiCall) params:uploadParams callBack:callBackModel];
 }
 
+/**
+ Get transaction about one hash
+ 
+ @param transferhash   hash
+ 
+ */
+- (void)Cocos_GetTransactionById:(NSString *)transferhash
+                         Success:(SuccessBlock)successBlock
+                           Error:(Error)errorBlock
+{
+    UploadParams *uploadParams = [[UploadParams alloc] init];
+    
+    uploadParams.methodName = kCocosGetTransactionById;
+    
+    uploadParams.totalParams = @[transferhash];
+    
+    CallBackModel *callBackModel = [[CallBackModel alloc] init];
+    
+    callBackModel.successResult = successBlock;
+    
+    callBackModel.errorResult = errorBlock;
+    
+    [self sendWithChainApi:(WebsocketBlockChainApiHistory) method:(WebsocketBlockChainMethodApiCall) params:uploadParams callBack:callBackModel];
+}
+
 /** Decrypt memo① */
 - (void)Cocos_DecryptMemo:(NSDictionary *)memo
                   Private:(NSString *)active_key
@@ -470,7 +495,7 @@
         return;
     }
     if (IsStrEmpty(active_key)) {
-        NSError *error = [NSError errorWithDomain:@"Parameter 'active_key' is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
+        NSError *error = [NSError errorWithDomain:@"Parameter ‘active_key‘ is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
         !errorBlock?:errorBlock(error);
         return;
     }
@@ -551,6 +576,78 @@
     } Error:errorBlock];
 }
 
+/**
+ Upgrade Membership
+ 
+ @param account account
+ @param feePayingAsset feePayingAsset
+ */
+- (void)Cocos_UpgradeMemberFeeAccount:(NSString *)account
+                       FeePayingAsset:(NSString *)feePayingAsset
+                              Success:(SuccessBlock)successBlock
+                                Error:(Error)errorBlock
+{
+    // 1. account info
+    [self Cocos_GetAccount:account Success:^(id responseObject) {
+        ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:account];
+        // 2. fee asset info
+        [self Cocos_GetAsset:feePayingAsset Success:^(id feeAssetObject) {
+            ChainAssetObject *feeAssetModel = [ChainAssetObject generateFromObject:feeAssetObject];
+            CocosUpgradeMemberOperation *operation = [[CocosUpgradeMemberOperation alloc] init];
+            operation.account_to_upgrade = accountModel.identifier;
+            operation.upgrade_to_lifetime_member = YES;
+            // 3. request fee
+            [self Cocos_OperationFees:operation OperationType:7 FeePayingAsset:feeAssetModel.identifier.generateToTransferObject Success:successBlock Error:errorBlock];
+        } Error:errorBlock];
+    } Error:errorBlock];
+}
+
+/**
+ Upgrade Membership
+ 
+ @param account account
+ @param feePayingAsset feePayingAsset
+ */
+- (void)Cocos_UpgradeMemberAccount:(NSString *)account
+                          password:(NSString *)password
+                    FeePayingAsset:(NSString *)feePayingAsset
+                           Success:(SuccessBlock)successBlock
+                             Error:(Error)errorBlock
+{
+    // 1. Account password decryption
+    [self validateAccount:account Password:password Success:^(NSDictionary *keyDic) {
+        if (keyDic[@"active_key"]) {
+            // 2. Generating Private Key Transfer
+            CocosPrivateKey *private = [[CocosPrivateKey alloc] initWithPrivateKey:keyDic[@"active_key"]];
+            // 3. account info
+            [self Cocos_GetAccount:account Success:^(id responseObject) {
+                ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:responseObject];
+                // 4. Stitching transfer data
+                CocosUpgradeMemberOperation *operation = [[CocosUpgradeMemberOperation alloc] init];
+                operation.account_to_upgrade = accountModel.identifier;
+                operation.upgrade_to_lifetime_member = YES;
+                // 5. Inquiry fee
+                [self Cocos_UpgradeMemberFeeAccount:account FeePayingAsset:feePayingAsset Success:^(NSArray *feeObject) {
+                    // 6. Stitching fee
+                    NSDictionary *feeDic = feeObject.firstObject;
+                    operation.fee = [ChainAssetAmountObject generateFromObject:feeDic];
+                    CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
+                    SignedTransaction *signedTran = [[SignedTransaction alloc] init];
+                    signedTran.operations = @[content];
+                    // 7. Transfer
+                    [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
+                } Error:errorBlock];
+            } Error:errorBlock];
+        }else if (keyDic[@"owner_key"]){
+            NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
+            !errorBlock?:errorBlock(error);
+        }else{
+            NSError *error = [NSError errorWithDomain:@"Please enter the correct original/temporary password" code:SDKErrorCodePasswordwrong userInfo:@{@"password":password}];
+            !errorBlock?:errorBlock(error);
+        }
+    } Error:errorBlock];
+}
+
 #pragma mark - Asset query operation
 /** Get blockchain assets list */
 - (void)Cocos_ChainListLimit:(NSInteger)nLimit
@@ -579,7 +676,7 @@
 {
     // 1. Validation parameters
     if (IsStrEmpty(assetIdOrName)) {
-        NSError *error = [NSError errorWithDomain:@"Parameter 'assetIdOrName' is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
+        NSError *error = [NSError errorWithDomain:@"Parameter ‘assetIdOrName‘ is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
         !errorBlock?:errorBlock(error);
         return;
     }
@@ -737,7 +834,7 @@
 {
     // 1. Validation parameters
     if (IsStrEmpty(receiver) || IsStrEmpty(symbol) || IsStrEmpty(fee_symbol)) {
-        NSError *error = [NSError errorWithDomain:@"Parameter 'receiver' 、'symbol' Or 'fee_symbol' is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
+        NSError *error = [NSError errorWithDomain:@"Parameter ‘receiver‘ 、’symbol‘ Or ‘fee_symbol‘ is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
         !errorBlock?:errorBlock(error);
         return;
     }
@@ -1201,7 +1298,7 @@
     [self sendWithChainApi:WebsocketBlockChainApiDataBase method:(WebsocketBlockChainMethodApiCall) params:uploadParams callBack:callBackModel];
 }
 
-// Get account's NH assets' sell list
+// Get account's NH assets‘ sell list
 - (void)Cocos_ListAccountNHAssetOrder:(NSString *)accountID
                              PageSize:(NSInteger)pageSize
                                  Page:(NSInteger)page
@@ -1436,6 +1533,146 @@
     } Error:errorBlock];
 }
 
+/** Delete NH assets Fee */
+- (void)Cocos_DeleteNHAssetFeeAccount:(NSString *)account
+                       FeePayingAsset:(NSString *)feePayingAsset
+                            nhAssetID:(NSString *)nhAssetID
+                              Success:(SuccessBlock)successBlock
+                                Error:(Error)errorBlock
+{
+    // 1. account info
+    [self Cocos_GetAccount:account Success:^(id responseObject) {
+        ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:responseObject];
+        // 2. fee asset info
+        [self Cocos_GetAsset:feePayingAsset Success:^(id feeAssetObject) {
+            ChainAssetObject *feeAssetModel = [ChainAssetObject generateFromObject:feeAssetObject];
+            CocosDeleteNHOperation *operation = [[CocosDeleteNHOperation alloc] init];
+            operation.fee_paying_account = accountModel.identifier;
+            operation.nh_asset = [ChainObjectId generateFromObject:nhAssetID];
+            // 3. request fee
+            [self Cocos_OperationFees:operation OperationType:50 FeePayingAsset:feeAssetModel.identifier.generateToTransferObject Success:successBlock Error:errorBlock];
+        } Error:errorBlock];
+    } Error:errorBlock];
+}
+
+/** Delete NH assets */
+- (void)Cocos_DeleteNHAssetAccount:(NSString *)account
+                          Password:(NSString *)password
+                    FeePayingAsset:(NSString *)feePayingAsset
+                         nhAssetID:(NSString *)nhAssetID
+                           Success:(SuccessBlock)successBlock
+                             Error:(Error)errorBlock
+{
+    // 1. valida password
+    [self validateAccount:account Password:password Success:^(NSDictionary *keyDic) {
+        if (keyDic[@"active_key"]) {
+            // 2. Generating Private Key Transfer
+            CocosPrivateKey *private = [[CocosPrivateKey alloc] initWithPrivateKey:keyDic[@"active_key"]];
+            // 3. account info
+            [self Cocos_GetAccount:account Success:^(id responseObject) {
+                ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:responseObject];
+                // 4. Stitching transfer data
+                CocosDeleteNHOperation *operation = [[CocosDeleteNHOperation alloc] init];
+                operation.fee_paying_account = accountModel.identifier;
+                operation.nh_asset = [ChainObjectId generateFromObject:nhAssetID] ;
+                // 5. Inquiry fee
+                [self Cocos_DeleteNHAssetFeeAccount:account FeePayingAsset:feePayingAsset nhAssetID:nhAssetID Success:^(NSArray *feeObject) {
+                    // 6. Stitching fee
+                    NSDictionary *feeDic = feeObject.firstObject;
+                    operation.fee = [ChainAssetAmountObject generateFromObject:feeDic];
+                    CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
+                    SignedTransaction *signedTran = [[SignedTransaction alloc] init];
+                    signedTran.operations = @[content];
+                    // 7. Delete
+                    [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
+                } Error:errorBlock];
+            } Error:errorBlock];
+        }else if (keyDic[@"owner_key"]){
+            NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
+            !errorBlock?:errorBlock(error);
+        }else{
+            NSError *error = [NSError errorWithDomain:@"Please enter the correct original/temporary password" code:SDKErrorCodePasswordwrong userInfo:@{@"password":password}];
+            !errorBlock?:errorBlock(error);
+        }
+    } Error:errorBlock];
+}
+
+/**
+ cancel sell NH assets Fee
+ 
+ @param account          account
+ @param feePayingAsset   feePayingAssetID
+ @param orderId          orderId
+ */
+- (void)Cocos_CancelNHAssetFeeAccount:(NSString *)account
+                       FeePayingAsset:(NSString *)feePayingAsset
+                              OrderId:(NSString *)orderId
+                              Success:(SuccessBlock)successBlock
+                                Error:(Error)errorBlock
+{
+    // 1. account info
+    [self Cocos_GetAccount:account Success:^(id responseObject) {
+        ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:responseObject];
+        // 2. fee asset info
+        [self Cocos_GetAsset:feePayingAsset Success:^(id feeAssetObject) {
+            ChainAssetObject *feeAssetModel = [ChainAssetObject generateFromObject:feeAssetObject];
+            CocosSellNHAssetCancelOperation *operation = [[CocosSellNHAssetCancelOperation alloc] init];
+            operation.fee_paying_account = accountModel.identifier;
+            operation.order = [ChainObjectId generateFromObject:orderId];
+            // 3. request fee
+            [self Cocos_OperationFees:operation OperationType:53 FeePayingAsset:feeAssetModel.identifier.generateToTransferObject Success:successBlock Error:errorBlock];
+        } Error:errorBlock];
+    } Error:errorBlock];
+}
+/**
+ cancel sell NH assets
+ 
+ @param account         account
+ @param password        password
+ @param feePayingAsset  feePayingAsset
+ @param orderId         orderId
+ */
+- (void)Cocos_CancelNHAssetAccount:(NSString *)account
+                          Password:(NSString *)password
+                    FeePayingAsset:(NSString *)feePayingAsset
+                           OrderId:(NSString *)orderId
+                           Success:(SuccessBlock)successBlock
+                             Error:(Error)errorBlock
+{
+    // 1. valida password
+    [self validateAccount:account Password:password Success:^(NSDictionary *keyDic) {
+        if (keyDic[@"active_key"]) {
+            // 2. Generating Private Key Transfer
+            CocosPrivateKey *private = [[CocosPrivateKey alloc] initWithPrivateKey:keyDic[@"active_key"]];
+            // 3. account info
+            [self Cocos_GetAccount:account Success:^(id responseObject) {
+                ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:responseObject];
+                // 4. Stitching transfer data
+                CocosSellNHAssetCancelOperation *operation = [[CocosSellNHAssetCancelOperation alloc] init];
+                operation.fee_paying_account = accountModel.identifier;
+                operation.order = [ChainObjectId generateFromObject:orderId] ;
+                // 5. Inquiry fee
+                [self Cocos_CancelNHAssetFeeAccount:account FeePayingAsset:feePayingAsset OrderId:orderId Success:^(NSArray *feeObject) {
+                    // 6. Stitching fee
+                    NSDictionary *feeDic = feeObject.firstObject;
+                    operation.fee = [ChainAssetAmountObject generateFromObject:feeDic];
+                    CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
+                    SignedTransaction *signedTran = [[SignedTransaction alloc] init];
+                    signedTran.operations = @[content];
+                    // 7. Delete
+                    [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
+                } Error:errorBlock];
+            } Error:errorBlock];
+        }else if (keyDic[@"owner_key"]){
+            NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
+            !errorBlock?:errorBlock(error);
+        }else{
+            NSError *error = [NSError errorWithDomain:@"Please enter the correct original/temporary password" code:SDKErrorCodePasswordwrong userInfo:@{@"password":password}];
+            !errorBlock?:errorBlock(error);
+        }
+    } Error:errorBlock];
+}
+
 #pragma mark - Expanding Method
 /** operation fee */
 - (void)Cocos_OperationFees:(CocosBaseOperation *)operation
@@ -1530,7 +1767,7 @@
 {
     // 1. Validation parameters
     if (IsStrEmpty(accountName) || IsStrEmpty(password)) {
-        NSError *error = [NSError errorWithDomain:@"Parameter 'accountName' or 'password' is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
+        NSError *error = [NSError errorWithDomain:@"Parameter ‘accountName‘ or ‘password‘ is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
         !errorBlock?:errorBlock(error);
         return;
     }

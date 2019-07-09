@@ -63,6 +63,10 @@
 @property (weak, nonatomic) IBOutlet UITextField *get_pri_account;
 @property (weak, nonatomic) IBOutlet UITextField *get_pri_password;
 
+// 升级成为终身会员
+@property (weak, nonatomic) IBOutlet UITextField *upgrade_embership_account;
+@property (weak, nonatomic) IBOutlet UITextField *upgrade_embership_password;
+
 #pragma mark 代币操作属性
 // 转账
 @property (weak, nonatomic) IBOutlet UITextField *transfer_fromTF;
@@ -71,6 +75,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *transfer_assetIDTF;
 @property (weak, nonatomic) IBOutlet UITextField *transfer_FeeAssetTF;
 @property (weak, nonatomic) IBOutlet UITextField *transfer_noteTF;
+@property (weak, nonatomic) IBOutlet UITextField *transfer_password;
 
 // 查询账户拥有的所有资产列表
 @property (weak, nonatomic) IBOutlet UITextField *get_assetList_account;
@@ -101,6 +106,36 @@
 @property (weak, nonatomic) IBOutlet UITextField *get_nhassetcreat_pageSize;
 @property (weak, nonatomic) IBOutlet UITextField *get_nhassetcreat_page;
 
+#pragma mark - NH资产操作
+#warning todo
+// 注册开发者
+@property (weak, nonatomic) IBOutlet UITextField *developer_id;
+@property (weak, nonatomic) IBOutlet UITextField *develop_password;
+// 世界观创建
+@property (weak, nonatomic) IBOutlet UITextField *worldview_cread;
+@property (weak, nonatomic) IBOutlet UITextField *worldview_id;
+@property (weak, nonatomic) IBOutlet UITextField *worldview_password;
+// 世界观提议关联
+@property (weak, nonatomic) IBOutlet UITextField *worldview_relate;
+@property (weak, nonatomic) IBOutlet UITextField *worldview_relateid;
+@property (weak, nonatomic) IBOutlet UITextField *worldview_relatepassword;
+// 获取当前用户收到的提议
+@property (weak, nonatomic) IBOutlet UITextField *get_worldview_relate;
+// NH资产删除
+@property (weak, nonatomic) IBOutlet UITextField *deletenh_nhId;
+@property (weak, nonatomic) IBOutlet UITextField *deletenh_account;
+@property (weak, nonatomic) IBOutlet UITextField *deletenh_password;
+#warning todo
+// NH资产转移
+@property (weak, nonatomic) IBOutlet UITextField *transfernh_nhId;
+@property (weak, nonatomic) IBOutlet UITextField *transfernh_account_from;
+@property (weak, nonatomic) IBOutlet UITextField *transfernh_account_to;
+@property (weak, nonatomic) IBOutlet UITextField *transfernh_password;
+// NH资产购买
+@property (weak, nonatomic) IBOutlet UITextField *bugnh_nhId;
+@property (weak, nonatomic) IBOutlet UITextField *bugnh_account;
+@property (weak, nonatomic) IBOutlet UITextField *bugnh_password;
+
 @end
 
 @implementation CocosViewController
@@ -124,12 +159,6 @@
 //        } Error:^(NSError *error) {
 //            NSLog(@"Cocos_CallContract erroe  \n%@",error);
 //        }];
-        
-        [[CocosSDK shareInstance] Cocos_TransferNHAsset:@"syling" ToAccount:@"gnkhandsome1" NHAssetID:@"4.2.56" Password:@"1111aaaa" FeePayingAsset:@"1.3.0" Success:^(id responseObject) {
-            NSLog(@"Cocos_TransferNHAsset \n%@",responseObject);
-        } Error:^(NSError *error) {
-            NSLog(@"Cocos_TransferNHAsset error  \n%@",error);
-        }];
     });
 }
 
@@ -298,10 +327,38 @@
         NSLog(@"account_logoutClick error :%@",error);
     }];
 }
+
+// 升级成为终身会员 手续费
+- (IBAction)upgradeMemberShipFee:(id)sender {
+    NSString *upgradeaccount = self.upgrade_embership_account.text;
+    [[CocosSDK shareInstance] Cocos_UpgradeMemberFeeAccount:upgradeaccount FeePayingAsset:@"COCOS" Success:^(id responseObject) {
+        NSLog(@"Cocos_UpgradeMemberFeeAccount \n%@",responseObject);
+    } Error:^(NSError *error) {
+        NSLog(@"Cocos_UpgradeMemberFeeAccount error \n%@",error);
+    }];
+}
+// 升级成为终身会员
+- (IBAction)upgradeMemberShip {
+    NSString *upgradeaccount = self.upgrade_embership_account.text;
+    NSString *pwd = self.upgrade_embership_password.text;
+    [[CocosSDK shareInstance] Cocos_UpgradeMemberAccount:upgradeaccount password:pwd FeePayingAsset:@"COCOS" Success:^(id responseObject) {
+        NSLog(@"Cocos_UpgradeMemberAccount \n%@",responseObject);
+    } Error:^(NSError *error) {
+        NSLog(@"Cocos_UpgradeMemberAccount error \n%@",error);
+    }];
+}
+
 #pragma mark - 代币到账
 // 获取手续费
 - (IBAction)getTransferClick:(UIButton *)sender {
-    [[CocosSDK shareInstance] Cocos_GetTransferFeesFrom:@"gnkhandsome2" ToAccount:@"testtest2" Password:@"123456" TransferAsset:@"COCOS" AssetAmount:@"0.1" FeePayingAsset:@"COCOS" Memo:@"gnk high big" Success:^(id responseObject) {
+    NSString *frome = self.transfer_fromTF.text;// @"syling"
+    NSString *to = self.transfer_toTF.text;// @"gnkhandsome1"
+    NSString *count = self.transfer_countTF.text;// @"10"
+    NSString *assetID = self.transfer_assetIDTF.text; // @"COCOS"
+    NSString *FeeAsset = self.transfer_FeeAssetTF.text;// @"COCOS"
+    NSString *note = self.transfer_noteTF.text;// 备注
+    NSString *password = self.transfer_password.text;// 备注
+    [[CocosSDK shareInstance] Cocos_GetTransferFeesFrom:frome ToAccount:to Password:password TransferAsset:assetID AssetAmount:count FeePayingAsset:FeeAsset Memo:note Success:^(id responseObject) {
         NSLog(@"Cocos_GetTransferFeesFrom 1 success :%@",responseObject);
     } Error:^(NSError *error) {
         NSLog(@"Cocos_GetTransferFeesFrom 1 error :%@",error);
@@ -310,8 +367,14 @@
 
 // 转账
 - (IBAction)transferClick:(id)sender {
-    
-    [[CocosSDK shareInstance] Cocos_TransferFromAccount:@"syling" ToAccount:@"gnkhandsome1" Password:@"1111aaaa" TransferAsset:@"COCOS" AssetAmount:@"10" FeePayingAsset:@"COCOS" Memo:@"" Success:^(id responseObject) {
+    NSString *frome = self.transfer_fromTF.text;// @"syling"
+    NSString *to = self.transfer_toTF.text;// @"gnkhandsome1"
+    NSString *count = self.transfer_countTF.text;// @"10"
+    NSString *assetID = self.transfer_assetIDTF.text; // @"COCOS"
+    NSString *FeeAsset = self.transfer_FeeAssetTF.text;// @"COCOS"
+    NSString *note = self.transfer_noteTF.text;// 备注
+    NSString *password = self.transfer_password.text;// 备注
+    [[CocosSDK shareInstance] Cocos_TransferFromAccount:frome ToAccount:to Password:password TransferAsset:assetID AssetAmount:count FeePayingAsset:FeeAsset Memo:note Success:^(id responseObject) {
         NSLog(@"transferClick success :%@",responseObject);
     } Error:^(NSError *error) {
         NSLog(@"transferClick error :%@",error);
@@ -321,8 +384,9 @@
 // 查询账户拥有的所有资产列表
 - (IBAction)GetAccountBalance:(id)sender
 {
-    // 查询账户拥有的所有资产列表
-    [[CocosSDK shareInstance] Cocos_GetAccountBalance:@"1.2.62" CoinID:@[] Success:^(id responseObject) {
+    NSString *accountID = self.get_assetList_account.text;//@"1.2.136"
+    NSString *coinID = self.get_assetList_ID.text;// @"4.1.5"
+    [[CocosSDK shareInstance] Cocos_GetAccountBalance:accountID CoinID:@[] Success:^(id responseObject) {
         NSLog(@"Success:%@",responseObject);
     } Error:^(NSError *error) {
         NSLog(@"Error:%@",error);
@@ -355,17 +419,24 @@
 // 查询账户下所拥有的NH资产
 - (IBAction)getAllNHAssetOfAccount:(id)sender
 {
-    [[CocosSDK shareInstance] Cocos_ListAccountNHAsset:@"1.2.73" WorldView:@[@"4.1.5"] PageSize:100 Page:1 Success:^(id responseObject) {
+    NSString *accountID = self.get_nhassetsell_account.text;//@"1.2.136"
+    NSString *worldviewID = self.get_nhasset_worldview.text;// @"4.1.5"
+    NSInteger pageSize = [self.get_nhasset_pageSize.text integerValue];
+    NSInteger page = [self.get_nhasset_page.text integerValue];
+    [[CocosSDK shareInstance] Cocos_ListAccountNHAsset:accountID WorldView:@[worldviewID] PageSize:pageSize Page:page Success:^(id responseObject) {
         NSLog(@"Success:%@",responseObject);
     } Error:^(NSError *error) {
         NSLog(@"Error:%@",error);
     }];
 }
 
-// 查询账户下的NH资产售卖单
+// 查询账户下NH资产售卖单
 - (IBAction)getSellListNHAssetOfAccount:(id)sender
 {
-    [[CocosSDK shareInstance] Cocos_ListAccountNHAssetOrder:@"1.2.136" PageSize:10 Page:1 Success:^(id responseObject) {
+    NSString *accountID = self.get_nhassetsell_account.text;//@"1.2.136"
+    NSInteger pageSize = [self.get_nhassetsell_pageSize.text integerValue];
+    NSInteger page = [self.get_nhassetsell_page.text integerValue];
+    [[CocosSDK shareInstance] Cocos_ListAccountNHAssetOrder:accountID PageSize:pageSize Page:page Success:^(id responseObject) {
         NSLog(@"Success:%@",responseObject);
     } Error:^(NSError *error) {
         NSLog(@"Error:%@",error);
@@ -375,7 +446,12 @@
 // 查询(购买)全网NH资产售卖单
 - (IBAction)getAllSellListNHAsset:(id)sender
 {
-    [[CocosSDK shareInstance] Cocos_AllListNHAssetOrder:@"" WorldView:@"" BaseDescribe:@"" PageSize:10 Page:1 Success:^(id responseObject) {
+    NSString *sell_id = self.get_allnhassetsell_id.text;// @""
+    NSString *worldview = self.get_allnhassetsell_worldview.text;// @""
+    NSString *baseDescribe = self.get_allnhassetsell_baseDescribe.text;// @""
+    NSInteger pageSize = [self.get_allnhassetsell_pageSize.text integerValue];
+    NSInteger page = [self.get_allnhassetsell_page.text integerValue];
+    [[CocosSDK shareInstance] Cocos_AllListNHAssetOrder:sell_id WorldView:worldview BaseDescribe:baseDescribe PageSize:pageSize Page:page Success:^(id responseObject) {
         NSLog(@"Success:%@",responseObject);
     } Error:^(NSError *error) {
         NSLog(@"Error:%@",error);
@@ -384,7 +460,8 @@
 // 查询世界观详细信息
 - (IBAction)getWorldViewInfo:(id)sender
 {
-    [[CocosSDK shareInstance] Cocos_LookupWorldView:@[@"SYLing"] Success:^(id responseObject) {
+    NSString *worldview = self.get_worldviewinfo_id.text;// SYLing
+    [[CocosSDK shareInstance] Cocos_LookupWorldView:@[worldview] Success:^(id responseObject) {
         NSLog(@"Success:%@",responseObject);
     } Error:^(NSError *error) {
         NSLog(@"Error:%@",error);
@@ -394,7 +471,10 @@
 // 查询开发者所创建的NH资产
 - (IBAction)getNHAssetsForDeveloper:(id)sender
 {
-    [[CocosSDK shareInstance] Cocos_ListNHAssetByCreator:@"1.2.62" PageSize:10 Page:1 Success:^(id responseObject) {
+    NSString *accountid = self.get_nhassetcreat_account.text;
+    NSInteger pageSize = [self.get_nhassetcreat_pageSize.text integerValue];
+    NSInteger page = [self.get_nhassetcreat_page.text integerValue];
+    [[CocosSDK shareInstance] Cocos_ListNHAssetByCreator:accountid PageSize:pageSize Page:page Success:^(id responseObject) {
         NSLog(@"Success:%@",responseObject);
     } Error:^(NSError *error) {
         NSLog(@"Error:%@",error);
@@ -402,5 +482,32 @@
 }
 
 #pragma mark - NH资产操作
+
+// NH资产转移
+- (IBAction)transferNH:(id)sender{
+    NSString *nhId = self.transfernh_nhId.text;// @"4.2.56"
+    NSString *nhfrom = self.transfernh_account_from.text;//@"syling"
+    NSString *nhto = self.transfernh_account_to.text;// @"gnkhandsome1"
+    NSString *nhtranferpwd = self.transfernh_password.text;
+    
+    [[CocosSDK shareInstance] Cocos_TransferNHAsset:nhfrom ToAccount:nhto NHAssetID:nhId Password:nhtranferpwd FeePayingAsset:@"1.3.0" Success:^(id responseObject) {
+        NSLog(@"Cocos_TransferNHAsset \n%@",responseObject);
+    } Error:^(NSError *error) {
+        NSLog(@"Cocos_TransferNHAsset error  \n%@",error);
+    }];
+}
+
+// NH资产购买
+- (IBAction)bugNHAsset:(id)sender
+{
+    NSString *orderId = self.bugnh_nhId.text;// @"4.2.56"
+    NSString *account = self.bugnh_account.text;//@"syling"
+    NSString *bugnhpwd = self.bugnh_password.text;
+    [[CocosSDK shareInstance] Cocos_BuyNHAssetOrderID:orderId Account:account Password:bugnhpwd FeePayingAsset:@"1.3.0" Success:^(id responseObject) {
+        NSLog(@"Cocos_BuyNHAssetFeeOrderID \n%@",responseObject);
+    } Error:^(NSError *error) {
+        NSLog(@"Cocos_BuyNHAssetFeeOrderID error  \n%@",error);
+    }];
+}
 
 @end
