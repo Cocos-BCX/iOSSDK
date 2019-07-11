@@ -26,9 +26,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, nonnull) ChainAssetAmountObject *price;
 
-@property (nonatomic, copy, nonnull) NSString *expiration;
+@property (nonatomic, strong, nonnull) NSDate *expiration;
 
-@property (nonatomic, strong, nonnull) NSArray *extensions;
+//@property (nonatomic, strong, nonnull) NSArray *extensions;
 
 @end
 

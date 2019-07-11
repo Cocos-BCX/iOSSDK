@@ -579,30 +579,49 @@ NS_ASSUME_NONNULL_BEGIN
                              Error:(Error)errorBlock;
 /**
  Sell NH assets Fee
- 
- @param account          account
- @param feePayingAsset   feePayingAssetID
- @param orderId          orderId
+
+ @param SellerAccount 出售人账户
+ @param nhAssetid nh资产id
+ @param memo 备注
+ @param priceAmount 价格
+ @param pendingFeeAmount 挂单费用
+ @param sellAsset 交易代币
+ @param opAsset 操作币种
+ @param expiration 过期时间(即挂卖时间,number类型,如3600，表示3600秒后过期)
  */
-- (void)Cocos_SellNHAssetFeeAccount:(NSString *)account
-                       FeePayingAsset:(NSString *)feePayingAsset
-                              OrderId:(NSString *)orderId
-                              Success:(SuccessBlock)successBlock
-                                Error:(Error)errorBlock;
+- (void)Cocos_SellNHAssetFeeSeller:(NSString *)SellerAccount
+                          NHAssetId:(NSString *)nhAssetid
+                               Memo:(NSString *)memo
+                    SellPriceAmount:(NSString *)priceAmount
+                   PendingFeeAmount:(NSString *)pendingFeeAmount
+                    OperationAsset:(NSString *)opAsset
+                    SellAsset:(NSString *)sellAsset
+                         Expiration:(NSString *)expiration
+                            Success:(SuccessBlock)successBlock
+                              Error:(Error)errorBlock;
 /**
  Sell NH assets
  
- @param account         account
- @param password        password
- @param feePayingAsset  feePayingAsset
- @param orderId         orderId
+ @param SellerAccount 出售人账户
+ @param nhAssetid nh资产id
+ @param memo 备注
+ @param priceAmount 价格
+ @param pendingFeeAmount 挂单费用
+ @param sellAsset 交易代币
+ @param opAsset 操作币种
+ @param expiration 过期时间(即挂卖时间,number类型,如3600，表示3600秒后过期)
  */
-- (void)Cocos_SellNHAssetAccount:(NSString *)account
-                          Password:(NSString *)password
-                    FeePayingAsset:(NSString *)feePayingAsset
-                           OrderId:(NSString *)orderId
-                           Success:(SuccessBlock)successBlock
-                             Error:(Error)errorBlock;
+- (void)Cocos_SellNHAssetSeller:(NSString *)SellerAccount
+                       Password:(NSString *)password
+                       NHAssetId:(NSString *)nhAssetid
+                            Memo:(NSString *)memo
+                 SellPriceAmount:(NSString *)priceAmount
+                PendingFeeAmount:(NSString *)pendingFeeAmount
+                  OperationAsset:(NSString *)opAsset
+                      SellAsset:(NSString *)sellAsset
+                      Expiration:(NSString *)expiration
+                         Success:(SuccessBlock)successBlock
+                           Error:(Error)errorBlock;
 
 /** Get global variable parameter(latest blocks news etc.) */
 - (void)Cocos_GetDynamicGlobalPropertiesWithSuccess:(SuccessBlock)successBlock Error:(Error)errorBlock;

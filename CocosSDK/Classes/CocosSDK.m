@@ -1597,13 +1597,7 @@
     } Error:errorBlock];
 }
 
-/**
- cancel sell NH assets Fee
- 
- @param account          account
- @param feePayingAsset   feePayingAssetID
- @param orderId          orderId
- */
+/** cancel sell NH assets Fee */
 - (void)Cocos_CancelNHAssetFeeAccount:(NSString *)account
                        FeePayingAsset:(NSString *)feePayingAsset
                               OrderId:(NSString *)orderId
@@ -1624,14 +1618,7 @@
         } Error:errorBlock];
     } Error:errorBlock];
 }
-/**
- cancel sell NH assets
- 
- @param account         account
- @param password        password
- @param feePayingAsset  feePayingAsset
- @param orderId         orderId
- */
+/** cancel sell NH assets */
 - (void)Cocos_CancelNHAssetAccount:(NSString *)account
                           Password:(NSString *)password
                     FeePayingAsset:(NSString *)feePayingAsset
@@ -1673,7 +1660,112 @@
     } Error:errorBlock];
 }
 
+/** Sell NH assets Fee */
+- (void)Cocos_SellNHAssetFeeSeller:(NSString *)SellerAccount
+                          NHAssetId:(NSString *)nhAssetid
+                               Memo:(NSString *)memo
+                    SellPriceAmount:(NSString *)priceAmount
+                   PendingFeeAmount:(NSString *)pendingFeeAmount
+                    OperationAsset:(NSString *)opAsset
+                         SellAsset:(NSString *)sellAsset
+                         Expiration:(NSString *)expiration
+                            Success:(SuccessBlock)successBlock
+                              Error:(Error)errorBlock
+{
+    // 1. account info
+    [self sellNHAssetOperationSeller:SellerAccount NHAssetId:nhAssetid Memo:memo SellPriceAmount:priceAmount PendingFeeAmount:pendingFeeAmount OperationAsset:opAsset SellAsset:sellAsset Expiration:expiration Success:^(NSDictionary *callback) {
+        CocosSellNHAssetOperation *operation = callback[@"operation"];
+        ChainAssetObject *opAsset = callback[@"opAsset"];
+        // 2. fee asset info
+        [self Cocos_OperationFees:operation OperationType:52 FeePayingAsset:opAsset.identifier.generateToTransferObject Success:successBlock Error:errorBlock];
+    } Error:errorBlock];
+}
+
+/** Sell NH assets */
+
+- (void)Cocos_SellNHAssetSeller:(NSString *)SellerAccount
+                       Password:(NSString *)password
+                      NHAssetId:(NSString *)nhAssetid
+                           Memo:(NSString *)memo
+                SellPriceAmount:(NSString *)priceAmount
+               PendingFeeAmount:(NSString *)pendingFeeAmount
+                 OperationAsset:(NSString *)opAsset
+                      SellAsset:(NSString *)sellAsset
+                     Expiration:(NSString *)expiration
+                        Success:(SuccessBlock)successBlock
+                          Error:(Error)errorBlock
+{
+    // 1. validateAccount
+    [self validateAccount:SellerAccount Password:password Success:^(NSDictionary *keyDic) {
+        if (keyDic[@"active_key"]) {
+            // 2. Declassified private key
+            CocosPrivateKey *private = [[CocosPrivateKey alloc] initWithPrivateKey:keyDic[@"active_key"]];
+            [self sellNHAssetOperationSeller:SellerAccount NHAssetId:nhAssetid Memo:memo SellPriceAmount:priceAmount PendingFeeAmount:pendingFeeAmount OperationAsset:opAsset SellAsset:sellAsset Expiration:expiration Success:^(NSDictionary *callback) {
+                CocosSellNHAssetOperation *operation = callback[@"operation"];
+                ChainAssetObject *opAsset = callback[@"opAsset"];
+                // 3. fee asset info
+                [self Cocos_OperationFees:operation OperationType:52 FeePayingAsset:opAsset.identifier.generateToTransferObject Success:^(NSArray *feeObject) {
+                    // 4. Stitching fee
+                    NSDictionary *feeDic = feeObject.firstObject;
+                    operation.fee = [ChainAssetAmountObject generateFromObject:feeDic];
+                    CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
+                    SignedTransaction *signedTran = [[SignedTransaction alloc] init];
+                    signedTran.operations = @[content];
+                    // 5. Delete
+                    [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
+                } Error:errorBlock];
+            } Error:errorBlock];
+        }else if (keyDic[@"owner_key"]){
+            NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
+            !errorBlock?:errorBlock(error);
+        }else{
+            NSError *error = [NSError errorWithDomain:@"Please enter the correct original/temporary password" code:SDKErrorCodePasswordwrong userInfo:@{@"password":password}];
+            !errorBlock?:errorBlock(error);
+        }
+    } Error:errorBlock];
+}
+
 #pragma mark - Expanding Method
+- (void)sellNHAssetOperationSeller:(NSString *)SellerAccount
+                         NHAssetId:(NSString *)nhAssetid
+                              Memo:(NSString *)memo
+                   SellPriceAmount:(NSString *)priceAmount
+                  PendingFeeAmount:(NSString *)pendingFeeAmount
+                    OperationAsset:(NSString *)opAsset
+                         SellAsset:(NSString *)sellAsset
+                        Expiration:(NSString *)expiration
+                           Success:(SuccessBlock)successBlock
+                             Error:(Error)errorBlock
+{
+    // 1. account info
+    [self Cocos_GetAccount:SellerAccount Success:^(id responseObject) {
+        ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:responseObject];
+        // 2. fee asset info
+        [self Cocos_GetAsset:opAsset Success:^(id assetObject) {
+            ChainAssetObject *opAssetModel = [ChainAssetObject generateFromObject:assetObject];
+            ChainAssetAmountObject *pendingAmout = [opAssetModel getAmountFromNormalFloatString:pendingFeeAmount];
+            CocosSellNHAssetOperation *operation = [[CocosSellNHAssetOperation alloc] init];
+            operation.seller = accountModel.identifier;
+            operation.otcaccount = [ChainObjectId generateFromObject:@"1.2.11233"];
+            operation.pending_orders_fee = pendingAmout;
+            operation.nh_asset = [ChainObjectId generateFromObject:nhAssetid];
+            operation.memo = memo;
+            operation.expiration = [[NSDate date] dateByAddingTimeInterval:[expiration doubleValue]];
+            // 3. price Amount
+            [self Cocos_GetAsset:sellAsset Success:^(id sellAssetResObj) {
+                ChainAssetObject *sellAssetModel = [ChainAssetObject generateFromObject:sellAssetResObj];
+                ChainAssetAmountObject *priceAmout = [sellAssetModel getAmountFromNormalFloatString:priceAmount];
+                operation.price = priceAmout;
+                // 3. Callback CocosBaseOperation
+                NSDictionary *callback = @{
+                                           @"operation":operation,
+                                           @"opAsset":opAssetModel,
+                                           };
+                !successBlock?:successBlock(callback);
+            } Error:errorBlock];
+        } Error:errorBlock];
+    } Error:errorBlock];
+}
 /** operation fee */
 - (void)Cocos_OperationFees:(CocosBaseOperation *)operation
               OperationType:(NSInteger)operationType

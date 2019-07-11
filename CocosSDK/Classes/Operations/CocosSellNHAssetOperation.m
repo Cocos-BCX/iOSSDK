@@ -18,7 +18,7 @@
 {
     self = [super init];
     if (self) {
-        _extensions = @[];
+//        _extensions = @[];
     }
     return self;
 }
@@ -99,10 +99,9 @@
     
     [mutableData appendData:[self.price transformToData]];
 
-    NSData *expirationData = [CocosPackData packString:self.expiration];
-    [mutableData appendData:expirationData];
+    [mutableData appendData:[CocosPackData packDate:self.expiration]];
     
-    [mutableData appendData:[CocosPackData packUnsigedInteger:self.extensions.count]];
+//    [mutableData appendData:[CocosPackData packUnsigedInteger:self.extensions.count]];
     
     return [mutableData copy];
 }

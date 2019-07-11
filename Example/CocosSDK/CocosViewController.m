@@ -121,11 +121,11 @@
 @property (weak, nonatomic) IBOutlet UITextField *worldview_relatepassword;
 // 获取当前用户收到的提议
 @property (weak, nonatomic) IBOutlet UITextField *get_worldview_relate;
+#warning todo
 // NH资产删除
 @property (weak, nonatomic) IBOutlet UITextField *deletenh_nhId;
 @property (weak, nonatomic) IBOutlet UITextField *deletenh_account;
 @property (weak, nonatomic) IBOutlet UITextField *deletenh_password;
-#warning todo
 // NH资产转移
 @property (weak, nonatomic) IBOutlet UITextField *transfernh_nhId;
 @property (weak, nonatomic) IBOutlet UITextField *transfernh_account_from;
@@ -135,7 +135,22 @@
 @property (weak, nonatomic) IBOutlet UITextField *bugnh_nhId;
 @property (weak, nonatomic) IBOutlet UITextField *bugnh_account;
 @property (weak, nonatomic) IBOutlet UITextField *bugnh_password;
+// NH资产出售
+@property (weak, nonatomic) IBOutlet UITextField *sellnh_otcaccount;
+@property (weak, nonatomic) IBOutlet UITextField *sellnh_opfee;
+@property (weak, nonatomic) IBOutlet UITextField *sellnh_opfeeAsset;
+@property (weak, nonatomic) IBOutlet UITextField *sellnh_price;
+@property (weak, nonatomic) IBOutlet UITextField *sellnh_pricefeeAsset;
+@property (weak, nonatomic) IBOutlet UITextField *sellnh_expiration;
+@property (weak, nonatomic) IBOutlet UITextField *sellnh_nhid;
+@property (weak, nonatomic) IBOutlet UITextField *sellnh_account;
+@property (weak, nonatomic) IBOutlet UITextField *sellnh_password;
+@property (weak, nonatomic) IBOutlet UITextField *sellnh_memo;
 
+// NH资产出售单取消
+@property (weak, nonatomic) IBOutlet UITextField *callsellnh_orderId;
+@property (weak, nonatomic) IBOutlet UITextField *callsellnh_account;
+@property (weak, nonatomic) IBOutlet UITextField *callsellnh_password;
 @end
 
 @implementation CocosViewController
@@ -483,6 +498,18 @@
 
 #pragma mark - NH资产操作
 
+// NH资产删除
+- (IBAction)deleteNH:(id)sender{
+    NSString *nhId = self.deletenh_nhId.text;// @"4.2.56"
+    NSString *nhAccount = self.deletenh_account.text;//@"syling"
+    NSString *nhdeletepwd = self.deletenh_password.text;
+    
+    [[CocosSDK shareInstance] Cocos_DeleteNHAssetAccount:nhAccount Password:nhdeletepwd FeePayingAsset:@"COCOS" nhAssetID:nhId Success:^(id responseObject) {
+        NSLog(@"Cocos_DeleteNHAssetAccount \n%@",responseObject);
+    } Error:^(NSError *error) {
+        NSLog(@"Cocos_DeleteNHAssetAccount error  \n%@",error);
+    }];
+}
 // NH资产转移
 - (IBAction)transferNH:(id)sender{
     NSString *nhId = self.transfernh_nhId.text;// @"4.2.56"
@@ -509,5 +536,40 @@
         NSLog(@"Cocos_BuyNHAssetFeeOrderID error  \n%@",error);
     }];
 }
+
+// NH资产出售
+// NH资产出售单取消
+- (IBAction)sellnhasset:(id)sender
+{
+    NSString *otcaccount = self.sellnh_otcaccount.text;//
+    NSString *opfee = self.sellnh_opfee.text;//@"11"
+    NSString *opfeeAsset = self.sellnh_opfeeAsset.text;//@"COCOS"
+    NSString *price = self.sellnh_price.text;//@"100"
+    NSString *pricefeeAsset = self.sellnh_pricefeeAsset.text;//@"GNK"
+    NSString *expiration = self.sellnh_expiration.text;//@"60"
+    NSString *nhid = self.sellnh_nhid.text;// @"4.2.3503"
+    NSString *account = self.sellnh_account.text;// @"gnkhandsome1"
+    NSString *password = self.sellnh_password.text;
+    NSString *memo = self.sellnh_memo.text;// @"XXXXOOOO"
+    [[CocosSDK shareInstance] Cocos_SellNHAssetSeller:account Password:password NHAssetId:nhid Memo:memo SellPriceAmount:price PendingFeeAmount:opfee OperationAsset:opfeeAsset SellAsset:pricefeeAsset Expiration:expiration Success:^(id responseObject) {
+        NSLog(@"Cocos_SellNHAssetSeller \n%@",responseObject);
+    } Error:^(NSError *error) {
+        NSLog(@"Cocos_SellNHAssetSeller error \n%@",error);
+    }];
+}
+
+// NH资产出售单取消
+- (IBAction)cancelsellnhasset:(id)sender
+{
+    NSString *orderId = self.callsellnh_orderId.text;// @"4.3.77"
+    NSString *accountId = self.callsellnh_account.text;// @"syling"
+    NSString *password = self.callsellnh_password.text;
+    [[CocosSDK shareInstance] Cocos_CancelNHAssetAccount:accountId Password:password FeePayingAsset:@"COCOS" OrderId:orderId Success:^(id responseObject) {
+        NSLog(@"Cocos_CancelNHAssetAccount \n%@",responseObject);
+    } Error:^(NSError *error) {
+        NSLog(@"Cocos_CancelNHAssetAccount error \n%@",error);
+    }];
+}
+
 
 @end
