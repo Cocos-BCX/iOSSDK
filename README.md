@@ -21,7 +21,7 @@
 
 ## Installation
 
-1. Integrated installation using CocoaPods
+1. Integrated installation using CocoaPods(To be supported)
 
 	```ruby
 	pod 'CocosSDK'

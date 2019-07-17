@@ -19,7 +19,7 @@
 
 ## 安装
 
-1. 使用 CocoaPods 集成安装
+1. 使用 CocoaPods 集成安装(待支持)
 
 	```ruby
 	pod 'CocosSDK'
