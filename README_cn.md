@@ -1,3 +1,5 @@
+[English](https://github.com/Cocos-BCX/iOSSDK "English")
+
 # CocosSDK 集成使用文档
 
 [![CI Status](https://img.shields.io/travis/SYLing/CocosSDK.svg?style=flat)](https://travis-ci.org/SYLing/CocosSDK)
