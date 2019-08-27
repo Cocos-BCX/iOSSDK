@@ -42,6 +42,7 @@ UIKIT_EXTERN NSString * const kCocosListAccountNHOrder;//!< 查询账户下的NH
 UIKIT_EXTERN NSString * const kCocosListNHOrder;//!< 查询(购买)全网NH资产售卖单
 UIKIT_EXTERN NSString * const kCocosLookUpWorldView;//!< 查询世界观详细信息
 UIKIT_EXTERN NSString * const kCocosListNHbyCreator;//!< 查询开发者所创建的NH资产
+UIKIT_EXTERN NSString * const kCocosSellNHAssetExpiration;//!< 查询资产售卖最大过期时间
 
 // API_HISTORY
 UIKIT_EXTERN NSString * const kCocosGetAccountHistory;//!< 获取与特定帐户相关的操作。->返回 按帐户执行的操作列表，从最近到最旧排序。

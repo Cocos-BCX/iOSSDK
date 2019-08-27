@@ -64,6 +64,20 @@
     [CocosConfig setFaucetUrl:faucetUrl];
 }
 
+- (void)setConnectStatusChange:(void (^)(WebsocketConnectStatus))connectStatusChange {
+    _connectStatusChange = connectStatusChange;
+    if (_client) {
+        _client.connectStatusChange = connectStatusChange;
+    }
+}
+
+- (void)setClient:(WebsocketClient *)client {
+    _client = client;
+    if (_connectStatusChange) {
+        _client.connectStatusChange = _connectStatusChange;
+    }
+}
+
 #pragma mark - Create account
 /** Create account */
 - (void)Cocos_CreateAccountWalletMode:(CocosWalletMode)walletMode
@@ -1709,6 +1723,18 @@
             !errorBlock?:errorBlock(error);
         }
     } Error:errorBlock];
+}
+
+/** Sell NH assets MaxExpiration */
+- (void)Cocos_SellNHAssetMaxExpirationSuccess:(SuccessBlock)successBlock Error:(Error)errorBlock
+{
+    UploadParams *uploadParams = [[UploadParams alloc] init];
+    uploadParams.methodName = kCocosSellNHAssetExpiration;
+    uploadParams.totalParams = @[@[]];
+    CallBackModel *callBackModel = [[CallBackModel alloc] init];
+    callBackModel.successResult = successBlock;
+    callBackModel.errorResult = errorBlock;
+    [self sendWithChainApi:WebsocketBlockChainApiDataBase method:(WebsocketBlockChainMethodApiCall) params:uploadParams callBack:callBackModel];
 }
 
 #pragma mark - Expanding Method
