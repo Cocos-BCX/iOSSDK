@@ -15,12 +15,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol CocosSDKConnectStatusDelegate <NSObject>
-
-/** RPC status callback */
-- (void)Cocos_connectStatusChange:(WebsocketConnectStatus)status;
-
-@end
+//@protocol CocosSDKConnectStatusDelegate <NSObject>
+//
+///** RPC status callback */
+//- (void)Cocos_connectStatusChange:(WebsocketConnectStatus)status;
+//
+//@end
 
 @interface CocosSDK : NSObject
 
@@ -31,8 +31,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)shareInstance;
 
+/** RPC Connect Status Block */
+@property (nonatomic, copy) void (^connectStatusChange)(WebsocketConnectStatus status);
+
 /** RPC Connect delegate */
-@property (nonatomic, weak) id <CocosSDKConnectStatusDelegate> delegate;
+//@property (nonatomic, weak) id <CocosSDKConnectStatusDelegate> delegate;
 
 #pragma mark - System Setup Method
 /**
@@ -622,6 +625,9 @@ NS_ASSUME_NONNULL_BEGIN
                       Expiration:(NSString *)expiration
                          Success:(SuccessBlock)successBlock
                            Error:(Error)errorBlock;
+
+/** Sell NH assets MaxExpiration */
+- (void)Cocos_SellNHAssetMaxExpirationSuccess:(SuccessBlock)successBlock Error:(Error)errorBlock;
 
 /** Get global variable parameter(latest blocks news etc.) */
 - (void)Cocos_GetDynamicGlobalPropertiesWithSuccess:(SuccessBlock)successBlock Error:(Error)errorBlock;

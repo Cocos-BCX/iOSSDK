@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy, nonnull) NSString *price_asset_symbol;
 
+@property (nonatomic, strong, nonnull) NSArray *extensions;
 @end
 
 NS_ASSUME_NONNULL_END

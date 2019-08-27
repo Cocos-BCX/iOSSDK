@@ -17,6 +17,7 @@
 {
     self = [super init];
     if (self) {
+        _extensions = @[];
     }
     return self;
 }
@@ -89,6 +90,8 @@
     
     dic[@"price_asset_symbol"] = self.price_asset_symbol;
     
+    dic[@"extensions"] = self.extensions;
+    
     return [dic copy];
 }
 
@@ -113,9 +116,11 @@
     [mutableData appendData:priceAmountData];
     
     [mutableData appendData:[self.price_asset_id transformToData]];
-   
+    
     NSData *priceAssetSymbolData = [CocosPackData packString:self.price_asset_symbol];
     [mutableData appendData:priceAssetSymbolData];
+    
+    [mutableData appendData:[CocosPackData packUnsigedInteger:self.extensions.count]];
     
     return [mutableData copy];
 }
