@@ -174,6 +174,12 @@
 //        } Error:^(NSError *error) {
 //            NSLog(@"Cocos_CallContract erroe  \n%@",error);
 //        }];
+        
+        [[CocosSDK shareInstance] Cocos_GetTransactionById:@"425082979be47fd70d58e236f6120ad9218abc2bd4453bf734bddfbd179b4ca5" Success:^(id responseObject) {
+            NSLog(@"Cocos_GetTransactionById \n%@",responseObject);
+        } Error:^(NSError *error) {
+            NSLog(@"Cocos_GetTransactionById erroe  \n%@",error);
+        }];
     });
 }
 

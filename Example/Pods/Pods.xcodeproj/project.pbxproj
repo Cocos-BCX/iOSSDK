@@ -51,10 +51,10 @@
 		2D9E8C7AC4A433C97C69F5A2A960CCA2 /* CocosPackData.m in Sources */ = {isa = PBXBuildFile; fileRef = 649785B758448310361E068AC0B68AB1 /* CocosPackData.m */; };
 		2EE39E3512C3030B89813C90FAD9A682 /* CocosConstkey.m in Sources */ = {isa = PBXBuildFile; fileRef = E836C86DBE5B65C57820F45953C61ABC /* CocosConstkey.m */; };
 		30EB6E2354822D6B2403C1A3C13DD146 /* sha2.h in Headers */ = {isa = PBXBuildFile; fileRef = 323CD12017F1C6115C888F8A064C279D /* sha2.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		317B296622F02C1F001A7FE9 /* libsecp256k1_arm64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 317B296222F02C1F001A7FE9 /* libsecp256k1_arm64.a */; };
-		317B296722F02C1F001A7FE9 /* libsecp256k1_armv7.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 317B296322F02C1F001A7FE9 /* libsecp256k1_armv7.a */; };
-		317B296822F02C1F001A7FE9 /* libsecp256k1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 317B296422F02C1F001A7FE9 /* libsecp256k1.a */; };
-		317B296922F02C1F001A7FE9 /* libsecp256k1_i386.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 317B296522F02C1F001A7FE9 /* libsecp256k1_i386.a */; };
+		3123A3DD23334E0E00D8DDD8 /* libsecp256k1_i386.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3123A3D923334E0E00D8DDD8 /* libsecp256k1_i386.a */; };
+		3123A3DE23334E0E00D8DDD8 /* libsecp256k1_armv7.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3123A3DA23334E0E00D8DDD8 /* libsecp256k1_armv7.a */; };
+		3123A3DF23334E0E00D8DDD8 /* libsecp256k1_arm64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3123A3DB23334E0E00D8DDD8 /* libsecp256k1_arm64.a */; };
+		3123A3E023334E0E00D8DDD8 /* libsecp256k1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3123A3DC23334E0E00D8DDD8 /* libsecp256k1.a */; };
 		31F6FDE761CE2B993F357277B41AB199 /* CocosBitAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = 422FF0A8ADDD1F1ADA242D82DEF0B17C /* CocosBitAddress.m */; };
 		32216AC38766ABE13F554A060D3B3273 /* WebsocketResultErrorParse.h in Headers */ = {isa = PBXBuildFile; fileRef = 133159A8E99F2A075E68A123D9E89C0A /* WebsocketResultErrorParse.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		357C41C7F7A06EE2F102B349396F37E7 /* RIPEMD160Diggest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2E77FC6D42654F3085B079499FF82F /* RIPEMD160Diggest.m */; };
@@ -360,10 +360,10 @@
 		2F76295C7206A470F038CA48291B58BD /* CocosSDKError.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CocosSDKError.h; sourceTree = "<group>"; };
 		2FC8F53D3B38422B16140D45E302E6A4 /* KeystoneFile.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = KeystoneFile.m; sourceTree = "<group>"; };
 		309B83EEB04725EBD32614DDCE8D4C00 /* ChainAccountHistory.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ChainAccountHistory.m; sourceTree = "<group>"; };
-		317B296222F02C1F001A7FE9 /* libsecp256k1_arm64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsecp256k1_arm64.a; path = Secp256k1_A/Classes/secp256k1/libsecp256k1_arm64.a; sourceTree = "<group>"; };
-		317B296322F02C1F001A7FE9 /* libsecp256k1_armv7.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsecp256k1_armv7.a; path = Secp256k1_A/Classes/secp256k1/libsecp256k1_armv7.a; sourceTree = "<group>"; };
-		317B296422F02C1F001A7FE9 /* libsecp256k1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsecp256k1.a; path = Secp256k1_A/Classes/secp256k1/libsecp256k1.a; sourceTree = "<group>"; };
-		317B296522F02C1F001A7FE9 /* libsecp256k1_i386.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsecp256k1_i386.a; path = Secp256k1_A/Classes/secp256k1/libsecp256k1_i386.a; sourceTree = "<group>"; };
+		3123A3D923334E0E00D8DDD8 /* libsecp256k1_i386.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsecp256k1_i386.a; path = Secp256k1_A/Classes/secp256k1/libsecp256k1_i386.a; sourceTree = "<group>"; };
+		3123A3DA23334E0E00D8DDD8 /* libsecp256k1_armv7.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsecp256k1_armv7.a; path = Secp256k1_A/Classes/secp256k1/libsecp256k1_armv7.a; sourceTree = "<group>"; };
+		3123A3DB23334E0E00D8DDD8 /* libsecp256k1_arm64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsecp256k1_arm64.a; path = Secp256k1_A/Classes/secp256k1/libsecp256k1_arm64.a; sourceTree = "<group>"; };
+		3123A3DC23334E0E00D8DDD8 /* libsecp256k1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsecp256k1.a; path = Secp256k1_A/Classes/secp256k1/libsecp256k1.a; sourceTree = "<group>"; };
 		323CD12017F1C6115C888F8A064C279D /* sha2.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = sha2.h; sourceTree = "<group>"; };
 		34725F49028E2B4E4732A7037639AE63 /* WordList.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = WordList.h; sourceTree = "<group>"; };
 		34E8B1D69EA3566F6AD994B64D4E91CF /* CocosSetting.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CocosSetting.h; sourceTree = "<group>"; };
@@ -629,15 +629,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				317B296822F02C1F001A7FE9 /* libsecp256k1.a in Frameworks */,
 				EDCD77A502B1AE914F10E66F43B80F48 /* AFNetworking.framework in Frameworks */,
-				317B296722F02C1F001A7FE9 /* libsecp256k1_armv7.a in Frameworks */,
+				3123A3DE23334E0E00D8DDD8 /* libsecp256k1_armv7.a in Frameworks */,
 				57B2DBD1AA85FB67FC2D80BFB2A16B38 /* FMDB.framework in Frameworks */,
 				8BE3E2902F85F5B27450A4257A8A4119 /* Foundation.framework in Frameworks */,
-				317B296622F02C1F001A7FE9 /* libsecp256k1_arm64.a in Frameworks */,
 				2911308CE3A57FD0A180E60802A12420 /* Secp256k1_A.framework in Frameworks */,
-				317B296922F02C1F001A7FE9 /* libsecp256k1_i386.a in Frameworks */,
+				3123A3DD23334E0E00D8DDD8 /* libsecp256k1_i386.a in Frameworks */,
 				DBFC065AE57984FE742237ECF8D78639 /* SocketRocket.framework in Frameworks */,
+				3123A3DF23334E0E00D8DDD8 /* libsecp256k1_arm64.a in Frameworks */,
+				3123A3E023334E0E00D8DDD8 /* libsecp256k1.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1369,10 +1369,10 @@
 		FEF6102715BEBAF039F8D743E0499B7B /* Secp256k1_A */ = {
 			isa = PBXGroup;
 			children = (
-				317B296222F02C1F001A7FE9 /* libsecp256k1_arm64.a */,
-				317B296322F02C1F001A7FE9 /* libsecp256k1_armv7.a */,
-				317B296522F02C1F001A7FE9 /* libsecp256k1_i386.a */,
-				317B296422F02C1F001A7FE9 /* libsecp256k1.a */,
+				3123A3DB23334E0E00D8DDD8 /* libsecp256k1_arm64.a */,
+				3123A3DA23334E0E00D8DDD8 /* libsecp256k1_armv7.a */,
+				3123A3D923334E0E00D8DDD8 /* libsecp256k1_i386.a */,
+				3123A3DC23334E0E00D8DDD8 /* libsecp256k1.a */,
 				CE732D9335A8C6973052FC8B1CA211FF /* secp256k1.h */,
 				A1955561A941998143B92F829B848B31 /* Support Files */,
 			);

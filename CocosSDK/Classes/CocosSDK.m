@@ -471,6 +471,31 @@
     [self sendWithChainApi:(WebsocketBlockChainApiHistory) method:(WebsocketBlockChainMethodApiCall) params:uploadParams callBack:callBackModel];
 }
 
+/**
+ Get transaction about one hash
+ 
+ @param transferhash   hash
+ */
+- (void)Cocos_GetTransactionById:(NSString *)transferhash
+                         Success:(SuccessBlock)successBlock
+                           Error:(Error)errorBlock
+{
+    UploadParams *uploadParams = [[UploadParams alloc] init];
+    
+    uploadParams.methodName = kCocosGetTransactionById;
+    
+    uploadParams.totalParams = @[transferhash];
+    
+    CallBackModel *callBackModel = [[CallBackModel alloc] init];
+    
+    callBackModel.successResult = successBlock;
+    
+    callBackModel.errorResult = errorBlock;
+    
+    [self sendWithChainApi:(WebsocketBlockChainApiDataBase) method:(WebsocketBlockChainMethodApiCall) params:uploadParams callBack:callBackModel];
+
+}
+
 /** Decrypt memo① */
 - (void)Cocos_DecryptMemo:(NSDictionary *)memo
                   Private:(NSString *)active_key
