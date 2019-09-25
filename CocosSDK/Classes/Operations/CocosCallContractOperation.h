@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CocosCallContractOperation : CocosBaseOperation
 
-@property (nonatomic, strong, nonnull) ChainAssetAmountObject *fee;
+//@property (nonatomic, strong, nonnull) ChainAssetAmountObject *fee;
 
 @property (nonatomic, strong, nonnull) ChainObjectId *caller;
 

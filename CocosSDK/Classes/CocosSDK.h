@@ -228,24 +228,12 @@ NS_ASSUME_NONNULL_BEGIN
           Success:(SuccessBlock)successBlock
             Error:(Error)errorBlock;
 /**
- Upgrade Membership Fee
-
- @param account account
- @param feePayingAsset feePayingAsset
- */
-- (void)Cocos_UpgradeMemberFeeAccount:(NSString *)account
-                       FeePayingAsset:(NSString *)feePayingAsset
-                              Success:(SuccessBlock)successBlock
-                                Error:(Error)errorBlock;
-/**
  Upgrade Membership
  
  @param account account
- @param feePayingAsset feePayingAsset
  */
 - (void)Cocos_UpgradeMemberAccount:(NSString *)account
                           password:(NSString *)password
-                    FeePayingAsset:(NSString *)feePayingAsset
                            Success:(SuccessBlock)successBlock
                              Error:(Error)errorBlock;
 
@@ -280,26 +268,6 @@ NS_ASSUME_NONNULL_BEGIN
                  Success:(SuccessBlock)successBlock
                    Error:(Error)errorBlock;
 /**
- Transfer fee
- 
- @param fromName        Sender's account
- @param toName          Receiver's account
- @param password        Password
- @param transferAsset   Asset's name(eg. COCOS)
- @param assetAmount     Transfer amount
- @param feePayingAsset  Charge's currency(require)
- @param memo            Memo String
- */
-- (void)Cocos_GetTransferFeesFrom:(NSString *)fromName
-            ToAccount:(NSString *)toName
-             Password:(NSString *)password
-        TransferAsset:(NSString *)transferAsset
-          AssetAmount:(NSString *)assetAmount
-       FeePayingAsset:(NSString *)feePayingAsset
-                 Memo:(NSString *)memo
-              Success:(SuccessBlock)successBlock
-                Error:(Error)errorBlock;
-/**
  Transfer
  
  @param fromName        Sender's account
@@ -315,7 +283,6 @@ NS_ASSUME_NONNULL_BEGIN
                Password:(NSString *)password
           TransferAsset:(NSString *)transferAsset
             AssetAmount:(NSString *)assetAmount
-         FeePayingAsset:(NSString *)feePayingAsset
                    Memo:(NSString *)memo
               Success:(SuccessBlock)successBlock
                 Error:(Error)errorBlock;
@@ -366,36 +333,18 @@ NS_ASSUME_NONNULL_BEGIN
                              Success:(SuccessBlock)successBlock
                                Error:(Error)errorBlock;
 /**
- Call contract Fee
-
- @param contractIdOrName      Contract name or ID
- @param param                Parameter
- @param contractmMethod     Method name
- @param accountIdOrName     Account name or id
- @param feePayingAsset      Currency ID
- */
-- (void)Cocos_GetCallContractFee:(NSString *)contractIdOrName
-             ContractMethodParam:(NSArray *)param
-                  ContractMethod:(NSString *)contractmMethod
-                   CallerAccount:(NSString *)accountIdOrName
-                  feePayingAsset:(NSString *)feePayingAsset
-                         Success:(SuccessBlock)successBlock
-                           Error:(Error)errorBlock;
-/**
  Call contract
 
  @param contractIdOrName      Contract name or ID
  @param param                Parameter
  @param contractmMethod     Method name
  @param accountIdOrName     Account name or id
- @param feePayingAsset      Currency ID
  @param password            password
  */
 - (void)Cocos_CallContract:(NSString *)contractIdOrName
        ContractMethodParam:(NSArray *)param
             ContractMethod:(NSString *)contractmMethod
              CallerAccount:(NSString *)accountIdOrName
-            feePayingAsset:(NSString *)feePayingAsset
                   Password:(NSString *)password
                    Success:(SuccessBlock)successBlock
                      Error:(Error)errorBlock;
@@ -473,99 +422,43 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - NHAsset Operation
 /**
- assets transfer fee
-
- @param from              Asset sender
- @param to                Asset receiver
- @param NHAssetID         NHAssetID
- @param feePayingAssetID    Currency ID
- */
-- (void)Cocos_TransferNHAssetFee:(NSString *)from
-                   ToAccount:(NSString *)to
-                  NHAssetID:(NSString *)NHAssetID
-              FeePayingAsset:(NSString *)feePayingAssetID
-                       Success:(SuccessBlock)successBlock
-                         Error:(Error)errorBlock;
-/**
  assets transfer
 
  @param from            Asset sender
  @param to              Asset receiver
  @param NHAssetID       NHAssetID
  @param password        password
- @param feePayingAssetID Currency ID
  */
 - (void)Cocos_TransferNHAsset:(NSString *)from
                ToAccount:(NSString *)to
                NHAssetID:(NSString *)NHAssetID
                  Password:(NSString *)password
-          FeePayingAsset:(NSString *)feePayingAssetID
                  Success:(SuccessBlock)successBlock
                    Error:(Error)errorBlock;
-/**
- Get fee of buying NH Asset
- 
- @param orderID             NH asset order's ID
- @param account             Buyer's account
- @param feePayingAssetID    Currency ID
- */
-- (void)Cocos_BuyNHAssetFeeOrderID:(NSString *)orderID
-                       Account:(NSString *)account
-                  FeePayingAsset:(NSString *)feePayingAssetID
-                         Success:(SuccessBlock)successBlock
-                           Error:(Error)errorBlock;
 /**
  Buy NH assets
  
  @param orderID        NH asset order's ID
  @param account        Buyer's account
  @param password       password
- @param feePayingAssetID    Currency ID
  */
 - (void)Cocos_BuyNHAssetOrderID:(NSString *)orderID
                Account:(NSString *)account
                Password:(NSString *)password
-                FeePayingAsset:(NSString *)feePayingAssetID
                   Success:(SuccessBlock)successBlock
                     Error:(Error)errorBlock;
-/**
- Delete NH assets Fee
- 
- @param account          account
- @param feePayingAsset   feePayingAssetID
- @param nhAssetID        nhAssetID
- */
-- (void)Cocos_DeleteNHAssetFeeAccount:(NSString *)account
-                       FeePayingAsset:(NSString *)feePayingAsset
-                            nhAssetID:(NSString *)nhAssetID
-                        Success:(SuccessBlock)successBlock
-                          Error:(Error)errorBlock;
 /**
  Delete NH assets
 
  @param account         account
  @param password        password
- @param feePayingAsset  feePayingAsset
  @param nhAssetID       nhAssetID
  */
 - (void)Cocos_DeleteNHAssetAccount:(NSString *)account
                           Password:(NSString *)password
-                    FeePayingAsset:(NSString *)feePayingAsset
                          nhAssetID:(NSString *)nhAssetID
                            Success:(SuccessBlock)successBlock
                              Error:(Error)errorBlock;
-/**
- Cancel Sell NH assets Fee
- 
- @param account          account
- @param feePayingAsset   feePayingAssetID
- @param orderId          orderId
- */
-- (void)Cocos_CancelNHAssetFeeAccount:(NSString *)account
-                       FeePayingAsset:(NSString *)feePayingAsset
-                              OrderId:(NSString *)orderId
-                              Success:(SuccessBlock)successBlock
-                                Error:(Error)errorBlock;
 /**
  Cancel Sell NH assets
  
@@ -576,32 +469,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)Cocos_CancelNHAssetAccount:(NSString *)account
                           Password:(NSString *)password
-                    FeePayingAsset:(NSString *)feePayingAsset
                          OrderId:(NSString *)orderId
                            Success:(SuccessBlock)successBlock
                              Error:(Error)errorBlock;
-/**
- Sell NH assets Fee
-
- @param SellerAccount 出售人账户
- @param nhAssetid nh资产id
- @param memo 备注
- @param priceAmount 价格
- @param pendingFeeAmount 挂单费用
- @param sellAsset 交易代币
- @param opAsset 操作币种
- @param expiration 过期时间(即挂卖时间,number类型,如3600，表示3600秒后过期)
- */
-- (void)Cocos_SellNHAssetFeeSeller:(NSString *)SellerAccount
-                          NHAssetId:(NSString *)nhAssetid
-                               Memo:(NSString *)memo
-                    SellPriceAmount:(NSString *)priceAmount
-                   PendingFeeAmount:(NSString *)pendingFeeAmount
-                    OperationAsset:(NSString *)opAsset
-                    SellAsset:(NSString *)sellAsset
-                         Expiration:(NSString *)expiration
-                            Success:(SuccessBlock)successBlock
-                              Error:(Error)errorBlock;
 /**
  Sell NH assets
  

@@ -20,12 +20,13 @@ typedef NS_ENUM(NSInteger,CocosOperationType) {
     CocosOperationTypeNotFind = -1,
     CocosOperationTypeTransfer = 0,
     CocosOperationTypeUpgradeMember = 7,
-    CocosOperationTypeCallContract = 44,
-    CocosOperationTypeDeleteNHAsset = 50,
-    CocosOperationTypeTransferNHAsset = 51,
-    CocosOperationTypeSellNHAsset = 52,
-    CocosOperationTypeSellNHAssetCancel = 53,
-    CocosOperationTypeBuyNHAsset = 54,
+    CocosOperationTypeCallContract = 35,
+    
+    CocosOperationTypeDeleteNHAsset = 41,
+    CocosOperationTypeTransferNHAsset = 42,
+    CocosOperationTypeSellNHAsset = 43,
+    CocosOperationTypeSellNHAssetCancel = 44,
+    CocosOperationTypeBuyNHAsset = 45,
     CocosOperationTypeLimitOrderCreate,
 };
 

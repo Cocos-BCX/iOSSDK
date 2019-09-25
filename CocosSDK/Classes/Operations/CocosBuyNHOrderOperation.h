@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CocosBuyNHOrderOperation : CocosBaseOperation
 
-@property (nonatomic, strong, nonnull) ChainAssetAmountObject *fee;
+//@property (nonatomic, strong, nonnull) ChainAssetAmountObject *fee;
 
 @property (nonatomic, strong, nonnull) ChainObjectId *fee_paying_account;
 

@@ -12,7 +12,7 @@
 
 @interface CocosTransferOperation : CocosBaseOperation
 
-@property (nonatomic, strong, nonnull) ChainAssetAmountObject *fee;
+//@property (nonatomic, strong, nonnull) ChainAssetAmountObject *fee;
 
 @property (nonatomic, strong, nonnull) ChainObjectId *from;
 

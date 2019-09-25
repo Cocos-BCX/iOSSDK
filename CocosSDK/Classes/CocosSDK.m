@@ -596,35 +596,8 @@
  @param account account
  @param feePayingAsset feePayingAsset
  */
-- (void)Cocos_UpgradeMemberFeeAccount:(NSString *)account
-                       FeePayingAsset:(NSString *)feePayingAsset
-                              Success:(SuccessBlock)successBlock
-                                Error:(Error)errorBlock
-{
-    // 1. account info
-    [self Cocos_GetAccount:account Success:^(id responseObject) {
-        ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:account];
-        // 2. fee asset info
-        [self Cocos_GetAsset:feePayingAsset Success:^(id feeAssetObject) {
-            ChainAssetObject *feeAssetModel = [ChainAssetObject generateFromObject:feeAssetObject];
-            CocosUpgradeMemberOperation *operation = [[CocosUpgradeMemberOperation alloc] init];
-            operation.account_to_upgrade = accountModel.identifier;
-            operation.upgrade_to_lifetime_member = YES;
-            // 3. request fee
-            [self Cocos_OperationFees:operation OperationType:7 FeePayingAsset:feeAssetModel.identifier.generateToTransferObject Success:successBlock Error:errorBlock];
-        } Error:errorBlock];
-    } Error:errorBlock];
-}
-
-/**
- Upgrade Membership
- 
- @param account account
- @param feePayingAsset feePayingAsset
- */
 - (void)Cocos_UpgradeMemberAccount:(NSString *)account
                           password:(NSString *)password
-                    FeePayingAsset:(NSString *)feePayingAsset
                            Success:(SuccessBlock)successBlock
                              Error:(Error)errorBlock
 {
@@ -641,16 +614,11 @@
                 operation.account_to_upgrade = accountModel.identifier;
                 operation.upgrade_to_lifetime_member = YES;
                 // 5. Inquiry fee
-                [self Cocos_UpgradeMemberFeeAccount:account FeePayingAsset:feePayingAsset Success:^(NSArray *feeObject) {
-                    // 6. Stitching fee
-                    NSDictionary *feeDic = feeObject.firstObject;
-                    operation.fee = [ChainAssetAmountObject generateFromObject:feeDic];
-                    CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
-                    SignedTransaction *signedTran = [[SignedTransaction alloc] init];
-                    signedTran.operations = @[content];
-                    // 7. Transfer
-                    [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
-                } Error:errorBlock];
+                CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
+                SignedTransaction *signedTran = [[SignedTransaction alloc] init];
+                signedTran.operations = @[content];
+                // 7. Transfer
+                [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
             } Error:errorBlock];
         }else if (keyDic[@"owner_key"]){
             NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
@@ -760,60 +728,12 @@
     [self sendWithChainApi:(WebsocketBlockChainApiDataBase) method:(WebsocketBlockChainMethodApiCall) params:uploadParams callBack:callBackModel];
 }
 
-/** Transfer fee */
-- (void)Cocos_GetTransferFeesFrom:(NSString *)fromName
-                        ToAccount:(NSString *)toName
-                         Password:(NSString *)password
-                    TransferAsset:(NSString *)transferAsset
-                      AssetAmount:(NSString *)assetAmount
-                   FeePayingAsset:(NSString *)feePayingAsset
-                             Memo:(NSString *)memo
-                          Success:(SuccessBlock)successBlock
-                            Error:(Error)errorBlock
-{
-    // 1. Account password decryption
-    [self validateAccount:fromName Password:password Success:^(NSDictionary *keyDic) {
-        if (keyDic[@"active_key"]) {
-            // 2. Generating Private Key To Transfer
-            CocosPrivateKey *private = [[CocosPrivateKey alloc] initWithPrivateKey:keyDic[@"active_key"]];
-            // 3. Get the transfer object
-            [self getTransferObjFromAccount:fromName toAccount:toName activePrivate:private transferAsset:transferAsset feePayingAsset:feePayingAsset memo:memo Success:^(NSDictionary *operationObj) {
-                
-                ChainAccountModel *fromModel = operationObj[@"fromModel"];
-                ChainAccountModel *toModel = operationObj[@"toModel"];
-                ChainAssetObject *assetModel = operationObj[@"assetModel"];
-                ChainAssetObject *feeAssetModel = operationObj[@"feeAssetModel"];
-                ChainMemo *memoData = operationObj[@"memoData"];
-                
-                // 2. Stitching transfer data
-                CocosTransferOperation *operation = [[CocosTransferOperation alloc] init];
-                operation.from = fromModel.identifier;
-                operation.to = toModel.identifier;
-                operation.amount = [assetModel getAmountFromNormalFloatString:[NSString stringWithFormat:@"%@",assetAmount]];
-                operation.requiredAuthority = fromModel.active.publicKeys;
-                if (memoData) {
-                    operation.memo = memoData;
-                }
-                // 3. Inquiry fee
-                [self Cocos_OperationFees:operation OperationType:0 FeePayingAsset:feeAssetModel.identifier.generateToTransferObject Success:successBlock Error:errorBlock];
-            } Error:errorBlock];
-        }else if (keyDic[@"owner_key"]){
-            NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
-            !errorBlock?:errorBlock(error);
-        }else{
-            NSError *error = [NSError errorWithDomain:@"Please enter the correct original/temporary password" code:SDKErrorCodePasswordwrong userInfo:@{@"password":password}];
-            !errorBlock?:errorBlock(error);
-        }
-    } Error:errorBlock];
-}
-
 /** Transfer */
 - (void)Cocos_TransferFromAccount:(NSString *)fromName
                         ToAccount:(NSString *)toName
                          Password:(NSString *)password
                     TransferAsset:(NSString *)transferAsset
                       AssetAmount:(NSString *)assetAmount
-                   FeePayingAsset:(NSString *)feePayingAsset
                              Memo:(NSString *)memo
                           Success:(SuccessBlock)successBlock
                             Error:(Error)errorBlock
@@ -823,7 +743,7 @@
         if (keyDic[@"active_key"]) {
             // 2. Generating Private Key Transfer
             CocosPrivateKey *private = [[CocosPrivateKey alloc] initWithPrivateKey:keyDic[@"active_key"]];
-            [self transferFromAccount:fromName toAccount:toName activePrivate:private transferAsset:transferAsset assetAmount:assetAmount feePayingAsset:feePayingAsset memo:memo Success:successBlock Error:errorBlock];
+            [self transferFromAccount:fromName toAccount:toName activePrivate:private transferAsset:transferAsset assetAmount:assetAmount memo:memo Success:successBlock Error:errorBlock];
         }else if (keyDic[@"owner_key"]){
             NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
             !errorBlock?:errorBlock(error);
@@ -1004,48 +924,11 @@
     [self sendWithChainApi:(WebsocketBlockChainApiDataBase) method:(WebsocketBlockChainMethodApiCall) params:uploadParams callBack:callBackModel];
 }
 
-/** Call contract Fee */
-- (void)Cocos_GetCallContractFee:(NSString *)contractIdOrName
-             ContractMethodParam:(NSArray *)param
-                  ContractMethod:(NSString *)contractmMethod
-                   CallerAccount:(NSString *)accountIdOrName
-                  feePayingAsset:(NSString *)feePayingAsset
-                         Success:(SuccessBlock)successBlock
-                           Error:(Error)errorBlock
-{
-    // 1. Inquiry for transferor information
-    [self Cocos_GetAccount:accountIdOrName Success:^(id account) {
-        ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:account];
-        // 2. Get Contract Info
-        [self Cocos_GetContract:contractIdOrName Success:^(id contract) {
-            ChainContract *contractModel = [ChainContract generateFromObject:contract];
-            // 3. Stitching transfer data
-            CocosCallContractOperation *operation = [[CocosCallContractOperation alloc] init];
-            operation.caller = accountModel.identifier;
-            operation.contract_id = contractModel.identifier;
-            operation.requiredAuthority = accountModel.active.publicKeys;
-            operation.function_name = contractmMethod;
-            NSMutableArray *tempArray = [NSMutableArray array];
-            for (NSString *paramStr in param) {
-                NSMutableArray *array = [NSMutableArray array];
-                [array addObject:@(2)];
-                NSDictionary *dic = @{@"v":paramStr};
-                [array addObject:dic];
-                [tempArray addObject:array];
-            }
-            operation.value_list = tempArray;
-            
-            [self Cocos_OperationFees:operation OperationType:44 FeePayingAsset:feePayingAsset Success:successBlock Error:errorBlock];
-        } Error:errorBlock];
-    } Error:errorBlock];
-}
-
 /** Call contract */
 - (void)Cocos_CallContract:(NSString *)contractIdOrName
        ContractMethodParam:(NSArray *)param
             ContractMethod:(NSString *)contractmMethod
              CallerAccount:(NSString *)accountIdOrName
-            feePayingAsset:(NSString *)feePayingAsset
                   Password:(NSString *)password
                    Success:(SuccessBlock)successBlock
                      Error:(Error)errorBlock
@@ -1086,42 +969,42 @@
                         }
                     }
                     operation.value_list = tempArray;
-                    
-                    // 6. Inquiry fee
-                    [self Cocos_OperationFees:operation OperationType:44 FeePayingAsset:feePayingAsset Success:^(NSArray *feeObject) {
-                        // 7. Stitching fee
-                        NSDictionary *feeDic = feeObject.firstObject;
-                        operation.fee = [ChainAssetAmountObject generateFromObject:feeDic];
-                        CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
-                        SignedTransaction *signedTran = [[SignedTransaction alloc] init];
-                        signedTran.operations = @[content];
-                        // 8. Call contract
-                        [self signedTransaction:signedTran activePrivate:private Success:^(id transactionhash) {
-                            // 9. Get Transfer Block with hash
-                            dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                                dispatch_semaphore_t disp = dispatch_semaphore_create(0);
-                                do {
-                                    [self Cocos_GetTransactionBlockWithHash:transactionhash Success:^(id blockResponse) {
-                                        if (blockResponse == nil || blockResponse[@"block_num"] == nil) {
-                                            dispatch_semaphore_signal(disp);
-                                        }else{
-                                            // 10. Get Block with Block Num
-                                            [self Cocos_GetBlockWithBlockNum:blockResponse[@"block_num"] Success:^(id responseObject) {
-                                                [self CallContractSuccessResponseWithTrxHash:transactionhash blockNum:blockResponse[@"block_num"] resultData:responseObject succeed:^(NSMutableDictionary *callContractRes) {
-                                                    // 主线程回调
-                                                    dispatch_async(dispatch_get_main_queue(), ^{
-                                                        !successBlock?:successBlock(callContractRes);
-                                                    });
-                                                }];
-                                            } Error:errorBlock];
-                                        }
-                                    } Error:errorBlock];
-                                    // 2. 等待信号
-                                    dispatch_semaphore_wait(disp, DISPATCH_TIME_FOREVER);
-                                } while (1);
-                            });
-                        } Error:errorBlock];
+                    CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
+                    SignedTransaction *signedTran = [[SignedTransaction alloc] init];
+                    signedTran.operations = @[content];
+                    // 8. Call contract
+                    [self signedTransaction:signedTran activePrivate:private Success:^(id transactionhash) {
+                        // 9. Get Transfer Block with hash
+                        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                            dispatch_semaphore_t disp = dispatch_semaphore_create(0);
+                            do {
+                                [self Cocos_GetTransactionBlockWithHash:transactionhash Success:^(id blockResponse) {
+                                    if (blockResponse == nil || blockResponse[@"block_num"] == nil) {
+                                        dispatch_semaphore_signal(disp);
+                                    }else{
+                                        // 10. Get Block with Block Num
+                                        [self Cocos_GetBlockWithBlockNum:blockResponse[@"block_num"] Success:^(id responseObject) {
+                                            [self CallContractSuccessResponseWithTrxHash:transactionhash blockNum:blockResponse[@"block_num"] resultData:responseObject succeed:^(NSMutableDictionary *callContractRes) {
+                                                // 主线程回调
+                                                dispatch_async(dispatch_get_main_queue(), ^{
+                                                    !successBlock?:successBlock(callContractRes);
+                                                });
+                                            }];
+                                        } Error:errorBlock];
+                                    }
+                                } Error:errorBlock];
+                                // 2. 等待信号
+                                dispatch_semaphore_wait(disp, DISPATCH_TIME_FOREVER);
+                            } while (1);
+                        });
                     } Error:errorBlock];
+//                    // 6. Inquiry fee
+//                    [self Cocos_OperationFees:operation OperationType:35 FeePayingAsset:feePayingAsset Success:^(NSArray *feeObject) {
+//                        // 7. Stitching fee
+//                        NSDictionary *feeDic = feeObject.firstObject;
+//                        operation.fee = [ChainAssetAmountObject generateFromObject:feeDic];
+//
+//                    } Error:errorBlock];
                 }else if (keyDic[@"owner_key"]){
                     NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
                     !errorBlock?:errorBlock(error);
@@ -1387,34 +1270,11 @@
     [self sendWithChainApi:WebsocketBlockChainApiDataBase method:(WebsocketBlockChainMethodApiCall) params:uploadParams callBack:callBackModel];
 }
 
-/** assets transfer fee */
-- (void)Cocos_TransferNHAssetFee:(NSString *)from
-                       ToAccount:(NSString *)to
-                       NHAssetID:(NSString *)NHAssetID
-                  FeePayingAsset:(NSString *)feePayingAssetID
-                         Success:(SuccessBlock)successBlock
-                           Error:(Error)errorBlock
-{
-    [self getOperationFromAccount:from toAccount:to feePayingAsset:feePayingAssetID Success:^(NSDictionary *operationObj) {
-        ChainAccountModel *fromModel = operationObj[@"fromModel"];
-        ChainAccountModel *toModel = operationObj[@"toModel"];
-        // 2. Stitching transfer data
-        CocosTransferNHOperation *operation = [[CocosTransferNHOperation alloc] init];
-        operation.from = fromModel.identifier;
-        operation.to = toModel.identifier;
-        operation.nh_asset = [ChainObjectId createFromString:NHAssetID];
-        operation.requiredAuthority = fromModel.active.publicKeys;
-        // 3. Inquiry fee
-        [self Cocos_OperationFees:operation OperationType:51 FeePayingAsset:feePayingAssetID Success:successBlock Error:errorBlock];
-    } Error:errorBlock];
-}
-
 /** assets transfer */
 - (void)Cocos_TransferNHAsset:(NSString *)from
                     ToAccount:(NSString *)to
                     NHAssetID:(NSString *)NHAssetID
                      Password:(NSString *)password
-               FeePayingAsset:(NSString *)feePayingAssetID
                       Success:(SuccessBlock)successBlock
                         Error:(Error)errorBlock
 {
@@ -1423,7 +1283,7 @@
         if (keyDic[@"active_key"]) {
             // 2. Generating Private Key Transfer
             CocosPrivateKey *private = [[CocosPrivateKey alloc] initWithPrivateKey:keyDic[@"active_key"]];
-            [self getOperationFromAccount:from toAccount:to feePayingAsset:feePayingAssetID Success:^(NSDictionary *operationObj) {
+            [self getOperationFromAccount:from toAccount:to Success:^(NSDictionary *operationObj) {
                 ChainAccountModel *fromModel = operationObj[@"fromModel"];
                 ChainAccountModel *toModel = operationObj[@"toModel"];
                 // 2. Stitching transfer data
@@ -1432,17 +1292,11 @@
                 operation.to = toModel.identifier;
                 operation.nh_asset = [ChainObjectId createFromString:NHAssetID];
                 operation.requiredAuthority = fromModel.active.publicKeys;
-                // 3. Inquiry fee
-                [self Cocos_OperationFees:operation OperationType:51 FeePayingAsset:feePayingAssetID Success:^(NSArray * feeObject) {
-                    // 4. Stitching fee
-                    NSDictionary *feeDic = feeObject.firstObject;
-                    operation.fee = [ChainAssetAmountObject generateFromObject:feeDic];
-                    CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
-                    SignedTransaction *signedTran = [[SignedTransaction alloc] init];
-                    signedTran.operations = @[content];
-                    // 5. Transfer
-                    [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
-                } Error:errorBlock];
+                CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
+                SignedTransaction *signedTran = [[SignedTransaction alloc] init];
+                signedTran.operations = @[content];
+                // 5. Transfer
+                [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
             } Error:errorBlock];
         }else if (keyDic[@"owner_key"]){
             NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
@@ -1455,52 +1309,11 @@
 }
 
 /**
- Get fee of buying NH Asset
- */
-- (void)Cocos_BuyNHAssetFeeOrderID:(NSString *)orderID
-                           Account:(NSString *)account
-                    FeePayingAsset:(NSString *)feePayingAssetID
-                           Success:(SuccessBlock)successBlock
-                             Error:(Error)errorBlock
-{
-    // 1. request Order
-    [self Cocos_GetObjects:@[orderID] Success:^(id responseObject) {
-        ChainNHAssetOrder *NHAssetOrder = [ChainNHAssetOrder generateFromObject:[responseObject lastObject]];
-        // 2. request account
-        [self Cocos_GetAccount:account Success:^(id accountObj) {
-            ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:accountObj];
-            // 3. Search for asset information
-            [self Cocos_GetAsset:feePayingAssetID Success:^(id feeAssetObject) {
-                ChainAssetObject *feeAssetModel = [ChainAssetObject generateFromObject:feeAssetObject];
-                // 4. request Order Price
-                [self Cocos_GetAsset:[NHAssetOrder.price.assetId generateToTransferObject] Success:^(id priceObj) {
-                    ChainAssetObject *priceModel = [ChainAssetObject generateFromObject:priceObj];
-                    NSString *price_amount = [priceModel getRealAmountFromAssetAmount:NHAssetOrder.price];
-                    
-                    // 5. Return the operation object
-                    CocosBuyNHOrderOperation *operation = [[CocosBuyNHOrderOperation alloc] init];
-                    operation.fee_paying_account = accountModel.identifier;
-                    operation.order = NHAssetOrder.identifier;
-                    operation.seller = NHAssetOrder.seller;
-                    operation.nh_asset = NHAssetOrder.nh_asset_id;
-                    operation.price_amount = price_amount;
-                    operation.price_asset_id = priceModel.identifier;
-                    operation.price_asset_symbol = priceModel.symbol;
-                    // 6. Inquiry fee
-                    [self Cocos_OperationFees:operation OperationType:54 FeePayingAsset:[feeAssetModel.identifier generateToTransferObject] Success:successBlock Error:errorBlock];
-                } Error:errorBlock];
-            } Error:errorBlock];
-        } Error:errorBlock];
-    } Error:errorBlock];
-}
-
-/**
  Buy NH assets
  */
 - (void)Cocos_BuyNHAssetOrderID:(NSString *)orderID
                         Account:(NSString *)account
                        Password:(NSString *)password
-                 FeePayingAsset:(NSString *)feePayingAssetID
                         Success:(SuccessBlock)successBlock
                           Error:(Error)errorBlock
 {
@@ -1516,35 +1329,25 @@
                 // 2. request account
                 [self Cocos_GetAccount:account Success:^(id accountObj) {
                     ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:accountObj];
-                    // 3. Search for asset information
-                    [self Cocos_GetAsset:feePayingAssetID Success:^(id feeAssetObject) {
-                        ChainAssetObject *feeAssetModel = [ChainAssetObject generateFromObject:feeAssetObject];
-                        // 4. request Order Price
-                        [self Cocos_GetAsset:[NHAssetOrder.price.assetId generateToTransferObject] Success:^(id priceObj) {
-                            ChainAssetObject *priceModel = [ChainAssetObject generateFromObject:priceObj];
-                            NSString *price_amount = [priceModel getRealAmountFromAssetAmount:NHAssetOrder.price];
-                            
-                            // 5. Return the operation object
-                            CocosBuyNHOrderOperation *operation = [[CocosBuyNHOrderOperation alloc] init];
-                            operation.fee_paying_account = accountModel.identifier;
-                            operation.order = NHAssetOrder.identifier;
-                            operation.seller = NHAssetOrder.seller;
-                            operation.nh_asset = NHAssetOrder.nh_asset_id;
-                            operation.price_amount = price_amount;
-                            operation.price_asset_id = priceModel.identifier;
-                            operation.price_asset_symbol = priceModel.symbol;
-                            // 6. Inquiry fee
-                            [self Cocos_OperationFees:operation OperationType:54 FeePayingAsset:[feeAssetModel.identifier generateToTransferObject] Success:^(NSArray *feeObject) {
-                                // 7. Stitching fee
-                                NSDictionary *feeDic = feeObject.firstObject;
-                                operation.fee = [ChainAssetAmountObject generateFromObject:feeDic];
-                                CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
-                                SignedTransaction *signedTran = [[SignedTransaction alloc] init];
-                                signedTran.operations = @[content];
-                                // 8. Call contract
-                                [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
-                            } Error:errorBlock];
-                        } Error:errorBlock];
+                    // 4. request Order Price
+                    [self Cocos_GetAsset:[NHAssetOrder.price.assetId generateToTransferObject] Success:^(id priceObj) {
+                        ChainAssetObject *priceModel = [ChainAssetObject generateFromObject:priceObj];
+                        NSString *price_amount = [priceModel getRealAmountFromAssetAmount:NHAssetOrder.price];
+                        
+                        // 5. Return the operation object
+                        CocosBuyNHOrderOperation *operation = [[CocosBuyNHOrderOperation alloc] init];
+                        operation.fee_paying_account = accountModel.identifier;
+                        operation.order = NHAssetOrder.identifier;
+                        operation.seller = NHAssetOrder.seller;
+                        operation.nh_asset = NHAssetOrder.nh_asset_id;
+                        operation.price_amount = price_amount;
+                        operation.price_asset_id = priceModel.identifier;
+                        operation.price_asset_symbol = priceModel.symbol;
+                        CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
+                        SignedTransaction *signedTran = [[SignedTransaction alloc] init];
+                        signedTran.operations = @[content];
+                        // 8. Call contract
+                        [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];    
                     } Error:errorBlock];
                 } Error:errorBlock];
             } Error:errorBlock];
@@ -1558,32 +1361,9 @@
     } Error:errorBlock];
 }
 
-/** Delete NH assets Fee */
-- (void)Cocos_DeleteNHAssetFeeAccount:(NSString *)account
-                       FeePayingAsset:(NSString *)feePayingAsset
-                            nhAssetID:(NSString *)nhAssetID
-                              Success:(SuccessBlock)successBlock
-                                Error:(Error)errorBlock
-{
-    // 1. account info
-    [self Cocos_GetAccount:account Success:^(id responseObject) {
-        ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:responseObject];
-        // 2. fee asset info
-        [self Cocos_GetAsset:feePayingAsset Success:^(id feeAssetObject) {
-            ChainAssetObject *feeAssetModel = [ChainAssetObject generateFromObject:feeAssetObject];
-            CocosDeleteNHOperation *operation = [[CocosDeleteNHOperation alloc] init];
-            operation.fee_paying_account = accountModel.identifier;
-            operation.nh_asset = [ChainObjectId generateFromObject:nhAssetID];
-            // 3. request fee
-            [self Cocos_OperationFees:operation OperationType:50 FeePayingAsset:feeAssetModel.identifier.generateToTransferObject Success:successBlock Error:errorBlock];
-        } Error:errorBlock];
-    } Error:errorBlock];
-}
-
 /** Delete NH assets */
 - (void)Cocos_DeleteNHAssetAccount:(NSString *)account
                           Password:(NSString *)password
-                    FeePayingAsset:(NSString *)feePayingAsset
                          nhAssetID:(NSString *)nhAssetID
                            Success:(SuccessBlock)successBlock
                              Error:(Error)errorBlock
@@ -1600,17 +1380,11 @@
                 CocosDeleteNHOperation *operation = [[CocosDeleteNHOperation alloc] init];
                 operation.fee_paying_account = accountModel.identifier;
                 operation.nh_asset = [ChainObjectId generateFromObject:nhAssetID] ;
-                // 5. Inquiry fee
-                [self Cocos_DeleteNHAssetFeeAccount:account FeePayingAsset:feePayingAsset nhAssetID:nhAssetID Success:^(NSArray *feeObject) {
-                    // 6. Stitching fee
-                    NSDictionary *feeDic = feeObject.firstObject;
-                    operation.fee = [ChainAssetAmountObject generateFromObject:feeDic];
-                    CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
-                    SignedTransaction *signedTran = [[SignedTransaction alloc] init];
-                    signedTran.operations = @[content];
-                    // 7. Delete
-                    [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
-                } Error:errorBlock];
+                CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
+                SignedTransaction *signedTran = [[SignedTransaction alloc] init];
+                signedTran.operations = @[content];
+                // 7. Delete
+                [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
             } Error:errorBlock];
         }else if (keyDic[@"owner_key"]){
             NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
@@ -1622,31 +1396,9 @@
     } Error:errorBlock];
 }
 
-/** cancel sell NH assets Fee */
-- (void)Cocos_CancelNHAssetFeeAccount:(NSString *)account
-                       FeePayingAsset:(NSString *)feePayingAsset
-                              OrderId:(NSString *)orderId
-                              Success:(SuccessBlock)successBlock
-                                Error:(Error)errorBlock
-{
-    // 1. account info
-    [self Cocos_GetAccount:account Success:^(id responseObject) {
-        ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:responseObject];
-        // 2. fee asset info
-        [self Cocos_GetAsset:feePayingAsset Success:^(id feeAssetObject) {
-            ChainAssetObject *feeAssetModel = [ChainAssetObject generateFromObject:feeAssetObject];
-            CocosSellNHAssetCancelOperation *operation = [[CocosSellNHAssetCancelOperation alloc] init];
-            operation.fee_paying_account = accountModel.identifier;
-            operation.order = [ChainObjectId generateFromObject:orderId];
-            // 3. request fee
-            [self Cocos_OperationFees:operation OperationType:53 FeePayingAsset:feeAssetModel.identifier.generateToTransferObject Success:successBlock Error:errorBlock];
-        } Error:errorBlock];
-    } Error:errorBlock];
-}
 /** cancel sell NH assets */
 - (void)Cocos_CancelNHAssetAccount:(NSString *)account
                           Password:(NSString *)password
-                    FeePayingAsset:(NSString *)feePayingAsset
                            OrderId:(NSString *)orderId
                            Success:(SuccessBlock)successBlock
                              Error:(Error)errorBlock
@@ -1663,17 +1415,11 @@
                 CocosSellNHAssetCancelOperation *operation = [[CocosSellNHAssetCancelOperation alloc] init];
                 operation.fee_paying_account = accountModel.identifier;
                 operation.order = [ChainObjectId generateFromObject:orderId] ;
-                // 5. Inquiry fee
-                [self Cocos_CancelNHAssetFeeAccount:account FeePayingAsset:feePayingAsset OrderId:orderId Success:^(NSArray *feeObject) {
-                    // 6. Stitching fee
-                    NSDictionary *feeDic = feeObject.firstObject;
-                    operation.fee = [ChainAssetAmountObject generateFromObject:feeDic];
-                    CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
-                    SignedTransaction *signedTran = [[SignedTransaction alloc] init];
-                    signedTran.operations = @[content];
-                    // 7. Delete
-                    [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
-                } Error:errorBlock];
+                CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
+                SignedTransaction *signedTran = [[SignedTransaction alloc] init];
+                signedTran.operations = @[content];
+                // 7. Delete
+                [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
             } Error:errorBlock];
         }else if (keyDic[@"owner_key"]){
             NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
@@ -1685,29 +1431,7 @@
     } Error:errorBlock];
 }
 
-/** Sell NH assets Fee */
-- (void)Cocos_SellNHAssetFeeSeller:(NSString *)SellerAccount
-                         NHAssetId:(NSString *)nhAssetid
-                              Memo:(NSString *)memo
-                   SellPriceAmount:(NSString *)priceAmount
-                  PendingFeeAmount:(NSString *)pendingFeeAmount
-                    OperationAsset:(NSString *)opAsset
-                         SellAsset:(NSString *)sellAsset
-                        Expiration:(NSString *)expiration
-                           Success:(SuccessBlock)successBlock
-                             Error:(Error)errorBlock
-{
-    // 1. account info
-    [self sellNHAssetOperationSeller:SellerAccount NHAssetId:nhAssetid Memo:memo SellPriceAmount:priceAmount PendingFeeAmount:pendingFeeAmount OperationAsset:opAsset SellAsset:sellAsset Expiration:expiration Success:^(NSDictionary *callback) {
-        CocosSellNHAssetOperation *operation = callback[@"operation"];
-        ChainAssetObject *opAsset = callback[@"opAsset"];
-        // 2. fee asset info
-        [self Cocos_OperationFees:operation OperationType:52 FeePayingAsset:opAsset.identifier.generateToTransferObject Success:successBlock Error:errorBlock];
-    } Error:errorBlock];
-}
-
 /** Sell NH assets */
-
 - (void)Cocos_SellNHAssetSeller:(NSString *)SellerAccount
                        Password:(NSString *)password
                       NHAssetId:(NSString *)nhAssetid
@@ -1727,18 +1451,11 @@
             CocosPrivateKey *private = [[CocosPrivateKey alloc] initWithPrivateKey:keyDic[@"active_key"]];
             [self sellNHAssetOperationSeller:SellerAccount NHAssetId:nhAssetid Memo:memo SellPriceAmount:priceAmount PendingFeeAmount:pendingFeeAmount OperationAsset:opAsset SellAsset:sellAsset Expiration:expiration Success:^(NSDictionary *callback) {
                 CocosSellNHAssetOperation *operation = callback[@"operation"];
-                ChainAssetObject *opAsset = callback[@"opAsset"];
-                // 3. fee asset info
-                [self Cocos_OperationFees:operation OperationType:52 FeePayingAsset:opAsset.identifier.generateToTransferObject Success:^(NSArray *feeObject) {
-                    // 4. Stitching fee
-                    NSDictionary *feeDic = feeObject.firstObject;
-                    operation.fee = [ChainAssetAmountObject generateFromObject:feeDic];
-                    CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
-                    SignedTransaction *signedTran = [[SignedTransaction alloc] init];
-                    signedTran.operations = @[content];
-                    // 5. Delete
-                    [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
-                } Error:errorBlock];
+                CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
+                SignedTransaction *signedTran = [[SignedTransaction alloc] init];
+                signedTran.operations = @[content];
+                // 3. Sell
+                [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
             } Error:errorBlock];
         }else if (keyDic[@"owner_key"]){
             NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
@@ -1783,7 +1500,7 @@
             ChainAssetAmountObject *pendingAmout = [opAssetModel getAmountFromNormalFloatString:pendingFeeAmount];
             CocosSellNHAssetOperation *operation = [[CocosSellNHAssetOperation alloc] init];
             operation.seller = accountModel.identifier;
-            operation.otcaccount = [ChainObjectId generateFromObject:@"1.2.11233"];
+            operation.otcaccount = [ChainObjectId generateFromObject:@"1.2.25"];
             operation.pending_orders_fee = pendingAmout;
             operation.nh_asset = [ChainObjectId generateFromObject:nhAssetid];
             operation.memo = memo;
@@ -1796,7 +1513,6 @@
                 // 3. Callback CocosBaseOperation
                 NSDictionary *callback = @{
                                            @"operation":operation,
-                                           @"opAsset":opAssetModel,
                                            };
                 !successBlock?:successBlock(callback);
             } Error:errorBlock];
@@ -2010,18 +1726,16 @@
               activePrivate:(CocosPrivateKey *)private
               transferAsset:(NSString *)transferAsset
                 assetAmount:(NSString *)assetAmount
-             feePayingAsset:(NSString *)feePayingAsset
                        memo:(NSString *)memo
                     Success:(SuccessBlock)successBlock
                       Error:(Error)errorBlock
 {
     
     // 1. Query Transfer object information
-    [self getTransferObjFromAccount:fromName toAccount:toName activePrivate:private transferAsset:transferAsset feePayingAsset:feePayingAsset memo:memo Success:^(NSDictionary *operationObj) {
+    [self getTransferObjFromAccount:fromName toAccount:toName activePrivate:private transferAsset:transferAsset memo:memo Success:^(NSDictionary *operationObj) {
         ChainAccountModel *fromModel = operationObj[@"fromModel"];
         ChainAccountModel *toModel = operationObj[@"toModel"];
         ChainAssetObject *assetModel = operationObj[@"assetModel"];
-        ChainAssetObject *feeAssetModel = operationObj[@"feeAssetModel"];
         ChainMemo *memoData = operationObj[@"memoData"];
         
         // 2. Stitching transfer data
@@ -2033,24 +1747,17 @@
         if (memoData) {
             operation.memo = memoData;
         }
-        // 3. Inquiry fee
-        [self Cocos_OperationFees:operation OperationType:0 FeePayingAsset:feeAssetModel.identifier.generateToTransferObject Success:^(NSArray * feeObject) {
-            // 4. Stitching fee
-            NSDictionary *feeDic = feeObject.firstObject;
-            operation.fee = [ChainAssetAmountObject generateFromObject:feeDic];
-            CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
-            SignedTransaction *signedTran = [[SignedTransaction alloc] init];
-            signedTran.operations = @[content];
-            // 5. Transfer
-            [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
-        } Error:errorBlock];
+        CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
+        SignedTransaction *signedTran = [[SignedTransaction alloc] init];
+        signedTran.operations = @[content];
+        // 3. Transfer
+        [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
     } Error:errorBlock];
 }
 
 /** Request object for operation */
 - (void)getOperationFromAccount:(NSString *)fromName
                       toAccount:(NSString *)toName
-                 feePayingAsset:(NSString *)feePayingAsset
                         Success:(SuccessBlock)successBlock
                           Error:(Error)errorBlock
 {
@@ -2059,16 +1766,11 @@
         // 2. Inquiry for payee information
         [self Cocos_GetAccount:toName Success:^(id toAccount) {
             ChainAccountModel *toModel =[ChainAccountModel generateFromObject:toAccount];
-            // 3. Search for asset information
-            [self Cocos_GetAsset:feePayingAsset Success:^(id feeAssetObject) {
-                ChainAssetObject *feeAssetModel = [ChainAssetObject generateFromObject:feeAssetObject];
-                // 4. Return the desired object
-                NSMutableDictionary *operationObj = [NSMutableDictionary dictionary];
-                operationObj[@"fromModel"] = fromModel;
-                operationObj[@"toModel"] = toModel;
-                operationObj[@"feeAssetModel"] = feeAssetModel;
-                !successBlock?:successBlock(operationObj);
-            } Error:errorBlock];
+            // 3. Return the desired object
+            NSMutableDictionary *operationObj = [NSMutableDictionary dictionary];
+            operationObj[@"fromModel"] = fromModel;
+            operationObj[@"toModel"] = toModel;
+            !successBlock?:successBlock(operationObj);
         } Error:errorBlock];
     } Error:errorBlock];
 }
@@ -2078,7 +1780,6 @@
                         toAccount:(NSString *)toName
                     activePrivate:(CocosPrivateKey *)private
                     transferAsset:(NSString *)transferAsset
-                   feePayingAsset:(NSString *)feePayingAsset
                              memo:(NSString *)memo
                           Success:(SuccessBlock)successBlock
                             Error:(Error)errorBlock
@@ -2096,28 +1797,13 @@
                 if (memo.length > 0) {
                     memoData = [[ChainMemo alloc] initWithPrivateKey:private anotherPublickKey:toModel.options.memo_key customerNonce:nil totalMessage:memo];
                 }
-                if ([transferAsset isEqualToString:feePayingAsset]) {
-                    // 4. Return the desired object
-                    NSMutableDictionary *operationObj = [NSMutableDictionary dictionary];
-                    operationObj[@"fromModel"] = fromModel;
-                    operationObj[@"toModel"] = toModel;
-                    operationObj[@"assetModel"] = assetModel;
-                    operationObj[@"feeAssetModel"] = assetModel;
-                    operationObj[@"memoData"] = memoData;
-                    !successBlock?:successBlock(operationObj);
-                }else{
-                    [self Cocos_GetAsset:feePayingAsset Success:^(id feeAssetObject) {
-                        ChainAssetObject *feeAssetModel = [ChainAssetObject generateFromObject:feeAssetObject];
-                        // 4. Return the desired object
-                        NSMutableDictionary *operationObj = [NSMutableDictionary dictionary];
-                        operationObj[@"fromModel"] = fromModel;
-                        operationObj[@"toModel"] = toModel;
-                        operationObj[@"assetModel"] = assetModel;
-                        operationObj[@"feeAssetModel"] = feeAssetModel;
-                        operationObj[@"memoData"] = memoData;
-                        !successBlock?:successBlock(operationObj);
-                    } Error:errorBlock];
-                }
+                // 4. Return the desired object
+                NSMutableDictionary *operationObj = [NSMutableDictionary dictionary];
+                operationObj[@"fromModel"] = fromModel;
+                operationObj[@"toModel"] = toModel;
+                operationObj[@"assetModel"] = assetModel;
+                operationObj[@"memoData"] = memoData;
+                !successBlock?:successBlock(operationObj);
             } Error:errorBlock];
         } Error:errorBlock];
     } Error:errorBlock];

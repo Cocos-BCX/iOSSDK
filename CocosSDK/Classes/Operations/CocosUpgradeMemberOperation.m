@@ -31,10 +31,10 @@
 - (void)setValue:(id)value forKey:(NSString *)key {
     if ([value isKindOfClass:[NSNull class]]) return;
     
-    if ([key isEqualToString:@"fee"]) {
-        self.fee = [ChainAssetAmountObject generateFromObject:value];
-        return;
-    }
+//    if ([key isEqualToString:@"fee"]) {
+//        self.fee = [ChainAssetAmountObject generateFromObject:value];
+//        return;
+//    }
     
     [super setValue:value forKey:key];
 }
@@ -52,7 +52,7 @@
 - (id)generateToTransferObject {
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:8];
     
-    dic[@"fee"] = [self.fee generateToTransferObject];
+//    dic[@"fee"] = [self.fee generateToTransferObject];
     dic[@"account_to_upgrade"] = [self.account_to_upgrade generateToTransferObject];
     dic[@"upgrade_to_lifetime_member"] = @(self.upgrade_to_lifetime_member);
     dic[@"extensions"] = self.extensions;
@@ -63,11 +63,11 @@
 - (NSData *)transformToData {
     NSMutableData *mutableData = [NSMutableData dataWithCapacity:300];
     
-    if (!self.fee) {
-        [mutableData appendData:[[[ChainAssetAmountObject alloc] initFromAssetId:[ChainObjectId generateFromObject:@"1.3.0"] amount:0] transformToData]];
-    }else {
-        [mutableData appendData:[self.fee transformToData]];
-    }
+//    if (!self.fee) {
+//        [mutableData appendData:[[[ChainAssetAmountObject alloc] initFromAssetId:[ChainObjectId generateFromObject:@"1.3.0"] amount:0] transformToData]];
+//    }else {
+//        [mutableData appendData:[self.fee transformToData]];
+//    }
     [mutableData appendData:[self.account_to_upgrade transformToData]];
     
     NSData *upgrade_to_lifetimeData = [CocosPackData packBool:self.upgrade_to_lifetime_member];

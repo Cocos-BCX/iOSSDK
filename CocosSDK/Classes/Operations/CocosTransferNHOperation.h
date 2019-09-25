@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CocosTransferNHOperation : CocosBaseOperation
 
-@property (nonatomic, strong, nonnull) ChainAssetAmountObject *fee;
+//@property (nonatomic, strong, nonnull) ChainAssetAmountObject *fee;
 
 @property (nonatomic, strong, nonnull) ChainObjectId *from;
 

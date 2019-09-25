@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class ChainObjectId;
 
 @interface CocosUpgradeMemberOperation : CocosBaseOperation
-@property (nonatomic, strong, nonnull) ChainAssetAmountObject *fee;
+//@property (nonatomic, strong, nonnull) ChainAssetAmountObject *fee;
 
 @property (nonatomic, strong, nonnull) ChainObjectId *account_to_upgrade;
 

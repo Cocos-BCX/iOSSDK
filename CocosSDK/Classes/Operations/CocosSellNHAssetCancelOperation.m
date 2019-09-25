@@ -32,10 +32,10 @@
 - (void)setValue:(id)value forKey:(NSString *)key {
     if ([value isKindOfClass:[NSNull class]]) return;
     
-    if ([key isEqualToString:@"fee"]) {
-        self.fee = [ChainAssetAmountObject generateFromObject:value];
-        return;
-    }
+//    if ([key isEqualToString:@"fee"]) {
+//        self.fee = [ChainAssetAmountObject generateFromObject:value];
+//        return;
+//    }
     if ([key isEqualToString:@"order"]) {
         self.order = [ChainObjectId generateFromObject:value];
         return;
@@ -61,7 +61,7 @@
 - (id)generateToTransferObject {
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:6];
     
-    dic[@"fee"] = [self.fee generateToTransferObject];
+//    dic[@"fee"] = [self.fee generateToTransferObject];
     
     dic[@"order"] = [self.order generateToTransferObject];
     
@@ -75,11 +75,11 @@
 - (NSData *)transformToData {
     NSMutableData *mutableData = [NSMutableData dataWithCapacity:300];
     
-    if (!self.fee) {
-        [mutableData appendData:[[[ChainAssetAmountObject alloc] initFromAssetId:[ChainObjectId generateFromObject:@"1.3.0"] amount:0] transformToData]];
-    }else {
-        [mutableData appendData:[self.fee transformToData]];
-    }
+//    if (!self.fee) {
+//        [mutableData appendData:[[[ChainAssetAmountObject alloc] initFromAssetId:[ChainObjectId generateFromObject:@"1.3.0"] amount:0] transformToData]];
+//    }else {
+//        [mutableData appendData:[self.fee transformToData]];
+//    }
     
     [mutableData appendData:[self.order transformToData]];
     
