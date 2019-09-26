@@ -15,14 +15,15 @@
 #import "CocosSellNHAssetCancelOperation.h"
 #import "CocosSellNHAssetOperation.h"
 #import "CocosMortgageGasOperation.h"
+#import "CocosClaimVestingBalanceOperation.h"
 #import "CocosPackData.h"
 
 typedef NS_ENUM(NSInteger,CocosOperationType) {
     CocosOperationTypeNotFind = -1,
     CocosOperationTypeTransfer = 0,
     CocosOperationTypeUpgradeMember = 7,
+    CocosOperationTypeClaimVestingBalance = 27,
     CocosOperationTypeCallContract = 35,
-    
     CocosOperationTypeDeleteNHAsset = 41,
     CocosOperationTypeTransferNHAsset = 42,
     CocosOperationTypeSellNHAsset = 43,
@@ -48,6 +49,8 @@ typedef NS_ENUM(NSInteger,CocosOperationType) {
                 NSStringFromClass([CocosSellNHAssetCancelOperation class]):@(CocosOperationTypeSellNHAssetCancel),
                 NSStringFromClass([CocosSellNHAssetOperation class]):@(CocosOperationTypeSellNHAsset),
                 NSStringFromClass([CocosMortgageGasOperation class]):@(CocosOperationTypeMortgageGas),
+                NSStringFromClass([CocosClaimVestingBalanceOperation class]):@(CocosOperationTypeClaimVestingBalance)
+                
                 };
     }
     return dic;

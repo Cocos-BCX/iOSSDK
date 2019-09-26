@@ -37,6 +37,8 @@ typedef NS_ENUM(NSInteger,SDKErrorCode) {
     SDKErrorCodeNotFoundAsset = 115,
     // Error fetching account record
     SDKErrorCodeAccountRecordError = 120,
+    // No reward available
+    SDKErrorNoRewardAvailable = 127,
     // Parameter ‘memo’ can not be empty
     SDKErrorCodeAccountMemoNotEmpty = 129,
     // Please check parameter data type

@@ -150,6 +150,17 @@
 @property (weak, nonatomic) IBOutlet UITextField *callsellnh_orderId;
 @property (weak, nonatomic) IBOutlet UITextField *callsellnh_account;
 @property (weak, nonatomic) IBOutlet UITextField *callsellnh_password;
+
+// 为gas调整抵押物
+@property (weak, nonatomic) IBOutlet UITextField *mortgage_mortgager;
+@property (weak, nonatomic) IBOutlet UITextField *mortgage_beneficiary;
+@property (weak, nonatomic) IBOutlet UITextField *mortgage_amout;
+@property (weak, nonatomic) IBOutlet UITextField *mortgage_password;
+
+// 查看待领取GAS或节点出块奖励
+@property (weak, nonatomic) IBOutlet UITextField *receive_gas_account;
+@property (weak, nonatomic) IBOutlet UITextField *receive_gas_password;
+
 @end
 
 @implementation CocosViewController
@@ -582,5 +593,39 @@
     }];
 }
 
+// 为gas调整抵押物
+- (IBAction)getEstimateGas {
+    [[CocosSDK shareInstance] Cocos_Gas_EstimationWithCOCOSAmout:self.mortgage_amout.text Success:^(id responseObject) {
+        NSLog(@"Cocos_Gas_EstimationWithCOCOSAmout \n%@",responseObject);
+    } Error:^(NSError *error) {
+        NSLog(@"Cocos_Gas_EstimationWithCOCOSAmout error \n%@",error);
+    }];
+}
+
+- (IBAction)mortgageGetGas {
+    
+    [[CocosSDK shareInstance] Cocos_GasWithMortgager:self.mortgage_mortgager.text Beneficiary:self.mortgage_beneficiary.text Collateral:[self.mortgage_amout.text longLongValue] Password:self.mortgage_password.text Success:^(id responseObject) {
+        NSLog(@"Cocos_GasWithMortgager \n%@",responseObject);
+    } Error:^(NSError *error) {
+        NSLog(@"Cocos_GasWithMortgager error \n%@",error);
+    }];
+}
+
+// 查看待领取GAS或节点出块奖励
+- (IBAction)viewPendingCollection {
+    [[CocosSDK shareInstance] Cocos_LookupBlockRewards:self.receive_gas_account.text Success:^(id responseObject) {
+        NSLog(@"Cocos_GetVestingBalances \n%@",responseObject);
+    } Error:^(NSError *error) {
+        NSLog(@"Cocos_GetVestingBalances error \n%@",error);
+    }];
+}
+
+- (IBAction)receiveGas {
+    [[CocosSDK shareInstance] Cocos_ClaimVestingBalance:@"syling" Password:@"1111aaaa" Success:^(id responseObject) {
+        NSLog(@"Cocos_GetVestingBalances success :%@",responseObject);
+    } Error:^(NSError *error) {
+        NSLog(@"Cocos_GetVestingBalances error :%@",error);
+    }];
+}
 
 @end

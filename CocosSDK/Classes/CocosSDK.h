@@ -520,12 +520,21 @@ NS_ASSUME_NONNULL_BEGIN
                        Success:(SuccessBlock)successBlock
                          Error:(Error)errorBlock;
 /**
- get_vesting_balances
+ lookup Block Rewards
  @param account account
  */
-- (void)Cocos_GetVestingBalances:(NSString *)account
-                       Success:(SuccessBlock)successBlock
-                         Error:(Error)errorBlock;
+- (void)Cocos_LookupBlockRewards:(NSString *)account
+                         Success:(SuccessBlock)successBlock
+                           Error:(Error)errorBlock;
+/**
+ claim vesting balance
+ @param account account
+ @param password password
+ */
+- (void)Cocos_ClaimVestingBalance:(NSString *)account
+                         Password:(NSString *)password
+                         Success:(SuccessBlock)successBlock
+                           Error:(Error)errorBlock;
 
 /** Get global variable parameter(latest blocks news etc.) */
 - (void)Cocos_GetDynamicGlobalPropertiesWithSuccess:(SuccessBlock)successBlock Error:(Error)errorBlock;

@@ -11,6 +11,7 @@
 #import "Cocos_Key_Account.h"
 #import "Sha256.h"
 #import "CocosHTTPManager+CreateAccount.h"
+#import "ChainVestingBalance.h"
 
 @interface CocosSDK ()
 
@@ -1532,14 +1533,64 @@
     } Error:errorBlock];
 }
 
+/** lookup Block Rewards */
+- (void)Cocos_LookupBlockRewards:(NSString *)account
+             Success:(SuccessBlock)successBlock
+               Error:(Error)errorBlock
+{
+    [self Cocos_GetVestingBalances:account Success:^(NSArray * result) {
+        
+        ChainVestingBalance *vestingbalance = [ChainVestingBalance generateFromObject:result.firstObject];
+        
+        if (vestingbalance) {
+            ChainAssetAmountObject *gasBalance = vestingbalance.balance;
+            long return_cash = gasBalance.amount;;
+            ChainVestingBalancePolicy *gasPolicy = [ChainVestingBalancePolicy generateFromObject:[vestingbalance.policy lastObject]];
+            float coin_seconds_earned = gasPolicy.coin_seconds_earned;
+            float vesting_seconds = gasPolicy.vesting_seconds;
+            float amount = coin_seconds_earned/vesting_seconds;
+            
+            float available_percent = amount/return_cash*100;
+            float remaining_days = 1 - amount/return_cash;
+            
+            [self Cocos_GetAsset:[gasBalance.assetId generateToTransferObject] Success:^(id responseObject) {
+                
+                ChainAssetObject *opAssetModel = [ChainAssetObject generateFromObject:responseObject];
+                
+                NSDecimalNumber *amount_demicimal = [NSDecimalNumber decimalNumberWithMantissa:amount exponent:-opAssetModel.precision isNegative:NO];
+                
+                NSDecimalNumber *return_cash_demicimal = [NSDecimalNumber decimalNumberWithMantissa:return_cash exponent:-opAssetModel.precision isNegative:NO];
+                
+                NSMutableDictionary *successData = [NSMutableDictionary dictionary];
+                successData[@"id"] = [vestingbalance.identifier generateToTransferObject];
+                successData[@"return_cash"] = return_cash_demicimal.stringValue;
+                successData[@"earned_coindays"] = [self decimalSubScaleString:amount_demicimal.stringValue scale:0];
+                successData[@"require_coindays"] = [self decimalSubScaleString:return_cash_demicimal.stringValue scale:0];
+                successData[@"remaining_days"] = [self decimalSubScaleString:[NSString stringWithFormat:@"%f",remaining_days] scale:2];
+                successData[@"available_percent"] = [self decimalSubScaleString:[NSString stringWithFormat:@"%f",available_percent] scale:2];
+                successData[@"available_balance"] = @{
+                                                      @"amount":amount_demicimal.stringValue,
+                                                      @"asset_id":[opAssetModel.identifier generateToTransferObject],
+                                                      @"symbol":opAssetModel.symbol,
+                                                      @"precision":@(opAssetModel.precision)
+                                                      };
+                NSDictionary *successDic = @{
+                                             @"code":@(1),
+                                             @"data":successData
+                                             };
+                !successBlock?:successBlock(successDic);
+            } Error:errorBlock];
+        }else{
+            NSError *error = [NSError errorWithDomain:@"No reward available" code:SDKErrorNoRewardAvailable userInfo:@{@"account":account}];
+            !errorBlock?:errorBlock(error);
+        }
+    } Error:errorBlock];
+}
 
-/**
- get_vesting_balances
- @param account account
- */
+/** get_vesting_balances */
 - (void)Cocos_GetVestingBalances:(NSString *)account
-                         Success:(SuccessBlock)successBlock
-                           Error:(Error)errorBlock
+             Success:(SuccessBlock)successBlock
+               Error:(Error)errorBlock
 {
     [self Cocos_GetAccount:account Success:^(id accountRes) {
         ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:accountRes];
@@ -1551,6 +1602,69 @@
         callBackModel.errorResult = errorBlock;
         [self sendWithChainApi:WebsocketBlockChainApiDataBase method:(WebsocketBlockChainMethodApiCall) params:uploadParams callBack:callBackModel];
         
+    } Error:errorBlock];
+}
+
+/** 截取NSString变量的后几位 */
+- (NSString *)decimalSubScaleString:(NSString *)stringValue scale:(NSInteger)scale
+{
+    NSDecimalNumber *decimaNumer = [NSDecimalNumber decimalNumberWithString:stringValue];
+    NSDecimalNumberHandler *roundUp = [NSDecimalNumberHandler
+                                       decimalNumberHandlerWithRoundingMode:NSRoundPlain
+                                       scale:scale
+                                       raiseOnExactness:NO
+                                       raiseOnOverflow:NO
+                                       raiseOnUnderflow:NO
+                                       raiseOnDivideByZero:YES];
+    NSDecimalNumber * number = [decimaNumer decimalNumberByRoundingAccordingToBehavior:roundUp];
+    return number.stringValue;
+}
+
+/**
+ claim vesting balance
+ @param account account
+ @param password password
+ */
+- (void)Cocos_ClaimVestingBalance:(NSString *)account
+                         Password:(NSString *)password
+                          Success:(SuccessBlock)successBlock
+                            Error:(Error)errorBlock
+{
+    // 1. Account password decryption
+    [self validateAccount:account Password:password Success:^(NSDictionary *keyDic) {
+        if (keyDic[@"active_key"]) {
+            
+            // 2. Generating Private Key Transfer
+            CocosPrivateKey *private = [[CocosPrivateKey alloc] initWithPrivateKey:keyDic[@"active_key"]];
+            
+            [self Cocos_GetAccount:account Success:^(id accountRes) {
+                ChainAccountModel *ownerAccount =[ChainAccountModel generateFromObject:accountRes];
+                
+                [self Cocos_GetVestingBalances:account Success:^(NSArray * result) {
+                    ChainVestingBalance *vestingbalance = [ChainVestingBalance generateFromObject:result.firstObject];
+                    
+                    CocosClaimVestingBalanceOperation *operation = [[CocosClaimVestingBalanceOperation alloc] init];
+                    operation.owner = ownerAccount.identifier;
+                    operation.vesting_balance = vestingbalance.identifier;
+                    ChainVestingBalancePolicy *policy = [ChainVestingBalancePolicy generateFromObject:[vestingbalance.policy lastObject]];
+                    long balanceAmout = policy.coin_seconds_earned / policy.vesting_seconds;
+                    ChainAssetAmountObject *amount = [[ChainAssetAmountObject alloc] initFromAssetId:vestingbalance.balance.assetId amount:balanceAmout];
+                    operation.amount = amount;
+                    operation.requiredAuthority = ownerAccount.active.publicKeys;
+                    CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
+                    SignedTransaction *signedTran = [[SignedTransaction alloc] init];
+                    signedTran.operations = @[content];
+                    // 3. Transfer
+                    [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
+                } Error:errorBlock];
+            } Error:errorBlock];
+        }else if (keyDic[@"owner_key"]){
+            NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
+            !errorBlock?:errorBlock(error);
+        }else{
+            NSError *error = [NSError errorWithDomain:@"Please enter the correct original/temporary password" code:SDKErrorCodePasswordwrong userInfo:@{@"password":password}];
+            !errorBlock?:errorBlock(error);
+        }
     } Error:errorBlock];
 }
 

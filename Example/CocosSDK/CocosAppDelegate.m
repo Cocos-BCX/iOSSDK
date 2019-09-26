@@ -35,10 +35,14 @@
 //    [[CocosSDK shareInstance] Cocos_ConnectWithNodeUrl:@"ws://47.93.62.96:8020" Fauceturl:@"http://47.93.62.96:3000" TimeOut:5 CoreAsset:@"COCOS" ChainId:@"9fc429a48b47447afa5e6618fde46d1a5f7b2266f00ce60866f9fdd92236e137" ConnectedStatus:^(WebsocketConnectStatus connectStatus) {
 //
 //    }];
-    
-    [[CocosSDK shareInstance] Cocos_ConnectWithNodeUrl:@"ws://39.106.126.54:8049" Fauceturl:@"http://47.93.62.96:8041" TimeOut:5 CoreAsset:@"COCOS" ChainId:@"7d89b84f22af0b150780a2b121aa6c715b19261c8b7fe0fda3a564574ed7d3e9" ConnectedStatus:^(WebsocketConnectStatus connectStatus) {
-        
+    // 新的经济模型
+    [[CocosSDK shareInstance] Cocos_ConnectWithNodeUrl:@"ws://192.168.90.46:8049" Fauceturl:@"http://47.93.62.96:8041" TimeOut:5 CoreAsset:@"COCOS" ChainId:@"7c9a7b0b1b8cbe56aa3b24da08aaaf6b3b19a293e7446c7f94f0768d6790cdab" ConnectedStatus:^(WebsocketConnectStatus connectStatus) {
     }];
+    
+    // 旧的经济模型
+//    [[CocosSDK shareInstance] Cocos_ConnectWithNodeUrl:@"ws://39.106.126.54:8049" Fauceturl:@"http://47.93.62.96:8041" TimeOut:5 CoreAsset:@"COCOS" ChainId:@"7d89b84f22af0b150780a2b121aa6c715b19261c8b7fe0fda3a564574ed7d3e9" ConnectedStatus:^(WebsocketConnectStatus connectStatus) {
+//        
+//    }];
     
     return YES;
 }

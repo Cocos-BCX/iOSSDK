@@ -18,11 +18,11 @@
                         <viewControllerLayoutGuide type="bottom" id="tOy-bf-9f5"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="nbm-ZH-dU5">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="6800"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="7200"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8cs-CK-Eb7">
-                                <rect key="frame" x="0.0" y="64" width="375" height="6736"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="7136"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="钱包管理模式" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Na9-bz-Heo">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="21"/>
@@ -2057,6 +2057,166 @@
                                             <constraint firstItem="Qar-4V-0tv" firstAttribute="trailing" secondItem="nod-mH-aYQ" secondAttribute="trailing" id="tiI-hU-hAK"/>
                                         </constraints>
                                     </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aLh-tQ-wrT" userLabel="NH资产转移">
+                                        <rect key="frame" x="0.0" y="6382" width="375" height="279"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="为gas调整质押物" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gGG-Zf-8N3" userLabel="NH资产转移">
+                                                <rect key="frame" x="110.5" y="10" width="154" height="24"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="密码" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ck5-ef-t0h">
+                                                <rect key="frame" x="16" y="149" width="343" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="nf3-ph-LfN"/>
+                                                </constraints>
+                                                <nil key="textColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="受益人" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="NBo-qU-BDf">
+                                                <rect key="frame" x="16" y="79" width="343" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="fTk-Ya-Knw"/>
+                                                </constraints>
+                                                <nil key="textColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="抵押数量" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SFm-0o-clC">
+                                                <rect key="frame" x="16" y="114" width="343" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="IT7-fH-QGG"/>
+                                                </constraints>
+                                                <nil key="textColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dUl-2e-Hrs">
+                                                <rect key="frame" x="16" y="239" width="343" height="30"/>
+                                                <color key="backgroundColor" red="0.31372549020000001" green="0.4823529412" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="o17-NA-tkn"/>
+                                                </constraints>
+                                                <state key="normal" title="获取"/>
+                                                <connections>
+                                                    <action selector="cancelsellnhasset:" destination="Zcm-40-C04" eventType="touchUpInside" id="PfF-yv-1qz"/>
+                                                    <action selector="mortgageGetGas" destination="Zcm-40-C04" eventType="touchUpInside" id="1Xj-7g-6KA"/>
+                                                </connections>
+                                            </button>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="抵押人" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9gk-F4-GbE">
+                                                <rect key="frame" x="16" y="44" width="343" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="jZF-eg-X1J"/>
+                                                </constraints>
+                                                <nil key="textColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LjO-1k-DzZ">
+                                                <rect key="frame" x="16" y="199" width="343" height="30"/>
+                                                <color key="backgroundColor" red="0.31372549020000001" green="0.4823529412" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="cQR-Iu-eoP"/>
+                                                </constraints>
+                                                <state key="normal" title="获取预估Gas"/>
+                                                <connections>
+                                                    <action selector="cancelsellnhasset:" destination="Zcm-40-C04" eventType="touchUpInside" id="l2R-bb-ibG"/>
+                                                    <action selector="getEstimateGas" destination="Zcm-40-C04" eventType="touchUpInside" id="Jne-WJ-n1I"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="dUl-2e-Hrs" firstAttribute="top" secondItem="LjO-1k-DzZ" secondAttribute="bottom" constant="10" id="1Zt-CT-9QC"/>
+                                            <constraint firstItem="dUl-2e-Hrs" firstAttribute="leading" secondItem="ck5-ef-t0h" secondAttribute="leading" id="4H6-Rm-T0c"/>
+                                            <constraint firstItem="dUl-2e-Hrs" firstAttribute="trailing" secondItem="ck5-ef-t0h" secondAttribute="trailing" id="5Rt-Jg-3Gq"/>
+                                            <constraint firstItem="NBo-qU-BDf" firstAttribute="trailing" secondItem="9gk-F4-GbE" secondAttribute="trailing" id="8SE-6J-heU"/>
+                                            <constraint firstAttribute="bottom" secondItem="dUl-2e-Hrs" secondAttribute="bottom" constant="10" id="Bvv-Yl-3QU"/>
+                                            <constraint firstItem="9gk-F4-GbE" firstAttribute="top" secondItem="gGG-Zf-8N3" secondAttribute="bottom" constant="10" id="JnD-QV-ZY5"/>
+                                            <constraint firstItem="dUl-2e-Hrs" firstAttribute="trailing" secondItem="LjO-1k-DzZ" secondAttribute="trailing" id="JpX-bv-scz"/>
+                                            <constraint firstItem="ck5-ef-t0h" firstAttribute="leading" secondItem="9gk-F4-GbE" secondAttribute="leading" id="QT1-pI-M1Q"/>
+                                            <constraint firstItem="NBo-qU-BDf" firstAttribute="top" secondItem="9gk-F4-GbE" secondAttribute="bottom" constant="5" id="QzX-cZ-4XH"/>
+                                            <constraint firstAttribute="trailing" secondItem="dUl-2e-Hrs" secondAttribute="trailing" constant="16" id="Tmy-9u-eP3"/>
+                                            <constraint firstItem="ck5-ef-t0h" firstAttribute="top" secondItem="SFm-0o-clC" secondAttribute="bottom" constant="5" id="eyD-NB-bex"/>
+                                            <constraint firstItem="SFm-0o-clC" firstAttribute="leading" secondItem="NBo-qU-BDf" secondAttribute="leading" id="gss-D5-gf6"/>
+                                            <constraint firstItem="gGG-Zf-8N3" firstAttribute="top" secondItem="aLh-tQ-wrT" secondAttribute="top" constant="10" id="itc-re-Ko4"/>
+                                            <constraint firstItem="dUl-2e-Hrs" firstAttribute="leading" secondItem="LjO-1k-DzZ" secondAttribute="leading" id="kbf-gN-BBJ"/>
+                                            <constraint firstItem="SFm-0o-clC" firstAttribute="trailing" secondItem="NBo-qU-BDf" secondAttribute="trailing" id="lVg-RQ-DnU"/>
+                                            <constraint firstItem="LjO-1k-DzZ" firstAttribute="top" secondItem="ck5-ef-t0h" secondAttribute="bottom" constant="20" id="nIT-u9-AOg"/>
+                                            <constraint firstItem="gGG-Zf-8N3" firstAttribute="centerX" secondItem="aLh-tQ-wrT" secondAttribute="centerX" id="o2H-is-na3"/>
+                                            <constraint firstItem="dUl-2e-Hrs" firstAttribute="leading" secondItem="aLh-tQ-wrT" secondAttribute="leading" constant="16" id="teB-ne-fMn"/>
+                                            <constraint firstItem="ck5-ef-t0h" firstAttribute="trailing" secondItem="9gk-F4-GbE" secondAttribute="trailing" id="tyT-8W-LZS"/>
+                                            <constraint firstItem="SFm-0o-clC" firstAttribute="top" secondItem="NBo-qU-BDf" secondAttribute="bottom" constant="5" id="x28-cQ-LsA"/>
+                                            <constraint firstItem="NBo-qU-BDf" firstAttribute="leading" secondItem="9gk-F4-GbE" secondAttribute="leading" id="xDs-q2-AHe"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Zd-jf-ELm" userLabel="NH资产转移">
+                                        <rect key="frame" x="0.0" y="6671" width="375" height="208"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="查看待领取GAS或节点出块奖励" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kf3-uS-qLP" userLabel="NH资产转移">
+                                                <rect key="frame" x="45.5" y="10" width="284.5" height="24"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="密码" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="z3G-A2-Y85">
+                                                <rect key="frame" x="16" y="128" width="343" height="30"/>
+                                                <nil key="textColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Upa-QI-9il">
+                                                <rect key="frame" x="16" y="168" width="343" height="30"/>
+                                                <color key="backgroundColor" red="0.31372549020000001" green="0.4823529412" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="fIo-2u-SfE"/>
+                                                </constraints>
+                                                <state key="normal" title="领取"/>
+                                                <connections>
+                                                    <action selector="cancelsellnhasset:" destination="Zcm-40-C04" eventType="touchUpInside" id="Sxq-wE-H7H"/>
+                                                    <action selector="receiveGas" destination="Zcm-40-C04" eventType="touchUpInside" id="Guv-zv-nhU"/>
+                                                </connections>
+                                            </button>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="账户" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QrE-mK-RcB">
+                                                <rect key="frame" x="16" y="44" width="343" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="sxI-EY-rrz"/>
+                                                </constraints>
+                                                <nil key="textColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="75L-d1-G5F">
+                                                <rect key="frame" x="16" y="84" width="343" height="34"/>
+                                                <color key="backgroundColor" red="0.31372549020000001" green="0.4823529412" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
+                                                <state key="normal" title="获取预估Gas"/>
+                                                <connections>
+                                                    <action selector="cancelsellnhasset:" destination="Zcm-40-C04" eventType="touchUpInside" id="FuH-1k-cLj"/>
+                                                    <action selector="viewPendingCollection" destination="Zcm-40-C04" eventType="touchUpInside" id="pXQ-Cj-Z3a"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="z3G-A2-Y85" firstAttribute="leading" secondItem="QrE-mK-RcB" secondAttribute="leading" id="3N1-5Q-Y5v"/>
+                                            <constraint firstItem="Upa-QI-9il" firstAttribute="trailing" secondItem="QrE-mK-RcB" secondAttribute="trailing" id="Akm-XA-SDa"/>
+                                            <constraint firstItem="Upa-QI-9il" firstAttribute="leading" secondItem="8Zd-jf-ELm" secondAttribute="leading" constant="16" id="DRI-Xj-fDx"/>
+                                            <constraint firstItem="75L-d1-G5F" firstAttribute="trailing" secondItem="QrE-mK-RcB" secondAttribute="trailing" id="GTy-HJ-Oyv"/>
+                                            <constraint firstItem="75L-d1-G5F" firstAttribute="leading" secondItem="QrE-mK-RcB" secondAttribute="leading" id="HCU-Kx-O7w"/>
+                                            <constraint firstAttribute="bottom" secondItem="Upa-QI-9il" secondAttribute="bottom" constant="10" id="JoI-1W-301"/>
+                                            <constraint firstItem="kf3-uS-qLP" firstAttribute="top" secondItem="8Zd-jf-ELm" secondAttribute="top" constant="10" id="L4b-J6-wDG"/>
+                                            <constraint firstItem="z3G-A2-Y85" firstAttribute="trailing" secondItem="QrE-mK-RcB" secondAttribute="trailing" id="TR7-2d-0Xd"/>
+                                            <constraint firstAttribute="trailing" secondItem="Upa-QI-9il" secondAttribute="trailing" constant="16" id="UkA-Z4-lhY"/>
+                                            <constraint firstItem="QrE-mK-RcB" firstAttribute="top" secondItem="kf3-uS-qLP" secondAttribute="bottom" constant="10" id="WTe-6O-i5f"/>
+                                            <constraint firstItem="Upa-QI-9il" firstAttribute="top" secondItem="z3G-A2-Y85" secondAttribute="bottom" constant="10" id="Wrg-pt-BNj"/>
+                                            <constraint firstItem="Upa-QI-9il" firstAttribute="leading" secondItem="QrE-mK-RcB" secondAttribute="leading" id="Zkg-vN-v3p"/>
+                                            <constraint firstItem="z3G-A2-Y85" firstAttribute="top" secondItem="75L-d1-G5F" secondAttribute="bottom" constant="10" id="fAX-9c-Kng"/>
+                                            <constraint firstItem="kf3-uS-qLP" firstAttribute="centerX" secondItem="8Zd-jf-ELm" secondAttribute="centerX" id="thV-xp-HML"/>
+                                            <constraint firstItem="75L-d1-G5F" firstAttribute="top" secondItem="QrE-mK-RcB" secondAttribute="bottom" constant="10" id="wNq-KQ-Zwk"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.90815662205714276" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -2072,10 +2232,12 @@
                                     <constraint firstItem="NQP-3b-aK9" firstAttribute="top" secondItem="ccK-lW-hno" secondAttribute="bottom" constant="10" id="6lO-Qt-9h8"/>
                                     <constraint firstItem="ccK-lW-hno" firstAttribute="leading" secondItem="8cs-CK-Eb7" secondAttribute="leading" id="84G-Fa-gXu"/>
                                     <constraint firstAttribute="trailing" secondItem="gKV-Up-7Kz" secondAttribute="trailing" id="88P-oa-Mlf"/>
+                                    <constraint firstAttribute="trailing" secondItem="8Zd-jf-ELm" secondAttribute="trailing" id="8EO-k3-Chf"/>
                                     <constraint firstAttribute="trailing" secondItem="Ah9-IP-1Ta" secondAttribute="trailing" id="9Vq-TV-cJR"/>
                                     <constraint firstItem="Mp5-In-lp1" firstAttribute="top" secondItem="eoc-UO-6jb" secondAttribute="bottom" constant="10" id="9xV-IB-0eo"/>
                                     <constraint firstAttribute="trailing" secondItem="ObM-D0-Fr5" secondAttribute="trailing" id="ATk-nD-iuC"/>
                                     <constraint firstItem="wxX-Ud-FBn" firstAttribute="top" secondItem="zrt-OI-ATR" secondAttribute="bottom" constant="10" id="Afn-dI-4WJ"/>
+                                    <constraint firstItem="aLh-tQ-wrT" firstAttribute="top" secondItem="rk1-oA-2oh" secondAttribute="bottom" constant="10" id="BIo-Rf-Bme"/>
                                     <constraint firstItem="3EY-UB-MBh" firstAttribute="leading" secondItem="8cs-CK-Eb7" secondAttribute="leading" id="BrF-Aj-QVl"/>
                                     <constraint firstAttribute="trailing" secondItem="ryT-ae-IPL" secondAttribute="trailing" id="Btb-Gk-gff"/>
                                     <constraint firstItem="gKV-Up-7Kz" firstAttribute="top" secondItem="4N6-BT-1Mb" secondAttribute="bottom" constant="10" id="CAO-ZM-XEG"/>
@@ -2086,9 +2248,9 @@
                                     <constraint firstAttribute="trailing" secondItem="B0Y-zX-fTc" secondAttribute="trailing" id="FrM-yA-E1q"/>
                                     <constraint firstItem="ON6-M4-UJP" firstAttribute="top" secondItem="jbY-p1-tuf" secondAttribute="bottom" constant="10" id="H5Z-EA-EW4"/>
                                     <constraint firstItem="ryT-ae-IPL" firstAttribute="top" secondItem="wc5-AI-3Mj" secondAttribute="bottom" id="JHZ-Vj-tRq"/>
+                                    <constraint firstAttribute="bottom" secondItem="8Zd-jf-ELm" secondAttribute="bottom" constant="20" id="K3O-Wk-p3o"/>
                                     <constraint firstItem="U4f-YA-znH" firstAttribute="leading" secondItem="8cs-CK-Eb7" secondAttribute="leading" id="LV7-Tp-w5d"/>
                                     <constraint firstItem="OKA-ck-iab" firstAttribute="leading" secondItem="8cs-CK-Eb7" secondAttribute="leading" id="Lvz-W2-t2d"/>
-                                    <constraint firstAttribute="bottom" secondItem="rk1-oA-2oh" secondAttribute="bottom" constant="20" id="M3t-RQ-Rr6"/>
                                     <constraint firstItem="jbY-p1-tuf" firstAttribute="top" secondItem="Ah9-IP-1Ta" secondAttribute="bottom" id="MYm-Pl-NSJ"/>
                                     <constraint firstAttribute="trailing" secondItem="eoc-UO-6jb" secondAttribute="trailing" id="NDd-pA-RHb"/>
                                     <constraint firstItem="kLr-dY-ocq" firstAttribute="top" secondItem="iEa-5X-rdN" secondAttribute="bottom" constant="10" id="OFC-Py-5FV"/>
@@ -2108,7 +2270,9 @@
                                     <constraint firstAttribute="trailing" secondItem="1xg-nt-bRt" secondAttribute="trailing" id="Xe8-bO-nUD"/>
                                     <constraint firstAttribute="trailing" secondItem="8C5-BC-zIg" secondAttribute="trailing" id="Xuv-sH-Fqd"/>
                                     <constraint firstItem="4N6-BT-1Mb" firstAttribute="leading" secondItem="8cs-CK-Eb7" secondAttribute="leading" id="Z5J-Pq-tNt"/>
+                                    <constraint firstItem="aLh-tQ-wrT" firstAttribute="leading" secondItem="8cs-CK-Eb7" secondAttribute="leading" id="Z8B-AA-nyW"/>
                                     <constraint firstAttribute="trailing" secondItem="kLr-dY-ocq" secondAttribute="trailing" id="ZJY-zm-czS"/>
+                                    <constraint firstItem="8Zd-jf-ELm" firstAttribute="top" secondItem="aLh-tQ-wrT" secondAttribute="bottom" constant="10" id="ZZW-lb-PCq"/>
                                     <constraint firstAttribute="trailing" secondItem="0TK-j1-LXc" secondAttribute="trailing" id="ZmA-hc-2yd"/>
                                     <constraint firstItem="tiL-ty-ez5" firstAttribute="leading" secondItem="8cs-CK-Eb7" secondAttribute="leading" id="a3G-Vt-WIb"/>
                                     <constraint firstItem="WLk-up-B0k" firstAttribute="leading" secondItem="8cs-CK-Eb7" secondAttribute="leading" id="bCo-hA-tMY"/>
@@ -2168,8 +2332,10 @@
                                     <constraint firstItem="wc5-AI-3Mj" firstAttribute="leading" secondItem="8cs-CK-Eb7" secondAttribute="leading" id="vzi-Y8-3PO"/>
                                     <constraint firstAttribute="trailing" secondItem="HAg-v1-u4u" secondAttribute="trailing" id="w5F-Bh-ai1"/>
                                     <constraint firstAttribute="trailing" secondItem="iEa-5X-rdN" secondAttribute="trailing" id="wMw-nn-dTT"/>
+                                    <constraint firstAttribute="trailing" secondItem="aLh-tQ-wrT" secondAttribute="trailing" id="xPR-B9-bKz"/>
                                     <constraint firstAttribute="trailing" secondItem="zrt-OI-ATR" secondAttribute="trailing" id="xVK-be-9kI"/>
                                     <constraint firstAttribute="trailing" secondItem="Na9-bz-Heo" secondAttribute="trailing" id="xYP-xx-h71"/>
+                                    <constraint firstItem="8Zd-jf-ELm" firstAttribute="leading" secondItem="8cs-CK-Eb7" secondAttribute="leading" id="xi5-Oi-sV5"/>
                                     <constraint firstItem="DJq-oE-ecy" firstAttribute="top" secondItem="1Vo-A1-Mrp" secondAttribute="bottom" constant="10" id="xiQ-mb-QDZ"/>
                                     <constraint firstItem="1xg-nt-bRt" firstAttribute="top" secondItem="vqp-gn-zuU" secondAttribute="bottom" constant="10" id="xyj-IV-euV"/>
                                     <constraint firstItem="iEa-5X-rdN" firstAttribute="top" secondItem="dAn-c7-RbG" secondAttribute="bottom" constant="10" id="ycR-pP-1gs"/>
@@ -2190,7 +2356,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Cocos SDK" id="VnY-8S-SHL"/>
-                    <size key="freeformSize" width="375" height="6800"/>
+                    <size key="freeformSize" width="375" height="7200"/>
                     <connections>
                         <outlet property="account_createBtn" destination="iQw-SB-ju5" id="Wpc-nU-J4P"/>
                         <outlet property="account_createTF" destination="jVw-m9-yKe" id="vVi-Fp-4xg"/>
@@ -2242,6 +2408,12 @@
                         <outlet property="get_pri_password" destination="DzT-JT-Tdh" id="G1J-DH-Bdq"/>
                         <outlet property="get_worldview_relate" destination="Vk2-XU-20H" id="t9O-9C-v1u"/>
                         <outlet property="get_worldviewinfo_id" destination="EmA-BO-15q" id="IT4-rL-GIR"/>
+                        <outlet property="mortgage_amout" destination="SFm-0o-clC" id="3tz-1G-kd3"/>
+                        <outlet property="mortgage_beneficiary" destination="NBo-qU-BDf" id="rUG-Wx-BrK"/>
+                        <outlet property="mortgage_mortgager" destination="9gk-F4-GbE" id="QsB-y9-IbU"/>
+                        <outlet property="mortgage_password" destination="ck5-ef-t0h" id="xbq-Z6-Htj"/>
+                        <outlet property="receive_gas_account" destination="QrE-mK-RcB" id="oxO-65-9CF"/>
+                        <outlet property="receive_gas_password" destination="z3G-A2-Y85" id="ZNn-z3-g0h"/>
                         <outlet property="sellnh_account" destination="nUm-Sf-kjq" id="N18-3P-7u4"/>
                         <outlet property="sellnh_expiration" destination="aG6-MF-G65" id="AzS-WH-5Xe"/>
                         <outlet property="sellnh_memo" destination="TTa-dE-3sO" id="K78-OU-Bkc"/>
