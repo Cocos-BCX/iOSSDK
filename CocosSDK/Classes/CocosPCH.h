@@ -26,6 +26,7 @@
 #import "CocosDeleteNHOperation.h"
 #import "CocosSellNHAssetCancelOperation.h"
 #import "CocosSellNHAssetOperation.h"
+#import "CocosMortgageGasOperation.h"
 #import "CocosOperationContent.h"
 #import "SignedTransaction.h"
 #import "AuthorityObject.h"

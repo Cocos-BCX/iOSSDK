@@ -180,11 +180,11 @@
 //            NSLog(@"Cocos_GetTransactionById erroe  \n%@",error);
 //        }];
         
-        [[CocosSDK shareInstance] Cocos_GetAccountHistory:@"1.2.354" Limit:3 Success:^(NSArray *responseObject) {
-            NSLog(@"account_option_historyClick success :%@",responseObject);
-        } Error:^(NSError *error) {
-            NSLog(@"account_option_historyClick error :%@",error);
-        }];
+//        [[CocosSDK shareInstance] Cocos_GetAccountHistory:@"1.2.354" Limit:3 Success:^(NSArray *responseObject) {
+//            NSLog(@"account_option_historyClick success :%@",responseObject);
+//        } Error:^(NSError *error) {
+//            NSLog(@"account_option_historyClick error :%@",error);
+//        }];
 
     });
 }

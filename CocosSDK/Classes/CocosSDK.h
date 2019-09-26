@@ -275,7 +275,6 @@ NS_ASSUME_NONNULL_BEGIN
  @param password        Password
  @param transferAsset   Asset's name(eg. COCOS)
  @param assetAmount     assetAmount Transfer amount
- @param feePayingAsset  Charge's currency(require)
  @param memo            Memo String
  */
 - (void)Cocos_TransferFromAccount:(NSString *)fromName
@@ -464,7 +463,6 @@ NS_ASSUME_NONNULL_BEGIN
  
  @param account         account
  @param password        password
- @param feePayingAsset  feePayingAsset
  @param orderId         orderId
  */
 - (void)Cocos_CancelNHAssetAccount:(NSString *)account
@@ -499,6 +497,36 @@ NS_ASSUME_NONNULL_BEGIN
 /** Sell NH assets MaxExpiration */
 - (void)Cocos_SellNHAssetMaxExpirationSuccess:(SuccessBlock)successBlock Error:(Error)errorBlock;
 
+#pragma mark - Gas Mortgage and Receive
+/**
+ estimation gas
+
+ @param amount COCOS
+ */
+- (void)Cocos_Gas_EstimationWithCOCOSAmout:(NSString *)amount
+           Success:(SuccessBlock)successBlock
+             Error:(Error)errorBlock;
+/**
+ mortgager gas
+
+ @param mortgager mortgager
+ @param beneficiary beneficiary
+ @param collateral collateral
+ */
+- (void)Cocos_GasWithMortgager:(NSString *)mortgager
+                   Beneficiary:(NSString *)beneficiary
+                    Collateral:(long)collateral
+                      Password:(NSString *)password
+                       Success:(SuccessBlock)successBlock
+                         Error:(Error)errorBlock;
+/**
+ get_vesting_balances
+ @param account account
+ */
+- (void)Cocos_GetVestingBalances:(NSString *)account
+                       Success:(SuccessBlock)successBlock
+                         Error:(Error)errorBlock;
+
 /** Get global variable parameter(latest blocks news etc.) */
 - (void)Cocos_GetDynamicGlobalPropertiesWithSuccess:(SuccessBlock)successBlock Error:(Error)errorBlock;
 
@@ -515,16 +543,6 @@ NS_ASSUME_NONNULL_BEGIN
                            Success:(SuccessBlock)successBlock
                              Error:(Error)errorBlock;
 #pragma mark - Expanding Method
-/**
- operation fee
- @param operation           operation Object
- @param feePayingAssetID    assetID
- */
-- (void)Cocos_OperationFees:(CocosBaseOperation *)operation
-              OperationType:(NSInteger)operationType
-             FeePayingAsset:(NSString *)feePayingAssetID
-                    Success:(SuccessBlock)successBlock
-                      Error:(Error)errorBlock;
 /**
  Expand custom api
  

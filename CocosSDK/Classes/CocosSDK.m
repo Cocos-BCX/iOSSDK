@@ -594,7 +594,6 @@
  Upgrade Membership
  
  @param account account
- @param feePayingAsset feePayingAsset
  */
 - (void)Cocos_UpgradeMemberAccount:(NSString *)account
                           password:(NSString *)password
@@ -998,13 +997,6 @@
                             } while (1);
                         });
                     } Error:errorBlock];
-//                    // 6. Inquiry fee
-//                    [self Cocos_OperationFees:operation OperationType:35 FeePayingAsset:feePayingAsset Success:^(NSArray *feeObject) {
-//                        // 7. Stitching fee
-//                        NSDictionary *feeDic = feeObject.firstObject;
-//                        operation.fee = [ChainAssetAmountObject generateFromObject:feeDic];
-//
-//                    } Error:errorBlock];
                 }else if (keyDic[@"owner_key"]){
                     NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
                     !errorBlock?:errorBlock(error);
@@ -1479,6 +1471,89 @@
     [self sendWithChainApi:WebsocketBlockChainApiDataBase method:(WebsocketBlockChainMethodApiCall) params:uploadParams callBack:callBackModel];
 }
 
+/** estimation gas */
+- (void)Cocos_Gas_EstimationWithCOCOSAmout:(NSString *)amount
+                                   Success:(SuccessBlock)successBlock
+                                     Error:(Error)errorBlock
+{
+    [self Cocos_GetAsset:@"1.3.0" Success:^(id affectedRes) {
+        ChainAssetObject *affectedModel = [ChainAssetObject generateFromObject:affectedRes];
+        UploadParams *uploadParams = [[UploadParams alloc] init];
+        uploadParams.methodName = kCocosEstimationGas;
+        ChainAssetAmountObject *chainAssetAmount = [affectedModel getAmountFromNormalFloatString:amount];
+        uploadParams.totalParams = @[[chainAssetAmount generateToTransferObject]];
+        CallBackModel *callBackModel = [[CallBackModel alloc] init];
+        callBackModel.successResult = successBlock;
+        callBackModel.errorResult = errorBlock;
+        [self sendWithChainApi:WebsocketBlockChainApiDataBase method:(WebsocketBlockChainMethodApiCall) params:uploadParams callBack:callBackModel];
+    } Error:errorBlock];
+}
+
+/** mortgager gas */
+- (void)Cocos_GasWithMortgager:(NSString *)mortgagerAccount
+                   Beneficiary:(NSString *)beneficiaryAccount
+                    Collateral:(long)collateral
+                      Password:(NSString *)password
+                       Success:(SuccessBlock)successBlock
+                         Error:(Error)errorBlock
+{
+    // 1. Account password decryption
+    [self validateAccount:mortgagerAccount Password:password Success:^(NSDictionary *keyDic) {
+        if (keyDic[@"active_key"]) {
+            
+            // 2. Generating Private Key Transfer
+            CocosPrivateKey *private = [[CocosPrivateKey alloc] initWithPrivateKey:keyDic[@"active_key"]];
+            [self Cocos_GetAccount:mortgagerAccount Success:^(id mortgagerRes) {
+                ChainAccountModel *mortgager =[ChainAccountModel generateFromObject:mortgagerRes];
+                
+                [self Cocos_GetAccount:beneficiaryAccount Success:^(id beneficiaryRes) {
+                    ChainAccountModel *beneficiary =[ChainAccountModel generateFromObject:beneficiaryRes];
+                    
+                    CocosMortgageGasOperation *operation = [[CocosMortgageGasOperation alloc] init];
+                    operation.mortgager = mortgager.identifier;
+                    operation.beneficiary = beneficiary.identifier;
+                    operation.collateral = collateral;
+                    operation.requiredAuthority = mortgager.active.publicKeys;
+                    CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
+                    SignedTransaction *signedTran = [[SignedTransaction alloc] init];
+                    signedTran.operations = @[content];
+                    // 3. Transfer
+                    [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
+                } Error:errorBlock];
+                
+            } Error:errorBlock];
+        }else if (keyDic[@"owner_key"]){
+            NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
+            !errorBlock?:errorBlock(error);
+        }else{
+            NSError *error = [NSError errorWithDomain:@"Please enter the correct original/temporary password" code:SDKErrorCodePasswordwrong userInfo:@{@"password":password}];
+            !errorBlock?:errorBlock(error);
+        }
+    } Error:errorBlock];
+}
+
+
+/**
+ get_vesting_balances
+ @param account account
+ */
+- (void)Cocos_GetVestingBalances:(NSString *)account
+                         Success:(SuccessBlock)successBlock
+                           Error:(Error)errorBlock
+{
+    [self Cocos_GetAccount:account Success:^(id accountRes) {
+        ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:accountRes];
+        UploadParams *uploadParams = [[UploadParams alloc] init];
+        uploadParams.methodName = kCocosGetVestingBalances;
+        uploadParams.totalParams = @[[accountModel.identifier generateToTransferObject]];
+        CallBackModel *callBackModel = [[CallBackModel alloc] init];
+        callBackModel.successResult = successBlock;
+        callBackModel.errorResult = errorBlock;
+        [self sendWithChainApi:WebsocketBlockChainApiDataBase method:(WebsocketBlockChainMethodApiCall) params:uploadParams callBack:callBackModel];
+        
+    } Error:errorBlock];
+}
+
 #pragma mark - Expanding Method
 - (void)sellNHAssetOperationSeller:(NSString *)SellerAccount
                          NHAssetId:(NSString *)nhAssetid
@@ -1518,23 +1593,6 @@
             } Error:errorBlock];
         } Error:errorBlock];
     } Error:errorBlock];
-}
-/** operation fee */
-- (void)Cocos_OperationFees:(CocosBaseOperation *)operation
-              OperationType:(NSInteger)operationType
-             FeePayingAsset:(NSString *)feePayingAssetID
-                    Success:(SuccessBlock)successBlock
-                      Error:(Error)errorBlock
-{
-    // Transfer type is ‘0’
-    NSArray *paramArray = @[@(operationType),[operation generateToTransferObject]];
-    UploadParams *uploadParams = [[UploadParams alloc] init];
-    uploadParams.methodName = kCocosGetRequiredFees;
-    uploadParams.totalParams = @[@[paramArray],feePayingAssetID];
-    CallBackModel *callBackModel = [[CallBackModel alloc] init];
-    callBackModel.successResult = successBlock;
-    callBackModel.errorResult = errorBlock;
-    [self sendWithChainApi:WebsocketBlockChainApiDataBase method:(WebsocketBlockChainMethodApiCall) params:uploadParams callBack:callBackModel];
 }
 
 /** Expand custom api */

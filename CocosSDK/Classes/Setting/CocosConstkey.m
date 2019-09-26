@@ -41,6 +41,8 @@ NSString * const kCocosListNHOrder = @"list_nh_asset_order";
 NSString * const kCocosLookUpWorldView = @"lookup_world_view";
 NSString * const kCocosListNHbyCreator = @"list_nh_asset_by_creator";
 NSString * const kCocosSellNHAssetExpiration= @"get_global_properties";
+NSString * const kCocosEstimationGas = @"estimation_gas";
+NSString * const kCocosGetVestingBalances = @"get_vesting_balances";
 
 // API_HISTORY = 0x02;
 NSString * const kCocosGetAccountHistory = @"get_account_history";
