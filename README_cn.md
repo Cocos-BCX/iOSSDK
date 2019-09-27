@@ -9,7 +9,10 @@
 
 ## Example
 
-- 要运行示例项目，请克隆repo，然后首先从示例目录运行'pod install'。
+- 要运行示例项目，请克隆repo，然后首先从示例目录运行 'pod install' (如果没有安装 CocoaPods , 需要先安装)。
+- 在 Xcode 中, 修改 Secp256k1_A 的配置, 如图:
+
+    ![](xcode_secp_target_setting.png)
 
 ## 依赖库
 

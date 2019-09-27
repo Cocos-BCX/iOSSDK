@@ -9,7 +9,9 @@
 
 ## Example
 
-- To run the sample project, the repo shall be cloned and then run the 'pod install' from the sample directory.
+- To run the sample project, the repo shall be cloned and then run the 'pod install' from the sample directory. (if you don’t have CocoaPods installed, install it first)
+- Modify the configuration of Secp256k1_A as shown in the figure:
+	![](xcode_secp_target_setting.png)
 
 ## Dependent Libraries
 
