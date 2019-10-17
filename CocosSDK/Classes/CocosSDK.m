@@ -35,7 +35,7 @@
 /** Get SDK's version */
 - (NSString *)Cocos_SdkCurentVersion
 {
-    return @"1.0.1";
+    return @"1.0.2";
 }
 
 /** Open debug log */
@@ -1658,6 +1658,210 @@
                     [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
                 } Error:errorBlock];
             } Error:errorBlock];
+        }else if (keyDic[@"owner_key"]){
+            NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
+            !errorBlock?:errorBlock(error);
+        }else{
+            NSError *error = [NSError errorWithDomain:@"Please enter the correct original/temporary password" code:SDKErrorCodePasswordwrong userInfo:@{@"password":password}];
+            !errorBlock?:errorBlock(error);
+        }
+    } Error:errorBlock];
+}
+
+#pragma mark - Committee Member Witnesses Vote
+//typedef NS_ENUM(int,VoteIdType) {
+//    VoteIdTypeCommitteeMember,// 理事会
+//    VoteIdTypeWitness,见证人
+//};
+/** Get CommitteeMember Info: Active、Vote*/
+- (void)Cocos_GetCommitteeMemberInfoVoteAccountId:(NSString *)account_id
+                          Success:(SuccessBlock)successBlock
+                            Error:(Error)errorBlock
+{
+    [self Cocos_GetObjects:@[@"2.0.0"] Success:^(NSArray *global_data) {
+        NSDictionary *active_committee_dic = [global_data firstObject];
+        NSArray *activeArray = active_committee_dic[@"active_committee_members"];
+        
+        NSArray *memberIDArray = @[@"1.5.0",@"1.5.1",@"1.5.2",@"1.5.3",@"1.5.4",@"1.5.5",@"1.5.6",@"1.5.7",@"1.5.8",@"1.5.9",@"1.5.10",@"1.5.11",@"1.5.12",@"1.5.13",@"1.5.14",@"1.5.15",@"1.5.16",@"1.5.17",@"1.5.18",@"1.5.19",@"1.5.20",@"1.5.21",@"1.5.22",@"1.5.23",@"1.5.24",@"1.5.25",@"1.5.26",@"1.5.27",@"1.5.28",@"1.5.29",@"1.5.30",@"1.5.31",@"1.5.32",@"1.5.33",@"1.5.34",@"1.5.35",@"1.5.36",@"1.5.37",@"1.5.38",@"1.5.39",@"1.5.40",@"1.5.41",@"1.5.42",@"1.5.43",@"1.5.44",@"1.5.45",@"1.5.46",@"1.5.47",@"1.5.48",@"1.5.49",@"1.5.50"];
+        [self Cocos_GetObjects:memberIDArray Success:^(NSArray *responsArray) {
+            NSMutableArray *memberArray = [NSMutableArray array];
+            // 开启遍历
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                dispatch_semaphore_t disp = dispatch_semaphore_create(0);
+                for (id obj in responsArray) {
+                    if ([obj isEqual:[NSNull null]]) {
+                        break;
+                    }else{
+                        NSMutableDictionary *objDictionary = [NSMutableDictionary dictionary];
+                        objDictionary[@"url"] = obj[@"url"];
+                        objDictionary[@"account_id"] = obj[@"committee_member_account"];
+                        objDictionary[@"vote_id"] = obj[@"vote_id"];
+                        objDictionary[@"committee_id"] = obj[@"id"];
+                        objDictionary[@"type"] = @"committee";
+                        
+                        // 票数，COCOS 五位小数
+                        objDictionary[@"votes"] = [NSString stringWithFormat:@"%.3f",[obj[@"total_votes"] integerValue]/100000.000];
+                        NSArray *supporterArray = obj[@"supporters"];
+                        
+                        NSMutableArray *supportArray = [NSMutableArray array];
+                        for (NSArray *support in supporterArray) {
+                            NSMutableDictionary *supportDic = [NSMutableDictionary dictionary];
+                            supportDic[@"account_id"] = [support firstObject];
+                            NSDictionary *support_asset =  [support lastObject];
+                            supportDic[@"amount_raw"] = support_asset;
+                            supportDic[@"amount_text"] = [NSString stringWithFormat:@"%.3f COCOS",[support_asset[@"amount"] integerValue]/100000.000];
+                            [supportArray addObject:supportDic];
+                        }
+                        
+                        objDictionary[@"supporters"] = supportArray;
+                        // 投票人
+                        NSMutableArray *supportidArray = [NSMutableArray array];
+                        [supporterArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                            [supportidArray addObject:[obj firstObject]];
+                        }];
+                        // 是否活跃，是否是支持者
+                        objDictionary[@"supported"] = @(NO);
+                        objDictionary[@"active"] = @(NO);
+                        if ([activeArray containsObject:obj[@"id"]]) {
+                            objDictionary[@"active"] = @(YES);
+                        }
+                        if ([supportidArray containsObject:account_id]) {
+                            objDictionary[@"supported"] = @(YES);
+                        }
+                        
+                        [self Cocos_GetAccount:obj[@"committee_member_account"] Success:^(id accountObject) {
+                            ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:accountObject];
+                            objDictionary[@"account_name"] = accountModel.name;
+                            [memberArray addObject:objDictionary];
+                            dispatch_semaphore_signal(disp);
+                        } Error:errorBlock];
+                    }
+                    // 2. 等待信号
+                    dispatch_semaphore_wait(disp, DISPATCH_TIME_FOREVER);
+                }
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    !successBlock?:successBlock(memberArray);
+                });
+            });
+        } Error:errorBlock];
+    } Error:errorBlock];
+}
+
+/** Get Witness Info: Active、Vote*/
+- (void)Cocos_GetWitnessInfoVoteAccountId:(NSString *)account_id
+                      Success:(SuccessBlock)successBlock
+                        Error:(Error)errorBlock
+{
+    [self Cocos_GetObjects:@[@"2.0.0"] Success:^(NSArray *global_data) {
+        NSDictionary *active_committee_dic = [global_data firstObject];
+        NSArray *activeArray = active_committee_dic[@"active_witnesses"];
+        
+        NSArray *memberIDArray = @[@"1.6.1",@"1.6.2",@"1.6.3",@"1.6.4",@"1.6.5",@"1.6.6",@"1.6.7",@"1.6.8",@"1.6.9",@"1.6.10",@"1.6.11",@"1.6.12",@"1.6.13",@"1.6.14",@"1.6.15",@"1.6.16",@"1.6.17",@"1.6.18",@"1.6.19",@"1.6.20",@"1.6.21",@"1.6.22",@"1.6.23",@"1.6.24",@"1.6.25",@"1.6.26",@"1.6.27",@"1.6.28",@"1.6.29",@"1.6.30",@"1.6.31",@"1.6.32",@"1.6.33",@"1.6.34",@"1.6.35",@"1.6.36",@"1.6.37",@"1.6.38",@"1.6.39",@"1.6.40",@"1.6.41",@"1.6.42",@"1.6.43",@"1.6.44",@"1.6.45",@"1.6.46",@"1.6.47",@"1.6.48",@"1.6.49",@"1.6.50"];
+        [self Cocos_GetObjects:memberIDArray Success:^(NSArray *responsArray) {
+            NSMutableArray *memberArray = [NSMutableArray array];
+            // 开启遍历
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                dispatch_semaphore_t disp = dispatch_semaphore_create(0);
+                for (id obj in responsArray) {
+                    if ([obj isEqual:[NSNull null]]) {
+                        break;
+                    }else{
+                        NSMutableDictionary *objDictionary = [NSMutableDictionary dictionary];
+                        objDictionary[@"url"] = obj[@"url"];
+                        objDictionary[@"account_id"] = obj[@"witness_account"];
+                        objDictionary[@"type"] = @"witness";
+                        objDictionary[@"vote_id"] = obj[@"vote_id"];
+                        objDictionary[@"witness_id"] = obj[@"id"];
+                        objDictionary[@"last_confirmed_block_num"] = obj[@"last_confirmed_block_num"];
+                        objDictionary[@"total_missed"] = obj[@"total_missed"];
+                        objDictionary[@"last_aslot"] = obj[@"last_aslot"];
+                        
+                        // 票数，COCOS 五位小数
+                        objDictionary[@"votes"] = [NSString stringWithFormat:@"%.3f",[obj[@"total_votes"] integerValue]/100000.000];
+                        // 投票人
+                        NSArray *supporterArray = obj[@"supporters"];
+                        NSMutableArray *supportArray = [NSMutableArray array];
+                        for (NSArray *support in supporterArray) {
+                            NSMutableDictionary *supportDic = [NSMutableDictionary dictionary];
+                            supportDic[@"account_id"] = [support firstObject];
+                            NSDictionary *support_asset =  [support lastObject];
+                            supportDic[@"amount_raw"] = support_asset;
+                            supportDic[@"amount_text"] = [NSString stringWithFormat:@"%.3f COCOS",[support_asset[@"amount"] integerValue]/100000.000];
+                            [supportArray addObject:supportDic];
+                        }
+                        objDictionary[@"supporters"] = supportArray;
+                        
+                        NSMutableArray *supportidArray = [NSMutableArray array];
+                        [supporterArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                            [supportidArray addObject:[obj firstObject]];
+                        }];
+                        // 是否活跃，是否是支持者
+                        objDictionary[@"supported"] = @(NO);
+                        objDictionary[@"active"] = @(NO);
+                        if ([activeArray containsObject:obj[@"id"]]) {
+                            objDictionary[@"active"] = @(YES);
+                        }
+                        if ([supportidArray containsObject:account_id]) {
+                            objDictionary[@"supported"] = @(YES);
+                        }
+                        
+                        [self Cocos_GetAccount:obj[@"witness_account"] Success:^(id accountObject) {
+                            ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:accountObject];
+                            objDictionary[@"account_name"] = accountModel.name;
+                            [memberArray addObject:objDictionary];
+                            dispatch_semaphore_signal(disp);
+                        } Error:errorBlock];
+                    }
+                    // 2. 等待信号
+                    dispatch_semaphore_wait(disp, DISPATCH_TIME_FOREVER);
+                }
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    !successBlock?:successBlock(memberArray);
+                });
+            });
+        } Error:errorBlock];
+    } Error:errorBlock];
+}
+
+/** Votes : CommitteeMember Witness */
+- (void)Cocos_PublishVotes:(NSString *)accountName
+                  Password:(NSString *)password
+                   VoteIds:(NSArray *)voteids
+                     Votes:(NSString *)votes
+                   Success:(SuccessBlock)successBlock
+                     Error:(Error)errorBlock;
+{
+    // 1. Validation parameters
+    [self validateAccount:accountName Password:password Success:^(NSDictionary *keyDic) {
+        if (keyDic[@"active_key"]) {
+            // 2. Declassified private key
+            CocosPrivateKey *private = [[CocosPrivateKey alloc] initWithPrivateKey:keyDic[@"active_key"]];
+            // 3. account info
+            [self Cocos_GetAsset:@"COCOS" Success:^(id assetObject) {
+                ChainAssetObject *voteAssetModel = [ChainAssetObject generateFromObject:assetObject];
+                ChainAssetAmountObject *voteAmout = [voteAssetModel getAmountFromNormalFloatString:votes];
+                
+                [self Cocos_GetAccount:accountName Success:^(id responseObject) {
+                    ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:responseObject];
+                    
+                    // 4. Stitching transfer data
+                    CocosVoteOperation *operation = [[CocosVoteOperation alloc] init];
+                    operation.lock_with_vote = voteAmout;
+                    operation.account = accountModel.identifier;
+                    VoteOptionsObject *voteOptions = [[VoteOptionsObject alloc] init];
+                    voteOptions.memo_key = [accountModel.active.key_auths firstObject].key;
+                    voteOptions.votes = voteids;
+                    operation.options = voteOptions;
+                    CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
+                    SignedTransaction *signedTran = [[SignedTransaction alloc] init];
+                    signedTran.operations = @[content];
+                    // 7. Transfer
+                    [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
+                } Error:errorBlock];
+            } Error:errorBlock];
+            
         }else if (keyDic[@"owner_key"]){
             NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
             !errorBlock?:errorBlock(error);

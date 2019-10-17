@@ -22,6 +22,8 @@
 
 + (NSData *)packUInt64_T:(uint64_t)value;
 
++ (NSData *)packUInt32_T:(uint32_t)value;
+
 + (NSData *)packBool:(BOOL)boolValue;
 
 + (NSData *)packDate:(NSDate *)date;

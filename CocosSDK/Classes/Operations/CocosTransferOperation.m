@@ -12,7 +12,6 @@
 #import "CocosPackData.h"
 #import "NSData+HashData.h"
 #import "ChainAssetObject.h"
-#import "ChainPrice.h"
 
 @implementation CocosTransferOperation
 

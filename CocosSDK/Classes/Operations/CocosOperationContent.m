@@ -10,6 +10,7 @@
 #import "CocosCallContractOperation.h"
 #import "CocosTransferNHOperation.h"
 #import "CocosBuyNHOrderOperation.h"
+#import "CocosVoteOperation.h"
 #import "CocosUpgradeMemberOperation.h"
 #import "CocosDeleteNHOperation.h"
 #import "CocosSellNHAssetCancelOperation.h"
@@ -21,6 +22,7 @@
 typedef NS_ENUM(NSInteger,CocosOperationType) {
     CocosOperationTypeNotFind = -1,
     CocosOperationTypeTransfer = 0,
+    CocosOperationTypeVote = 6,
     CocosOperationTypeUpgradeMember = 7,
     CocosOperationTypeClaimVestingBalance = 27,
     CocosOperationTypeCallContract = 35,
@@ -44,6 +46,7 @@ typedef NS_ENUM(NSInteger,CocosOperationType) {
                 NSStringFromClass([CocosCallContractOperation class]):@(CocosOperationTypeCallContract),
                 NSStringFromClass([CocosTransferNHOperation class]):@(CocosOperationTypeTransferNHAsset),
                 NSStringFromClass([CocosBuyNHOrderOperation class]):@(CocosOperationTypeBuyNHAsset),
+                NSStringFromClass([CocosVoteOperation class]):@(CocosOperationTypeVote),
                 NSStringFromClass([CocosUpgradeMemberOperation class]):@(CocosOperationTypeUpgradeMember),
                 NSStringFromClass([CocosDeleteNHOperation class]):@(CocosOperationTypeDeleteNHAsset),
                 NSStringFromClass([CocosSellNHAssetCancelOperation class]):@(CocosOperationTypeSellNHAssetCancel),
@@ -116,7 +119,6 @@ typedef NS_ENUM(NSInteger,CocosOperationType) {
         
         content = [baseOperation generateToTransferObject];
     }
-    
     
     return @[@(self.operationType),content];
 }

@@ -95,6 +95,21 @@
     return [data copy];
 }
 
++ (NSData *)packUInt32_T:(uint32_t)value {
+    Byte *bytes = (Byte *)malloc(8);
+    
+    for (int i = 0; i < 4; i ++) {
+        bytes[i] = (Byte)((value >> (i * 8)) & 0xff);
+    }
+    
+    NSData *totalData = [NSData dataWithBytes:bytes length:4];
+    
+    free(bytes);
+    
+    return totalData;
+}
+
+
 + (NSData *)packBool:(BOOL)boolValue {
     Byte byte = boolValue?1:0;
     

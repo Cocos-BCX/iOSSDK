@@ -536,6 +536,30 @@ NS_ASSUME_NONNULL_BEGIN
                          Success:(SuccessBlock)successBlock
                            Error:(Error)errorBlock;
 
+#pragma mark - Committee Member Witnesses Vote
+/** Get CommitteeMember Info: Active、Vote*/
+- (void)Cocos_GetCommitteeMemberInfoVoteAccountId:(NSString *)account_id
+                          Success:(SuccessBlock)successBlock
+                            Error:(Error)errorBlock;
+
+/** Get Witness Info: Active、Vote*/
+- (void)Cocos_GetWitnessInfoVoteAccountId:(NSString *)account_id
+                                  Success:(SuccessBlock)successBlock
+                                    Error:(Error)errorBlock;
+/**
+ Votes : CommitteeMember Witness
+
+ @param accountName accountName
+ @param password password
+ @param voteids CommitteeMember Or Witness's vote_id
+ @param votes votes
+ */
+- (void)Cocos_PublishVotes:(NSString *)accountName
+                     Password:(NSString *)password
+                     VoteIds:(NSArray *)voteids
+                     Votes:(NSString *)votes
+                   Success:(SuccessBlock)successBlock
+                     Error:(Error)errorBlock;
 /** Get global variable parameter(latest blocks news etc.) */
 - (void)Cocos_GetDynamicGlobalPropertiesWithSuccess:(SuccessBlock)successBlock Error:(Error)errorBlock;
 
@@ -551,6 +575,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)Cocos_GetBlockWithBlockNum:(NSNumber *)blockNum
                            Success:(SuccessBlock)successBlock
                              Error:(Error)errorBlock;
+
 #pragma mark - Expanding Method
 /**
  Expand custom api
