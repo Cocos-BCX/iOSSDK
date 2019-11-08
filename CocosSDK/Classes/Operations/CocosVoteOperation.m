@@ -70,8 +70,12 @@
     
     NSMutableData *mutableData = [NSMutableData dataWithCapacity:300];
   
-    [mutableData appendData:[self.lock_with_vote transformToData]];
-
+    [mutableData appendData:[CocosPackData packBool:(self.lock_with_vote.count>0)]];
+    [mutableData appendData:[CocosPackData packUInt32_T:[self.lock_with_vote.firstObject integerValue]]];
+    
+    [mutableData appendData:[self.lock_with_vote.lastObject transformToData]];
+    
+    
     [mutableData appendData:[self.account transformToData]];
     
     // 先判断owner 是否有值，有值为1 ，无值为0

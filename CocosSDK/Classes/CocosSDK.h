@@ -63,11 +63,11 @@ NS_ASSUME_NONNULL_BEGIN
  @param connectedStatus Status of connection
  */
 - (void)Cocos_ConnectWithNodeUrl:(NSString *)url
-        Fauceturl:(NSString *)faucetUrl
-           TimeOut:(NSTimeInterval)timeOut
-        CoreAsset:(NSString *)coreAsset
-           ChainId:(NSString *)chainId
-    ConnectedStatus:(void (^)(WebsocketConnectStatus connectStatus))connectedStatus;
+                       Fauceturl:(NSString *)faucetUrl
+                         TimeOut:(NSTimeInterval)timeOut
+                       CoreAsset:(NSString *)coreAsset
+                         ChainId:(NSString *)chainId
+                 ConnectedStatus:(void (^)(WebsocketConnectStatus connectStatus))connectedStatus;
 
 #pragma mark - Create account
 /**
@@ -79,11 +79,11 @@ NS_ASSUME_NONNULL_BEGIN
  @param autoLogin   Auto log in
  */
 - (void)Cocos_CreateAccountWalletMode:(CocosWalletMode)walletMode
-         AccountName:(NSString *)accountName
-            Password:(NSString *)password
-           AutoLogin:(BOOL)autoLogin
-             Success:(SuccessBlock)successBlock
-               Error:(Error)errorBlock;
+                          AccountName:(NSString *)accountName
+                             Password:(NSString *)password
+                            AutoLogin:(BOOL)autoLogin
+                              Success:(SuccessBlock)successBlock
+                                Error:(Error)errorBlock;
 /**
  Import wallet
  
@@ -91,39 +91,39 @@ NS_ASSUME_NONNULL_BEGIN
  @param tempPassword    Temporary password
  */
 - (void)Cocos_ImportWalletWithPrivate:(NSString *)private_key
-                WalletMode:(CocosWalletMode)walletMode
-             TempPassword:(NSString *)tempPassword
-                  Success:(SuccessBlock)successBlock
-                    Error:(Error)errorBlock;
+                           WalletMode:(CocosWalletMode)walletMode
+                         TempPassword:(NSString *)tempPassword
+                              Success:(SuccessBlock)successBlock
+                                Error:(Error)errorBlock;
 /**
  Delete wallet
  
  @param accountName Account
  */
 - (void)Cocos_DeleteWalletAccountName:(NSString *)accountName
-          Success:(SuccessBlock)successBlock
-            Error:(Error)errorBlock;
+                              Success:(SuccessBlock)successBlock
+                                Error:(Error)errorBlock;
 
 #pragma mark - Wallet mode operation
 /**
  Backup wallet
-
+ 
  @param accountName Wallet name(The name must have logged in and been saved in SDK database)
  */
 - (void)Cocos_BackupWalletWithAccountName:(NSString *)accountName
-              Success:(SuccessBlock)successBlock
-                Error:(Error)errorBlock;
+                                  Success:(SuccessBlock)successBlock
+                                    Error:(Error)errorBlock;
 
 /**
  Recover wallet
-
+ 
  @param keystone        Backup for recovery
  @param keystonePwd     Password for recovery
  */
 - (void)Cocos_RecoverWalletWithString:(NSString *)keystone
-          KeystonePwd:(NSString *)keystonePwd
-              Success:(SuccessBlock)successBlock
-                Error:(Error)errorBlock;
+                          KeystonePwd:(NSString *)keystonePwd
+                              Success:(SuccessBlock)successBlock
+                                Error:(Error)errorBlock;
 /** Get Account full info */
 - (void)Cocos_GetFullAccount:(NSString *)assetIdOrName
                      Success:(SuccessBlock)successBlock
@@ -134,7 +134,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** Get all wallet accounts saved in SDK */
 - (void)Cocos_QueryAllAccountSuccess:(SuccessBlock)successBlock
-           Error:(Error)errorBlock;
+                               Error:(Error)errorBlock;
 
 #pragma mark - Account mode operation
 /**
@@ -144,37 +144,37 @@ NS_ASSUME_NONNULL_BEGIN
  @param password    Password
  */
 - (void)Cocos_LoginAccountWithName:(NSString *)accountName
-          Password:(NSString *)password
-            Success:(SuccessBlock)successBlock
-              Error:(Error)errorBlock;
+                          Password:(NSString *)password
+                           Success:(SuccessBlock)successBlock
+                             Error:(Error)errorBlock;
 
 #pragma mark - Information Operation of Accounts
 /**
  Get private key
-
+ 
  @param accountName     Account
  @param password        Password
  */
 - (void)Cocos_GetPrivateWithName:(NSString *)accountName
-            Password:(NSString *)password
-             Success:(SuccessBlock)successBlock
-               Error:(Error)errorBlock;
+                        Password:(NSString *)password
+                         Success:(SuccessBlock)successBlock
+                           Error:(Error)errorBlock;
 /**
  Get account simple object by Account
  
  @param accountName Account
  */
 - (void)Cocos_GetDBAccount:(NSString *)accountName
-                 Success:(SuccessBlock)successBlock
-                   Error:(Error)errorBlock;
+                   Success:(SuccessBlock)successBlock
+                     Error:(Error)errorBlock;
 /**
  Get account object by Account
  
  @param accountIdOrName Account or Account ID(eg.@"name" or @"1.2.n")
  */
 - (void)Cocos_GetAccount:(NSString *)accountIdOrName
-           Success:(SuccessBlock)successBlock
-             Error:(Error)errorBlock;
+                 Success:(SuccessBlock)successBlock
+                   Error:(Error)errorBlock;
 /**
  Get account's balance
  
@@ -182,9 +182,9 @@ NS_ASSUME_NONNULL_BEGIN
  @param coinID    Coin IDs ('@[]' will get All coin Balance, @[1.3.0] is COCOS)
  */
 - (void)Cocos_GetAccountBalance:(NSString *)accountID
-             CoinID:(NSArray *)coinID
-            Success:(SuccessBlock)successBlock
-              Error:(Error)errorBlock;
+                         CoinID:(NSArray *)coinID
+                        Success:(SuccessBlock)successBlock
+                          Error:(Error)errorBlock;
 
 /**
  Get account history about one account
@@ -193,40 +193,40 @@ NS_ASSUME_NONNULL_BEGIN
  @param limit       Amount
  */
 - (void)Cocos_GetAccountHistory:(NSString *)accountID
-              Limit:(NSInteger)limit
-            Success:(SuccessBlock)successBlock
-              Error:(Error)errorBlock;
+                          Limit:(NSInteger)limit
+                        Success:(SuccessBlock)successBlock
+                          Error:(Error)errorBlock;
 /**
  Get transaction about one hash
  
  @param transferhash   hash
-
+ 
  */
 - (void)Cocos_GetTransactionById:(NSString *)transferhash
-                        Success:(SuccessBlock)successBlock
-                          Error:(Error)errorBlock;
+                         Success:(SuccessBlock)successBlock
+                           Error:(Error)errorBlock;
 /**
  Decrypt memo①
-
+ 
  @param memo        memo
  @param active_key  Active private key
  */
 - (void)Cocos_DecryptMemo:(NSDictionary *)memo
-              Private:(NSString *)active_key
-              Success:(SuccessBlock)successBlock
-                Error:(Error)errorBlock;
+                  Private:(NSString *)active_key
+                  Success:(SuccessBlock)successBlock
+                    Error:(Error)errorBlock;
 /**
  Decrypt memo②
-
+ 
  @param memo memo
  @param accountName Account
  @param password    Password
  */
 - (void)Cocos_DecryptMemo:(NSDictionary *)memo
-          AccountName:(NSString *)accountName
-         Password:(NSString *)password
-          Success:(SuccessBlock)successBlock
-            Error:(Error)errorBlock;
+              AccountName:(NSString *)accountName
+                 Password:(NSString *)password
+                  Success:(SuccessBlock)successBlock
+                    Error:(Error)errorBlock;
 /**
  Upgrade Membership
  
@@ -240,12 +240,12 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Asset query operation
 /**
  Get blockchain assets list
-
+ 
  @param nLimit  Amount(maximum 100)
  */
 - (void)Cocos_ChainListLimit:(NSInteger)nLimit
-             Success:(SuccessBlock)successBlock
-               Error:(Error)errorBlock;
+                     Success:(SuccessBlock)successBlock
+                       Error:(Error)errorBlock;
 /**
  Get Asset by name
  
@@ -260,8 +260,8 @@ NS_ASSUME_NONNULL_BEGIN
  @param assetIds Asset ID(array)
  */
 - (void)Cocos_GetAssets:(NSArray *)assetIds
-            Success:(SuccessBlock)successBlock
-              Error:(Error)errorBlock;
+                Success:(SuccessBlock)successBlock
+                  Error:(Error)errorBlock;
 
 /** Get object by IDs [eg.1.3.n] */
 - (void)Cocos_GetObjects:(NSArray *)objectIds
@@ -278,17 +278,17 @@ NS_ASSUME_NONNULL_BEGIN
  @param memo            Memo String
  */
 - (void)Cocos_TransferFromAccount:(NSString *)fromName
-              ToAccount:(NSString *)toName
-               Password:(NSString *)password
-          TransferAsset:(NSString *)transferAsset
-            AssetAmount:(NSString *)assetAmount
-                   Memo:(NSString *)memo
-              Success:(SuccessBlock)successBlock
-                Error:(Error)errorBlock;
+                        ToAccount:(NSString *)toName
+                         Password:(NSString *)password
+                    TransferAsset:(NSString *)transferAsset
+                      AssetAmount:(NSString *)assetAmount
+                             Memo:(NSString *)memo
+                          Success:(SuccessBlock)successBlock
+                            Error:(Error)errorBlock;
 
 /**
  Receivables (String used to generate two-dimensional receipt code)
-
+ 
  @param receiver receiver
  @param symbol Currency of transfer
  @param amount amount of transfer
@@ -307,7 +307,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Contract
 /**
  Get Contract info
-
+ 
  @param contractIdOrName Contract or Contract id
  */
 - (void)Cocos_GetContract:(NSString *)contractIdOrName
@@ -315,7 +315,7 @@ NS_ASSUME_NONNULL_BEGIN
                     Error:(Error)errorBlock;
 /**
  Get Contract Info
-
+ 
  @param current_version contract version
  */
 - (void)Cocos_GetContractCreatInfo:(NSString *)current_version
@@ -323,7 +323,7 @@ NS_ASSUME_NONNULL_BEGIN
                              Error:(Error)errorBlock;
 /**
  Get Contract Info of Account
-
+ 
  @param accountId accountId
  @param contractId contractId
  */
@@ -333,7 +333,7 @@ NS_ASSUME_NONNULL_BEGIN
                                Error:(Error)errorBlock;
 /**
  Call contract
-
+ 
  @param contractIdOrName      Contract name or ID
  @param param                Parameter
  @param contractmMethod     Method name
@@ -365,11 +365,11 @@ NS_ASSUME_NONNULL_BEGIN
  @param page             page
  */
 - (void)Cocos_ListAccountNHAsset:(NSString *)accountID
-           WorldView:(NSArray *)worldViewIDArray
-            PageSize:(NSInteger)pageSize
-                Page:(NSInteger)page
-                 Success:(SuccessBlock)successBlock
-                   Error:(Error)errorBlock;
+                       WorldView:(NSArray *)worldViewIDArray
+                        PageSize:(NSInteger)pageSize
+                            Page:(NSInteger)page
+                         Success:(SuccessBlock)successBlock
+                           Error:(Error)errorBlock;
 /**
  Get account's NH assets' sell list
  
@@ -404,36 +404,36 @@ NS_ASSUME_NONNULL_BEGIN
  @param worldViewIDOrNameArray  World view's name or id
  */
 - (void)Cocos_LookupWorldView:(NSArray *)worldViewIDOrNameArray
-                    Success:(SuccessBlock)successBlock
-                      Error:(Error)errorBlock;
+                      Success:(SuccessBlock)successBlock
+                        Error:(Error)errorBlock;
 /**
  Get NH assets that creator created
-
+ 
  @param accountID AccountID
  @param pageSize  PageSize
  @param page      Page
  */
 - (void)Cocos_ListNHAssetByCreator:(NSString *)accountID
-                  PageSize:(NSInteger)pageSize
-                      Page:(NSInteger)page
-                      Success:(SuccessBlock)successBlock
-                        Error:(Error)errorBlock;
+                          PageSize:(NSInteger)pageSize
+                              Page:(NSInteger)page
+                           Success:(SuccessBlock)successBlock
+                             Error:(Error)errorBlock;
 
 #pragma mark - NHAsset Operation
 /**
  assets transfer
-
+ 
  @param from            Asset sender
  @param to              Asset receiver
  @param NHAssetID       NHAssetID
  @param password        password
  */
 - (void)Cocos_TransferNHAsset:(NSString *)from
-               ToAccount:(NSString *)to
-               NHAssetID:(NSString *)NHAssetID
-                 Password:(NSString *)password
-                 Success:(SuccessBlock)successBlock
-                   Error:(Error)errorBlock;
+                    ToAccount:(NSString *)to
+                    NHAssetID:(NSString *)NHAssetID
+                     Password:(NSString *)password
+                      Success:(SuccessBlock)successBlock
+                        Error:(Error)errorBlock;
 /**
  Buy NH assets
  
@@ -442,13 +442,13 @@ NS_ASSUME_NONNULL_BEGIN
  @param password       password
  */
 - (void)Cocos_BuyNHAssetOrderID:(NSString *)orderID
-               Account:(NSString *)account
-               Password:(NSString *)password
-                  Success:(SuccessBlock)successBlock
-                    Error:(Error)errorBlock;
+                        Account:(NSString *)account
+                       Password:(NSString *)password
+                        Success:(SuccessBlock)successBlock
+                          Error:(Error)errorBlock;
 /**
  Delete NH assets
-
+ 
  @param account         account
  @param password        password
  @param nhAssetID       nhAssetID
@@ -467,7 +467,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)Cocos_CancelNHAssetAccount:(NSString *)account
                           Password:(NSString *)password
-                         OrderId:(NSString *)orderId
+                           OrderId:(NSString *)orderId
                            Success:(SuccessBlock)successBlock
                              Error:(Error)errorBlock;
 /**
@@ -484,15 +484,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)Cocos_SellNHAssetSeller:(NSString *)SellerAccount
                        Password:(NSString *)password
-                       NHAssetId:(NSString *)nhAssetid
-                            Memo:(NSString *)memo
-                 SellPriceAmount:(NSString *)priceAmount
-                PendingFeeAmount:(NSString *)pendingFeeAmount
-                  OperationAsset:(NSString *)opAsset
+                      NHAssetId:(NSString *)nhAssetid
+                           Memo:(NSString *)memo
+                SellPriceAmount:(NSString *)priceAmount
+               PendingFeeAmount:(NSString *)pendingFeeAmount
+                 OperationAsset:(NSString *)opAsset
                       SellAsset:(NSString *)sellAsset
-                      Expiration:(NSString *)expiration
-                         Success:(SuccessBlock)successBlock
-                           Error:(Error)errorBlock;
+                     Expiration:(NSString *)expiration
+                        Success:(SuccessBlock)successBlock
+                          Error:(Error)errorBlock;
 
 /** Sell NH assets MaxExpiration */
 - (void)Cocos_SellNHAssetMaxExpirationSuccess:(SuccessBlock)successBlock Error:(Error)errorBlock;
@@ -500,15 +500,15 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Gas Mortgage and Receive
 /**
  estimation gas
-
+ 
  @param amount COCOS
  */
 - (void)Cocos_Gas_EstimationWithCOCOSAmout:(NSString *)amount
-           Success:(SuccessBlock)successBlock
-             Error:(Error)errorBlock;
+                                   Success:(SuccessBlock)successBlock
+                                     Error:(Error)errorBlock;
 /**
  mortgager gas
-
+ 
  @param mortgager mortgager
  @param beneficiary beneficiary
  @param collateral collateral
@@ -533,33 +533,36 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)Cocos_ClaimVestingBalance:(NSString *)account
                          Password:(NSString *)password
-                         Success:(SuccessBlock)successBlock
-                           Error:(Error)errorBlock;
+                          Success:(SuccessBlock)successBlock
+                            Error:(Error)errorBlock;
 
 #pragma mark - Committee Member Witnesses Vote
 /** Get CommitteeMember Info: Active、Vote*/
 - (void)Cocos_GetCommitteeMemberInfoVoteAccountId:(NSString *)account_id
-                          Success:(SuccessBlock)successBlock
-                            Error:(Error)errorBlock;
+                                          Success:(SuccessBlock)successBlock
+                                            Error:(Error)errorBlock;
 
 /** Get Witness Info: Active、Vote*/
 - (void)Cocos_GetWitnessInfoVoteAccountId:(NSString *)account_id
                                   Success:(SuccessBlock)successBlock
                                     Error:(Error)errorBlock;
 /**
- Votes : CommitteeMember Witness
-
- @param accountName accountName
- @param password password
- @param voteids CommitteeMember Or Witness's vote_id
- @param votes votes
- */
+Votes CommitteeMember , Witness
+ 
+@param accountName accountName
+@param password account password
+@param type  1 -> Witness,0 -> CommitteeMember
+@param vote_ids witnessesIds or committeeIds
+@param votes votes
+*/
 - (void)Cocos_PublishVotes:(NSString *)accountName
-                     Password:(NSString *)password
-                     VoteIds:(NSArray *)voteids
+                  Password:(NSString *)password
+                      Type:(int)type
+                  VoteIds:(NSArray *)voteids
                      Votes:(NSString *)votes
                    Success:(SuccessBlock)successBlock
                      Error:(Error)errorBlock;
+
 /** Get global variable parameter(latest blocks news etc.) */
 - (void)Cocos_GetDynamicGlobalPropertiesWithSuccess:(SuccessBlock)successBlock Error:(Error)errorBlock;
 
@@ -586,11 +589,11 @@ NS_ASSUME_NONNULL_BEGIN
  @param uploadParamsArray   Parameter
  */
 - (void)Cocos_SendWithChainApi:(WebsocketBlockChainApi)chainApi
-                Method:(WebsocketBlockChainMethodApi)method
-            MethodName:(NSString *)methodName
-                Params:(NSArray *)uploadParamsArray
-               Success:(SuccessBlock)successBlock
-                 Error:(Error)errorBlock;
+                        Method:(WebsocketBlockChainMethodApi)method
+                    MethodName:(NSString *)methodName
+                        Params:(NSArray *)uploadParamsArray
+                       Success:(SuccessBlock)successBlock
+                         Error:(Error)errorBlock;
 @end
 
 NS_ASSUME_NONNULL_END

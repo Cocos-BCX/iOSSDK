@@ -59,7 +59,7 @@
 }
 
 - (NSData *)transformToData {
-    return [CocosPackData packUnsigedInteger:self.instance];
+    return [CocosPackData packLongValue:self.instance];
 }
 
 @end

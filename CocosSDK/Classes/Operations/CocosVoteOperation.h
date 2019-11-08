@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CocosVoteOperation : CocosBaseOperation
 
-@property (nonatomic, strong, nonnull) ChainAssetAmountObject *lock_with_vote;
+@property (nonatomic, strong, nonnull) NSArray *lock_with_vote;
 
 @property (nonatomic, strong, nonnull) ChainObjectId *account;
 

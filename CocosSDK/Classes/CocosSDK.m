@@ -494,7 +494,7 @@
     callBackModel.errorResult = errorBlock;
     
     [self sendWithChainApi:(WebsocketBlockChainApiDataBase) method:(WebsocketBlockChainMethodApiCall) params:uploadParams callBack:callBackModel];
-
+    
 }
 
 /** Decrypt memo① */
@@ -1340,7 +1340,7 @@
                         SignedTransaction *signedTran = [[SignedTransaction alloc] init];
                         signedTran.operations = @[content];
                         // 8. Call contract
-                        [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];    
+                        [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
                     } Error:errorBlock];
                 } Error:errorBlock];
             } Error:errorBlock];
@@ -1535,8 +1535,8 @@
 
 /** lookup Block Rewards */
 - (void)Cocos_LookupBlockRewards:(NSString *)account
-             Success:(SuccessBlock)successBlock
-               Error:(Error)errorBlock
+                         Success:(SuccessBlock)successBlock
+                           Error:(Error)errorBlock
 {
     [self Cocos_GetVestingBalances:account Success:^(NSArray * result) {
         
@@ -1589,8 +1589,8 @@
 
 /** get_vesting_balances */
 - (void)Cocos_GetVestingBalances:(NSString *)account
-             Success:(SuccessBlock)successBlock
-               Error:(Error)errorBlock
+                         Success:(SuccessBlock)successBlock
+                           Error:(Error)errorBlock
 {
     [self Cocos_GetAccount:account Success:^(id accountRes) {
         ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:accountRes];
@@ -1675,8 +1675,8 @@
 //};
 /** Get CommitteeMember Info: Active、Vote*/
 - (void)Cocos_GetCommitteeMemberInfoVoteAccountId:(NSString *)account_id
-                          Success:(SuccessBlock)successBlock
-                            Error:(Error)errorBlock
+                                          Success:(SuccessBlock)successBlock
+                                            Error:(Error)errorBlock
 {
     [self Cocos_GetObjects:@[@"2.0.0"] Success:^(NSArray *global_data) {
         NSDictionary *active_committee_dic = [global_data firstObject];
@@ -1750,8 +1750,8 @@
 
 /** Get Witness Info: Active、Vote*/
 - (void)Cocos_GetWitnessInfoVoteAccountId:(NSString *)account_id
-                      Success:(SuccessBlock)successBlock
-                        Error:(Error)errorBlock
+                                  Success:(SuccessBlock)successBlock
+                                    Error:(Error)errorBlock
 {
     [self Cocos_GetObjects:@[@"2.0.0"] Success:^(NSArray *global_data) {
         NSDictionary *active_committee_dic = [global_data firstObject];
@@ -1825,50 +1825,103 @@
     } Error:errorBlock];
 }
 
-/** Votes : CommitteeMember Witness */
+/**
+Votes CommitteeMember , Witness
+ 
+@param accountName accountName
+@param password account password
+@param type  1 -> Witness,0 -> CommitteeMember
+@param voteids witnessesIds or committeeIds
+@param votes votes
+*/
 - (void)Cocos_PublishVotes:(NSString *)accountName
                   Password:(NSString *)password
-                   VoteIds:(NSArray *)voteids
+                      Type:(int)type
+                  VoteIds:(NSArray *)voteids
                      Votes:(NSString *)votes
                    Success:(SuccessBlock)successBlock
-                     Error:(Error)errorBlock;
+                     Error:(Error)errorBlock
 {
     // 1. Validation parameters
     [self validateAccount:accountName Password:password Success:^(NSDictionary *keyDic) {
-        if (keyDic[@"active_key"]) {
+       if (keyDic[@"owner_key"]){
             // 2. Declassified private key
-            CocosPrivateKey *private = [[CocosPrivateKey alloc] initWithPrivateKey:keyDic[@"active_key"]];
-            // 3. account info
-            [self Cocos_GetAsset:@"COCOS" Success:^(id assetObject) {
-                ChainAssetObject *voteAssetModel = [ChainAssetObject generateFromObject:assetObject];
-                ChainAssetAmountObject *voteAmout = [voteAssetModel getAmountFromNormalFloatString:votes];
-                
-                [self Cocos_GetAccount:accountName Success:^(id responseObject) {
-                    ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:responseObject];
-                    
-                    // 4. Stitching transfer data
-                    CocosVoteOperation *operation = [[CocosVoteOperation alloc] init];
-                    operation.lock_with_vote = voteAmout;
-                    operation.account = accountModel.identifier;
-                    VoteOptionsObject *voteOptions = [[VoteOptionsObject alloc] init];
-                    voteOptions.memo_key = [accountModel.active.key_auths firstObject].key;
-                    voteOptions.votes = voteids;
-                    operation.options = voteOptions;
-                    CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
-                    SignedTransaction *signedTran = [[SignedTransaction alloc] init];
-                    signedTran.operations = @[content];
-                    // 7. Transfer
-                    [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
+            CocosPrivateKey *private = [[CocosPrivateKey alloc] initWithPrivateKey:keyDic[@"owner_key"]];
+            
+            // 1. query committeeIds
+            NSMutableArray *vote_ids = [NSMutableArray array];
+            NSMutableArray *vote_account_ids = [NSMutableArray array];
+            [self Cocos_GetObjects:voteids Success:^(NSArray *idRes) {
+                for (NSDictionary *response in idRes) {
+                    if (type == 1) {
+                        NSArray *committee = response[@"witness_status"];
+                        [vote_account_ids addObject:[committee firstObject]];
+                    }else{
+                        NSArray *committee = response[@"committee_status"];
+                        [vote_account_ids addObject:[committee firstObject]];
+                    }
+                }
+                // 3. query vote
+                [self Cocos_GetObjects:vote_account_ids Success:^(NSArray *voteIdArray) {
+                    for (NSDictionary *voids in voteIdArray) {
+                        [vote_ids addObject:voids[@"vote_id"]];
+                    }
+                    NSArray *sortVoteIds = [vote_ids sortedArrayUsingComparator:
+                                            ^NSComparisonResult(NSString *obj1, NSString *obj2) {
+                        // 排序
+                        NSString *obj1id = [[obj1 componentsSeparatedByString:@":"] lastObject];
+                        NSString *obj2id = [[obj2 componentsSeparatedByString:@":"] lastObject];
+                        if ([obj1id integerValue] > [obj2id integerValue]) {
+                            return NSOrderedDescending;
+                        } else if ([obj1id integerValue] < [obj2id integerValue]) {
+                            return NSOrderedAscending;
+                        }
+                        return NSOrderedSame;
+                    }];
+                    [self PublishVotes:accountName VoteIds:sortVoteIds Votes:votes Type:@(type) Private:private Success:successBlock Error:errorBlock];
                 } Error:errorBlock];
             } Error:errorBlock];
-            
-        }else if (keyDic[@"owner_key"]){
-            NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
+        }else if (keyDic[@"active_key"]) {
+            NSError *error = [NSError errorWithDomain:@"Please import the owner private key" code:SDKErrorCodePrivateisNull userInfo:nil];
             !errorBlock?:errorBlock(error);
         }else{
             NSError *error = [NSError errorWithDomain:@"Please enter the correct original/temporary password" code:SDKErrorCodePasswordwrong userInfo:@{@"password":password}];
             !errorBlock?:errorBlock(error);
         }
+    } Error:errorBlock];
+}
+
+/** Votes : 0 > CommitteeMember,1 > Witness */
+- (void)PublishVotes:(NSString *)accountName
+             VoteIds:(NSArray *)voteids
+               Votes:(NSString *)votes
+                Type:(NSNumber *)type
+             Private:(CocosPrivateKey *)private
+             Success:(SuccessBlock)successBlock
+               Error:(Error)errorBlock
+{
+    // 3. account info
+    [self Cocos_GetAsset:@"COCOS" Success:^(id assetObject) {
+        ChainAssetObject *voteAssetModel = [ChainAssetObject generateFromObject:assetObject];
+        ChainAssetAmountObject *voteAmout = [voteAssetModel getAmountFromNormalFloatString:votes];
+        
+        [self Cocos_GetAccount:accountName Success:^(id responseObject) {
+            ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:responseObject];
+            
+            // 4. Stitching transfer data
+            CocosVoteOperation *operation = [[CocosVoteOperation alloc] init];
+            operation.lock_with_vote = @[type,voteAmout];
+            operation.account = accountModel.identifier;
+            VoteOptionsObject *voteOptions = [[VoteOptionsObject alloc] init];
+            voteOptions.memo_key = [accountModel.active.key_auths firstObject].key;
+            voteOptions.votes = voteids;
+            operation.options = voteOptions;
+            CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
+            SignedTransaction *signedTran = [[SignedTransaction alloc] init];
+            signedTran.operations = @[content];
+            // 7. Transfer
+            [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
+        } Error:errorBlock];
     } Error:errorBlock];
 }
 
