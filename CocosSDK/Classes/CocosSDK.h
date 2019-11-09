@@ -531,9 +531,11 @@ NS_ASSUME_NONNULL_BEGIN
  claim vesting balance
  @param account account
  @param password password
+ @param vesting_id vestingid
  */
 - (void)Cocos_ClaimVestingBalance:(NSString *)account
                          Password:(NSString *)password
+                        VestingID:(NSString *)vesting_id
                           Success:(SuccessBlock)successBlock
                             Error:(Error)errorBlock;
 

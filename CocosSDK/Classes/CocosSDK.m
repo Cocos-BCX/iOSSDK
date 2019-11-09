@@ -1666,6 +1666,7 @@
     return number.stringValue;
 }
 
+
 /**
  claim vesting balance
  @param account account
@@ -1673,6 +1674,7 @@
  */
 - (void)Cocos_ClaimVestingBalance:(NSString *)account
                          Password:(NSString *)password
+                        VestingID:(NSString *)vesting_id
                           Success:(SuccessBlock)successBlock
                             Error:(Error)errorBlock
 {
@@ -1685,23 +1687,63 @@
             
             [self Cocos_GetAccount:account Success:^(id accountRes) {
                 ChainAccountModel *ownerAccount =[ChainAccountModel generateFromObject:accountRes];
-                
                 [self Cocos_GetVestingBalances:account Success:^(NSArray * result) {
-                    ChainVestingBalance *vestingbalance = [ChainVestingBalance generateFromObject:result.firstObject];
-                    
-                    CocosClaimVestingBalanceOperation *operation = [[CocosClaimVestingBalanceOperation alloc] init];
-                    operation.owner = ownerAccount.identifier;
-                    operation.vesting_balance = vestingbalance.identifier;
-                    ChainVestingBalancePolicy *policy = [ChainVestingBalancePolicy generateFromObject:[vestingbalance.policy lastObject]];
-                    long balanceAmout = policy.coin_seconds_earned / policy.vesting_seconds;
-                    ChainAssetAmountObject *amount = [[ChainAssetAmountObject alloc] initFromAssetId:vestingbalance.balance.assetId amount:balanceAmout];
-                    operation.amount = amount;
-                    operation.requiredAuthority = ownerAccount.active.publicKeys;
-                    CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
-                    SignedTransaction *signedTran = [[SignedTransaction alloc] init];
-                    signedTran.operations = @[content];
-                    // 3. Transfer
-                    [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
+                    for (int i = 0 ; i<result.count; i++) {
+                        NSDictionary *vestingDic = result[i];
+                        ChainVestingBalance *vestingbalance = [ChainVestingBalance generateFromObject:vestingDic];
+                        
+                        if ([vestingbalance.identifier.description isEqualToString:vesting_id]) {
+                            CocosClaimVestingBalanceOperation *operation = [[CocosClaimVestingBalanceOperation alloc] init];
+                            operation.owner = ownerAccount.identifier;
+                            operation.vesting_balance = vestingbalance.identifier;
+                            ChainVestingBalancePolicy *policy = [ChainVestingBalancePolicy generateFromObject:[vestingbalance.policy lastObject]];
+                            
+                            // balance key
+                            ChainAssetAmountObject *gasBalance = vestingbalance.balance;
+                            long return_cash = gasBalance.amount;
+                            
+                            // current date
+                            NSInteger currentTimeInteger = [[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]] integerValue];
+                            
+                            // 服务器时间戳
+                            NSInteger timeSp = ({
+                                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                                // 获得日期对象
+                                formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
+                                NSTimeZone* timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+                                [formatter setTimeZone:timeZone];
+                                NSDate *createDate = [formatter dateFromString:policy.coin_seconds_earned_last_update];
+                                
+                                // 获取系统时区
+                                NSTimeZone *zone1 = [NSTimeZone systemTimeZone];
+                                [formatter setTimeZone:zone1];
+                                NSString *formatTime = [formatter stringFromDate:createDate];
+                                NSDate* date = [formatter dateFromString:formatTime];
+                                //时间转时间戳的方法:
+                                NSInteger timeSp = [[NSNumber numberWithDouble:[date timeIntervalSince1970]] integerValue];
+                                timeSp;
+                            });
+                            // 相差秒数
+                            NSInteger past_sconds = currentTimeInteger - timeSp;
+                            
+                            float vesting_seconds = policy.vesting_seconds;
+                            float total_earned = vesting_seconds * return_cash;
+                            float new_earned = (past_sconds / vesting_seconds)*(total_earned);
+                            float old_earned = policy.coin_seconds_earned;
+                            float earned = old_earned + new_earned;
+                            float availablePercent = earned / (vesting_seconds * return_cash);
+                            float available_balance_amount = availablePercent * return_cash;//精度
+                            ChainAssetAmountObject *amount = [[ChainAssetAmountObject alloc] initFromAssetId:vestingbalance.balance.assetId amount:available_balance_amount];
+                            operation.amount = amount;
+                            operation.requiredAuthority = ownerAccount.active.publicKeys;
+                            CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
+                            SignedTransaction *signedTran = [[SignedTransaction alloc] init];
+                            signedTran.operations = @[content];
+                            // 3. Transfer
+                            [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
+                            break;
+                        }
+                    }
                 } Error:errorBlock];
             } Error:errorBlock];
         }else if (keyDic[@"owner_key"]){
@@ -1713,6 +1755,7 @@
         }
     } Error:errorBlock];
 }
+
 
 #pragma mark - Committee Member Witnesses Vote
 //typedef NS_ENUM(int,VoteIdType) {
