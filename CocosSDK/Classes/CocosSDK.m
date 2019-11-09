@@ -1256,7 +1256,7 @@
 {
     UploadParams *uploadParams = [[UploadParams alloc] init];
     uploadParams.methodName = kCocosListNHbyCreator;
-    uploadParams.totalParams = @[accountID,@(pageSize),@(page)];
+    uploadParams.totalParams = @[accountID,@"",@(pageSize),@(page)];
     CallBackModel *callBackModel = [[CallBackModel alloc] init];
     callBackModel.successResult = successBlock;
     callBackModel.errorResult = errorBlock;
@@ -1534,56 +1534,102 @@
 }
 
 /** lookup Block Rewards */
-- (void)Cocos_LookupBlockRewards:(NSString *)account
+- (void)Cocos_QueryVestingBalance:(NSString *)account
                          Success:(SuccessBlock)successBlock
                            Error:(Error)errorBlock
 {
     [self Cocos_GetVestingBalances:account Success:^(NSArray * result) {
         
-        ChainVestingBalance *vestingbalance = [ChainVestingBalance generateFromObject:result.firstObject];
+        NSMutableArray *vestingArray = [NSMutableArray array];
         
-        if (vestingbalance) {
-            ChainAssetAmountObject *gasBalance = vestingbalance.balance;
-            long return_cash = gasBalance.amount;;
-            ChainVestingBalancePolicy *gasPolicy = [ChainVestingBalancePolicy generateFromObject:[vestingbalance.policy lastObject]];
-            float coin_seconds_earned = gasPolicy.coin_seconds_earned;
-            float vesting_seconds = gasPolicy.vesting_seconds;
-            float amount = coin_seconds_earned/vesting_seconds;
-            
-            float available_percent = amount/return_cash*100;
-            float remaining_days = 1 - amount/return_cash;
-            
-            [self Cocos_GetAsset:[gasBalance.assetId generateToTransferObject] Success:^(id responseObject) {
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            dispatch_semaphore_t disp = dispatch_semaphore_create(0);
+            for (NSDictionary *vestingbalance in result) {
+
+                ChainVestingBalance *vesting = [ChainVestingBalance generateFromObject:vestingbalance];
                 
-                ChainAssetObject *opAssetModel = [ChainAssetObject generateFromObject:responseObject];
+                // balance key
+                ChainAssetAmountObject *gasBalance = vesting.balance;
+                long return_cash = gasBalance.amount;;
                 
-                NSDecimalNumber *amount_demicimal = [NSDecimalNumber decimalNumberWithMantissa:amount exponent:-opAssetModel.precision isNegative:NO];
+                // policy key
+                ChainVestingBalancePolicy *gasPolicy = [ChainVestingBalancePolicy generateFromObject:[vesting.policy lastObject]];
                 
-                NSDecimalNumber *return_cash_demicimal = [NSDecimalNumber decimalNumberWithMantissa:return_cash exponent:-opAssetModel.precision isNegative:NO];
+                // current date
+                NSInteger currentTimeInteger = [[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]] integerValue];
                 
-                NSMutableDictionary *successData = [NSMutableDictionary dictionary];
-                successData[@"id"] = [vestingbalance.identifier generateToTransferObject];
-                successData[@"return_cash"] = return_cash_demicimal.stringValue;
-                successData[@"earned_coindays"] = [self decimalSubScaleString:amount_demicimal.stringValue scale:0];
-                successData[@"require_coindays"] = [self decimalSubScaleString:return_cash_demicimal.stringValue scale:0];
-                successData[@"remaining_days"] = [self decimalSubScaleString:[NSString stringWithFormat:@"%f",remaining_days] scale:2];
-                successData[@"available_percent"] = [self decimalSubScaleString:[NSString stringWithFormat:@"%f",available_percent] scale:2];
-                successData[@"available_balance"] = @{
-                                                      @"amount":amount_demicimal.stringValue,
-                                                      @"asset_id":[opAssetModel.identifier generateToTransferObject],
-                                                      @"symbol":opAssetModel.symbol,
-                                                      @"precision":@(opAssetModel.precision)
-                                                      };
-                NSDictionary *successDic = @{
-                                             @"code":@(1),
-                                             @"data":successData
-                                             };
-                !successBlock?:successBlock(successDic);
-            } Error:errorBlock];
-        }else{
-            NSError *error = [NSError errorWithDomain:@"No reward available" code:SDKErrorNoRewardAvailable userInfo:@{@"account":account}];
-            !errorBlock?:errorBlock(error);
-        }
+                // 服务器时间戳
+                NSInteger timeSp = ({
+                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                    // 获得日期对象
+                    formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
+                    NSTimeZone* timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+                    [formatter setTimeZone:timeZone];
+                    NSDate *createDate = [formatter dateFromString:gasPolicy.coin_seconds_earned_last_update];
+                    
+                    // 获取系统时区
+                    NSTimeZone *zone1 = [NSTimeZone systemTimeZone];
+                    [formatter setTimeZone:zone1];
+                    NSString *formatTime = [formatter stringFromDate:createDate];
+                    NSDate* date = [formatter dateFromString:formatTime];
+                    //时间转时间戳的方法:
+                    NSInteger timeSp = [[NSNumber numberWithDouble:[date timeIntervalSince1970]] integerValue];
+                    timeSp;
+                });
+                // 相差秒数
+                NSInteger past_sconds = currentTimeInteger - timeSp;
+                
+                float vesting_seconds = gasPolicy.vesting_seconds;
+                float total_earned = vesting_seconds * return_cash;
+                float new_earned = (past_sconds / vesting_seconds)*(total_earned);
+                float old_earned = gasPolicy.coin_seconds_earned;
+                float earned = old_earned + new_earned;
+                float availablePercent = earned / (vesting_seconds * return_cash);
+                float available_balance_amount = availablePercent * return_cash;//精度
+                float remaining_hours = vesting_seconds * (1 - availablePercent)/3600;
+                
+                [self Cocos_GetAsset:[gasBalance.assetId generateToTransferObject] Success:^(id responseObject) {
+                    ChainAssetObject *opAssetModel = [ChainAssetObject generateFromObject:responseObject];
+                    
+                    NSDecimalNumber *amount_demicimal = [NSDecimalNumber decimalNumberWithMantissa:available_balance_amount exponent:-opAssetModel.precision isNegative:NO];
+                    
+                    NSDecimalNumber *return_cash_demicimal = [NSDecimalNumber decimalNumberWithMantissa:return_cash exponent:-opAssetModel.precision isNegative:NO];
+                    
+                    NSMutableDictionary *successData = [NSMutableDictionary dictionary];
+                    successData[@"type"] = vesting.describe;
+                    successData[@"id"] = [vesting.identifier generateToTransferObject];
+                    successData[@"return_cash"] = return_cash_demicimal.stringValue;
+                    successData[@"available_percent"] = @(availablePercent*100);
+                    successData[@"remaining_hours"] = @(remaining_hours);
+                    
+                    successData[@"available_balance"] = @{
+                        @"amount":amount_demicimal.stringValue,
+                        @"asset_id":[opAssetModel.identifier generateToTransferObject],
+                        @"symbol":opAssetModel.symbol,
+                        @"precision":@(opAssetModel.precision)
+                    };
+                    [vestingArray addObject:successData];
+                    // 释放信号
+                    dispatch_semaphore_signal(disp);
+                } Error:errorBlock];
+                // 2. 等待信号
+                dispatch_semaphore_wait(disp, DISPATCH_TIME_FOREVER);
+            }
+           
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (vestingArray.count) {
+                    NSDictionary *successDic = @{
+                        @"code":@(1),
+                        @"data":vestingArray
+                    };
+                    !successBlock?:successBlock(successDic);
+                }else{
+                    NSError *error = [NSError errorWithDomain:@"No reward available" code:SDKErrorNoRewardAvailable userInfo:@{@"account":account}];
+                    !errorBlock?:errorBlock(error);
+                }
+                           
+            });
+        });
     } Error:errorBlock];
 }
 

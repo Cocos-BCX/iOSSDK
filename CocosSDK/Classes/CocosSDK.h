@@ -523,9 +523,10 @@ NS_ASSUME_NONNULL_BEGIN
  lookup Block Rewards
  @param account account
  */
-- (void)Cocos_LookupBlockRewards:(NSString *)account
+- (void)Cocos_QueryVestingBalance:(NSString *)account
                          Success:(SuccessBlock)successBlock
                            Error:(Error)errorBlock;
+
 /**
  claim vesting balance
  @param account account
@@ -552,7 +553,7 @@ Votes CommitteeMember , Witness
 @param accountName accountName
 @param password account password
 @param type  1 -> Witness,0 -> CommitteeMember
-@param vote_ids witnessesIds or committeeIds
+@param voteids witnessesIds or committeeIds
 @param votes votes
 */
 - (void)Cocos_PublishVotes:(NSString *)accountName
