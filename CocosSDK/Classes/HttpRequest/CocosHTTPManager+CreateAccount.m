@@ -23,7 +23,6 @@
     NSMutableDictionary *paramAccount = [NSMutableDictionary dictionary];
     paramAccount[@"name"] = name;
     paramAccount[@"owner_key"] = owner_key;
-    paramAccount[@"referror"] = @"";
     paramAccount[@"memo_key"] = memo_key;
     paramAccount[@"active_key"] = active_key;
     NSMutableDictionary *param = [NSMutableDictionary dictionaryWithObject:paramAccount forKey:@"account"];
