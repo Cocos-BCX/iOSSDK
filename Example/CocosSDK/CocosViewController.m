@@ -613,19 +613,19 @@
 
 // 查看待领取GAS或节点出块奖励
 - (IBAction)viewPendingCollection {
-    [[CocosSDK shareInstance] Cocos_LookupBlockRewards:self.receive_gas_account.text Success:^(id responseObject) {
-        NSLog(@"Cocos_GetVestingBalances \n%@",responseObject);
-    } Error:^(NSError *error) {
-        NSLog(@"Cocos_GetVestingBalances error \n%@",error);
-    }];
+//    [[CocosSDK shareInstance] Cocos_LookupBlockRewards:self.receive_gas_account.text Success:^(id responseObject) {
+//        NSLog(@"Cocos_GetVestingBalances \n%@",responseObject);
+//    } Error:^(NSError *error) {
+//        NSLog(@"Cocos_GetVestingBalances error \n%@",error);
+//    }];
 }
 
 - (IBAction)receiveGas {
-    [[CocosSDK shareInstance] Cocos_ClaimVestingBalance:@"syling" Password:@"1111aaaa" Success:^(id responseObject) {
-        NSLog(@"Cocos_GetVestingBalances success :%@",responseObject);
-    } Error:^(NSError *error) {
-        NSLog(@"Cocos_GetVestingBalances error :%@",error);
-    }];
+//    [[CocosSDK shareInstance] Cocos_ClaimVestingBalance:@"syling" Password:@"1111aaaa" Success:^(id responseObject) {
+//        NSLog(@"Cocos_GetVestingBalances success :%@",responseObject);
+//    } Error:^(NSError *error) {
+//        NSLog(@"Cocos_GetVestingBalances error :%@",error);
+//    }];
 }
 
 @end

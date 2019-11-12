@@ -68,7 +68,11 @@ NS_ASSUME_NONNULL_BEGIN
                        CoreAsset:(NSString *)coreAsset
                          ChainId:(NSString *)chainId
                  ConnectedStatus:(void (^)(WebsocketConnectStatus connectStatus))connectedStatus;
-
+/**
+ Query Current Chain ID
+ */
+- (void)Cocos_QueryCurrentChainID:(SuccessBlock)successBlock
+                            Error:(Error)errorBlock;
 #pragma mark - Create account
 /**
  Create account

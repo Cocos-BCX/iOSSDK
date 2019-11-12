@@ -78,7 +78,21 @@
         _client.connectStatusChange = _connectStatusChange;
     }
 }
-
+/**
+ Query Current Chain ID
+ */
+- (void)Cocos_QueryCurrentChainID:(SuccessBlock)successBlock
+                            Error:(Error)errorBlock
+{
+    // 1. Request account information with all wallet account IDs
+    UploadParams *uploadParams = [[UploadParams alloc] init];
+    uploadParams.methodName = kCocosGetChainId;
+    uploadParams.totalParams = @[];
+    CallBackModel *callBackModel = [[CallBackModel alloc] init];
+    callBackModel.successResult = successBlock;
+    callBackModel.errorResult = errorBlock;
+    [self sendWithChainApi:WebsocketBlockChainApiDataBase method:(WebsocketBlockChainMethodApiCall) params:uploadParams callBack:callBackModel];
+}
 #pragma mark - Create account
 /** Create account */
 - (void)Cocos_CreateAccountWalletMode:(CocosWalletMode)walletMode

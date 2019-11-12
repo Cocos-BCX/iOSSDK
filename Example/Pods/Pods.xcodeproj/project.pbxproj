@@ -52,10 +52,11 @@
 		2D0056EEA94B21FA445322B76B41C38E /* FMDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 247F7383C003F2F33C75AE391ECECDED /* FMDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2DD6EE54E15CD31CD51D02AAD6170339 /* FMDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F0E2720041FFD17838A166A1E349ABD /* FMDB.framework */; };
 		2FE80F96C6FF42710B28D88A7BDD0DAC /* CocosVoteOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A368567060B72BA3170A99275BC80E05 /* CocosVoteOperation.m */; };
-		31AFD25423587224007FAED8 /* libsecp256k1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F729BD8784254CF917F465EA664AB858 /* libsecp256k1.a */; };
-		31AFD25523587224007FAED8 /* libsecp256k1_arm64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA989748A18F7A707E91B098E1AA7FD0 /* libsecp256k1_arm64.a */; };
-		31AFD25623587224007FAED8 /* libsecp256k1_armv7.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27722E5995A4168AE1E94DC844259D34 /* libsecp256k1_armv7.a */; };
-		31AFD25723587224007FAED8 /* libsecp256k1_i386.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08F2CE5788B3B4B99D7CB8133359CE69 /* libsecp256k1_i386.a */; };
+		31CDA238237902800069A3FA /* libsecp256k1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F729BD8784254CF917F465EA664AB858 /* libsecp256k1.a */; };
+		31CDA239237902800069A3FA /* libsecp256k1_arm64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA989748A18F7A707E91B098E1AA7FD0 /* libsecp256k1_arm64.a */; };
+		31CDA23A237902800069A3FA /* libsecp256k1_armv7.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27722E5995A4168AE1E94DC844259D34 /* libsecp256k1_armv7.a */; };
+		31CDA23B237902800069A3FA /* libsecp256k1_i386.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08F2CE5788B3B4B99D7CB8133359CE69 /* libsecp256k1_i386.a */; };
+		31CDA23C237902800069A3FA /* secp256k1.h in Headers */ = {isa = PBXBuildFile; fileRef = CE732D9335A8C6973052FC8B1CA211FF /* secp256k1.h */; };
 		333ECAA37AD572C7B787D7D8A6C0BD45 /* ChainAccountHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 77630826D8B71F76CA53A0E13BA05116 /* ChainAccountHistory.m */; };
 		354A5C4C4E06157C3D1ED3CEC7111C78 /* NSData+CopyWithRange.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A1714B41A16DE0AF2B44F382CBA9DB1 /* NSData+CopyWithRange.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3602DCE5B234F46BD30354F17B2A3138 /* CocosConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7257F0FB03A534AA99D747BD9FED8B /* CocosConfig.m */; };
@@ -236,7 +237,6 @@
 		F080156925674E49B98FCEEC5ED503E7 /* CocosDataBase+Account.h in Headers */ = {isa = PBXBuildFile; fileRef = C71C11E54C5FF75BCDFE2325366DADB3 /* CocosDataBase+Account.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F0ED1CEFF1ACCFAA8538E3BD93C816D2 /* Pods-CocosSDK_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C2841D3F09017E063BCC7F13D2DB469 /* Pods-CocosSDK_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F21882BA3318F3AFABC16ED0A8C32F3C /* CocosDeleteNHOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = E851D1576A454BF346A736ECAC8A204C /* CocosDeleteNHOperation.m */; };
-		F218E5BB19BF1AA9321F07B21CEAA363 /* secp256k1.h in Headers */ = {isa = PBXBuildFile; fileRef = CE732D9335A8C6973052FC8B1CA211FF /* secp256k1.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F25DAB3AEB7B89ED759E46EC06F6A982 /* ChainObjectId.h in Headers */ = {isa = PBXBuildFile; fileRef = 787D5BBFC91558896DE4ABF251228DE1 /* ChainObjectId.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F65FA58A039808A667929DC12604DC72 /* NSDate+UTCDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 35F1D3095F38DE3E9A4B778D908C2268 /* NSDate+UTCDate.m */; };
 		F6817D4BBC07CE076284391BDA15640C /* ChainAssetOption.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A497C17C9AF28FAD8D0145C861EA65 /* ChainAssetOption.m */; };
@@ -645,12 +645,12 @@
 			files = (
 				6E6AD54D24C83CEA175C56626F3795BD /* AFNetworking.framework in Frameworks */,
 				2DD6EE54E15CD31CD51D02AAD6170339 /* FMDB.framework in Frameworks */,
-				31AFD25623587224007FAED8 /* libsecp256k1_armv7.a in Frameworks */,
-				31AFD25523587224007FAED8 /* libsecp256k1_arm64.a in Frameworks */,
-				31AFD25423587224007FAED8 /* libsecp256k1.a in Frameworks */,
+				31CDA23A237902800069A3FA /* libsecp256k1_armv7.a in Frameworks */,
+				31CDA239237902800069A3FA /* libsecp256k1_arm64.a in Frameworks */,
+				31CDA238237902800069A3FA /* libsecp256k1.a in Frameworks */,
 				BA0026499F9859463A217013E6A4A68B /* Foundation.framework in Frameworks */,
 				AF3379639D0012CA2F1E44DF29F0C45B /* Secp256k1_A.framework in Frameworks */,
-				31AFD25723587224007FAED8 /* libsecp256k1_i386.a in Frameworks */,
+				31CDA23B237902800069A3FA /* libsecp256k1_i386.a in Frameworks */,
 				4F9EF0397FA5C78AF82559A787B9B2D6 /* SocketRocket.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1422,7 +1422,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F218E5BB19BF1AA9321F07B21CEAA363 /* secp256k1.h in Headers */,
 				77287BC8AE83EC6B85A4A9DCE98C2CE2 /* Secp256k1_A-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1504,6 +1503,7 @@
 				9A9D37A7C16CBD3966B50D303BAD7E1B /* CocosSDKError.h in Headers */,
 				0E4AA770036D4139470843EE6B7EAF5C /* CocosSellNHAssetCancelOperation.h in Headers */,
 				FCD6F2E7B5ED99A964D7F1FED0B3C0B0 /* CocosSellNHAssetOperation.h in Headers */,
+				31CDA23C237902800069A3FA /* secp256k1.h in Headers */,
 				D7F28B44F7422228F4ED663B8606D961 /* CocosSetting.h in Headers */,
 				BCEDCF0D814CCCBD446DF4451951B521 /* CocosTransferNHOperation.h in Headers */,
 				D88D6E177DF29458A91544CD10F09205 /* CocosTransferOperation.h in Headers */,
