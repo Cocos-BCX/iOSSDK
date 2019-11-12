@@ -35,7 +35,7 @@
 /** Get SDK's version */
 - (NSString *)Cocos_SdkCurentVersion
 {
-    return @"1.0.2";
+    return @"2.0.0";
 }
 
 /** Open debug log */
