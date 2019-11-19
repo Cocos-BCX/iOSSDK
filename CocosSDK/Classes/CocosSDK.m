@@ -644,6 +644,107 @@
     } Error:errorBlock];
 }
 
+/**
+ CreateSonAccount
+ 
+ @param newAccountName SonAccount
+ @param newPassword SonPassword
+ @param account account
+ @param password password
+ */
+- (void)Cocos_CreateSonAccount:(NSString *)newAccountName
+                   newPassword:(NSString *)newPassword
+                     Registrar:(NSString *)account
+                      password:(NSString *)password
+                       Success:(SuccessBlock)successBlock
+                         Error:(Error)errorBlock
+{
+    // 1.1 Validation parameters
+    if (IsStrEmpty(newAccountName) || IsStrEmpty(newPassword)) {
+        NSError *error = [NSError errorWithDomain:@"Parameter ‘accountName‘ or ‘password‘  is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
+        !errorBlock?:errorBlock(error);
+        return;
+    }
+    
+    // 1.2 Verify Account Name
+    if (![self regexAccountNameValidate:newAccountName]) {
+        NSError *error = [NSError errorWithDomain:@"Please enter the correct account name(/^a-z{4,63}/$)" code:SDKErrorCodeAccountNameError userInfo:@{@"account":newAccountName}];
+        !errorBlock?:errorBlock(error);
+        return;
+    }
+    // 2. Generating parameters
+    NSString *owner = @"owner";
+    NSString *active = @"active";
+    NSString *ownerSeed = [NSString stringWithFormat:@"%@%@%@",newAccountName,owner,newPassword];
+    NSString *activeSeed = [NSString stringWithFormat:@"%@%@%@",newAccountName,active,newPassword];
+    NSString *owner_key = [Cocos_Key_Account private_with_seed:ownerSeed];
+    NSString *active_key = [Cocos_Key_Account private_with_seed:activeSeed];
+    NSString *owner_pubkey = [Cocos_Key_Account publicKey_with_seed:ownerSeed];
+    NSString *active_pubkey = [Cocos_Key_Account publicKey_with_seed:activeSeed];
+    // 1. Account password decryption
+    [self validateAccount:account Password:password Success:^(NSDictionary *keyDic) {
+        if (keyDic[@"active_key"]) {
+            // 2. Generating Private Key Transfer
+            CocosPrivateKey *private = [[CocosPrivateKey alloc] initWithPrivateKey:keyDic[@"active_key"]];
+            // 3. account info
+            [self Cocos_GetAccount:account Success:^(id responseObject) {
+                ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:responseObject];
+                
+                NSDictionary *ownerAuthDic = @{
+                                               @"weight_threshold":@(1),
+                                               @"account_auths":@[],
+                                               @"key_auths":@[@[owner_pubkey,@(1)]],
+                                               @"address_auths":@[]
+                                               };
+                AuthorityObject *ownerAuthoriry = [AuthorityObject generateFromObject:ownerAuthDic];
+                
+                NSDictionary *activeAuthDic = @{
+                                                @"weight_threshold":@(1),
+                                                @"account_auths":@[],
+                                                @"key_auths":@[@[active_pubkey,@(1)]],
+                                                @"address_auths":@[]
+                                                };
+                AuthorityObject *activeAuthoriry = [AuthorityObject generateFromObject:activeAuthDic];
+                
+                NSDictionary *optionsDic = @{
+                                             @"memo_key":active_pubkey,
+                                             @"votes":@[],
+                                             @"extensions":@[]
+                                             };
+                AccountOptionObject *optionAuthoriry = [AccountOptionObject generateFromObject:optionsDic];
+                
+                // 4. Stitching transfer data
+                CocosCreateSonAccountOperation *operation = [[CocosCreateSonAccountOperation alloc] init];
+                operation.registrar = accountModel.identifier;
+                operation.name = newAccountName;
+                operation.owner = ownerAuthoriry;
+                operation.active = activeAuthoriry;
+                operation.options = optionAuthoriry;
+                // 5. Inquiry fee
+                CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
+                SignedTransaction *signedTran = [[SignedTransaction alloc] init];
+                signedTran.operations = @[content];
+                // 7. Transfer
+                [self signedTransaction:signedTran activePrivate:private Success:^(id responseObject) {
+                    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+                    dic[@"active_pri_key"] = active_key;
+                    dic[@"owner_pri_key"] = owner_key;
+                    dic[@"active_pub_key"] = active_pubkey;
+                    dic[@"owner_pub_key"] = owner_pubkey;
+                    dic[@"accont_name"] = newAccountName;
+                    !successBlock?:successBlock(dic);
+                } Error:errorBlock];
+            } Error:errorBlock];
+        }else if (keyDic[@"owner_key"]){
+            NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
+            !errorBlock?:errorBlock(error);
+        }else{
+            NSError *error = [NSError errorWithDomain:@"Please enter the correct original/temporary password" code:SDKErrorCodePasswordwrong userInfo:@{@"password":password}];
+            !errorBlock?:errorBlock(error);
+        }
+    } Error:errorBlock];
+}
+
 #pragma mark - Asset query operation
 /** Get blockchain assets list */
 - (void)Cocos_ChainListLimit:(NSInteger)nLimit
@@ -1595,7 +1696,7 @@
     }
     long available_balance_amount = (long)(availablePercent * return_cash);//精度
     float remaining_hours = vesting_seconds * (1 - availablePercent)/3600;
-    
+
     return @{
              @"available_balance_amount":[NSNumber numberWithLong:available_balance_amount],
              @"remaining_hours":[NSNumber numberWithFloat:remaining_hours],
@@ -1606,8 +1707,8 @@
 
 /** lookup Block Rewards */
 - (void)Cocos_QueryVestingBalance:(NSString *)account
-                          Success:(SuccessBlock)successBlock
-                            Error:(Error)errorBlock
+                         Success:(SuccessBlock)successBlock
+                           Error:(Error)errorBlock
 {
     [self Cocos_GetVestingBalances:account Success:^(NSArray * result) {
         
@@ -1640,11 +1741,11 @@
                     successData[@"remaining_hours"] = @(remaining_hours);
                     
                     successData[@"available_balance"] = @{
-                                                          @"amount":amount_demicimal.stringValue,
-                                                          @"asset_id":[opAssetModel.identifier generateToTransferObject],
-                                                          @"symbol":opAssetModel.symbol,
-                                                          @"precision":@(opAssetModel.precision)
-                                                          };
+                        @"amount":amount_demicimal.stringValue,
+                        @"asset_id":[opAssetModel.identifier generateToTransferObject],
+                        @"symbol":opAssetModel.symbol,
+                        @"precision":@(opAssetModel.precision)
+                    };
                     [vestingArray addObject:successData];
                     // 释放信号
                     dispatch_semaphore_signal(disp);
@@ -1652,19 +1753,19 @@
                 // 2. 等待信号
                 dispatch_semaphore_wait(disp, DISPATCH_TIME_FOREVER);
             }
-            
+           
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (vestingArray.count) {
                     NSDictionary *successDic = @{
-                                                 @"code":@(1),
-                                                 @"data":vestingArray
-                                                 };
+                        @"code":@(1),
+                        @"data":vestingArray
+                    };
                     !successBlock?:successBlock(successDic);
                 }else{
                     NSError *error = [NSError errorWithDomain:@"No reward available" code:SDKErrorNoRewardAvailable userInfo:@{@"account":account}];
                     !errorBlock?:errorBlock(error);
                 }
-                
+                           
             });
         });
     } Error:errorBlock];
@@ -1900,25 +2001,25 @@
 }
 
 /**
- Votes CommitteeMember , Witness
+Votes CommitteeMember , Witness
  
- @param accountName accountName
- @param password account password
- @param type  1 -> Witness,0 -> CommitteeMember
- @param voteids witnessesIds or committeeIds
- @param votes votes
- */
+@param accountName accountName
+@param password account password
+@param type  1 -> Witness,0 -> CommitteeMember
+@param voteids witnessesIds or committeeIds
+@param votes votes
+*/
 - (void)Cocos_PublishVotes:(NSString *)accountName
                   Password:(NSString *)password
                       Type:(int)type
-                   VoteIds:(NSArray *)voteids
+                  VoteIds:(NSArray *)voteids
                      Votes:(NSString *)votes
                    Success:(SuccessBlock)successBlock
                      Error:(Error)errorBlock
 {
     // 1. Validation parameters
     [self validateAccount:accountName Password:password Success:^(NSDictionary *keyDic) {
-        if (keyDic[@"owner_key"]){
+       if (keyDic[@"owner_key"]){
             // 2. Declassified private key
             CocosPrivateKey *private = [[CocosPrivateKey alloc] initWithPrivateKey:keyDic[@"owner_key"]];
             
@@ -1942,16 +2043,16 @@
                     }
                     NSArray *sortVoteIds = [vote_ids sortedArrayUsingComparator:
                                             ^NSComparisonResult(NSString *obj1, NSString *obj2) {
-                                                // 排序
-                                                NSString *obj1id = [[obj1 componentsSeparatedByString:@":"] lastObject];
-                                                NSString *obj2id = [[obj2 componentsSeparatedByString:@":"] lastObject];
-                                                if ([obj1id integerValue] > [obj2id integerValue]) {
-                                                    return NSOrderedDescending;
-                                                } else if ([obj1id integerValue] < [obj2id integerValue]) {
-                                                    return NSOrderedAscending;
-                                                }
-                                                return NSOrderedSame;
-                                            }];
+                        // 排序
+                        NSString *obj1id = [[obj1 componentsSeparatedByString:@":"] lastObject];
+                        NSString *obj2id = [[obj2 componentsSeparatedByString:@":"] lastObject];
+                        if ([obj1id integerValue] > [obj2id integerValue]) {
+                            return NSOrderedDescending;
+                        } else if ([obj1id integerValue] < [obj2id integerValue]) {
+                            return NSOrderedAscending;
+                        }
+                        return NSOrderedSame;
+                    }];
                     [self PublishVotes:accountName VoteIds:sortVoteIds Votes:votes Type:@(type) Private:private Success:successBlock Error:errorBlock];
                 } Error:errorBlock];
             } Error:errorBlock];

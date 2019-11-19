@@ -240,7 +240,20 @@ NS_ASSUME_NONNULL_BEGIN
                           password:(NSString *)password
                            Success:(SuccessBlock)successBlock
                              Error:(Error)errorBlock;
+/**
+ CreateSonAccount
 
+ @param newAccountName SonAccount
+ @param newPassword SonPassword
+ @param account account
+ @param password password
+ */
+- (void)Cocos_CreateSonAccount:(NSString *)newAccountName
+                   newPassword:(NSString *)newPassword
+                     Registrar:(NSString *)account
+                      password:(NSString *)password
+                       Success:(SuccessBlock)successBlock
+                         Error:(Error)errorBlock;
 #pragma mark - Asset query operation
 /**
  Get blockchain assets list

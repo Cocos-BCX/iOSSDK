@@ -7,21 +7,22 @@
 
 #import <Foundation/Foundation.h>
 #import "ObjectToDataProtocol.h"
-@class CocosPublicKey;
-@class ChainObjectId;
-@class VoteIdObject;
+@class CocosPublicKey,ChainObjectId,VoteIdObject;
+
 @interface AccountOptionObject : NSObject<ObjectToDataProtocol>
 
-@property (nonatomic, strong) CocosPublicKey *memo_key;
+@property (nonatomic, strong, nonnull) CocosPublicKey *memo_key;
 
-@property (nonatomic, strong) ChainObjectId *voting_account;
+//@property (nonatomic, strong) ChainObjectId *voting_account;
 
-@property (nonatomic, assign) NSInteger num_witness;
+//@property (nonatomic, assign) NSInteger num_witness;
+//
+//@property (nonatomic, assign) NSInteger num_committee;
 
-@property (nonatomic, assign) NSInteger num_committee;
+//@property (nonatomic, copy) NSArray <VoteIdObject *>*votes;
 
-@property (nonatomic, copy) NSArray <VoteIdObject *>*votes;
+@property (nonatomic, strong, nonnull) NSArray *votes;
 
-@property (nonatomic, copy) NSArray *extensions;
+@property (nonatomic, strong, nonnull) NSArray *extensions;
 
 @end

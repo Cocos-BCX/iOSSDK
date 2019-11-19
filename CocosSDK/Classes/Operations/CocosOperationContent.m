@@ -17,11 +17,13 @@
 #import "CocosSellNHAssetOperation.h"
 #import "CocosMortgageGasOperation.h"
 #import "CocosClaimVestingBalanceOperation.h"
+#import "CocosCreateSonAccountOperation.h"
 #import "CocosPackData.h"
 
 typedef NS_ENUM(NSInteger,CocosOperationType) {
     CocosOperationTypeNotFind = -1,
     CocosOperationTypeTransfer = 0,
+    CocosOperationTypeCreateAccount = 5,
     CocosOperationTypeVote = 6,
     CocosOperationTypeUpgradeMember = 7,
     CocosOperationTypeClaimVestingBalance = 27,
@@ -43,17 +45,17 @@ typedef NS_ENUM(NSInteger,CocosOperationType) {
     if (!dic) {
         dic = @{
                 NSStringFromClass([CocosTransferOperation class]):@(CocosOperationTypeTransfer),
-                NSStringFromClass([CocosCallContractOperation class]):@(CocosOperationTypeCallContract),
-                NSStringFromClass([CocosTransferNHOperation class]):@(CocosOperationTypeTransferNHAsset),
-                NSStringFromClass([CocosBuyNHOrderOperation class]):@(CocosOperationTypeBuyNHAsset),
+                NSStringFromClass([CocosCreateSonAccountOperation class]):@(CocosOperationTypeCreateAccount),
                 NSStringFromClass([CocosVoteOperation class]):@(CocosOperationTypeVote),
                 NSStringFromClass([CocosUpgradeMemberOperation class]):@(CocosOperationTypeUpgradeMember),
+                NSStringFromClass([CocosClaimVestingBalanceOperation class]):@(CocosOperationTypeClaimVestingBalance),
+                NSStringFromClass([CocosCallContractOperation class]):@(CocosOperationTypeCallContract),
                 NSStringFromClass([CocosDeleteNHOperation class]):@(CocosOperationTypeDeleteNHAsset),
-                NSStringFromClass([CocosSellNHAssetCancelOperation class]):@(CocosOperationTypeSellNHAssetCancel),
+                NSStringFromClass([CocosTransferNHOperation class]):@(CocosOperationTypeTransferNHAsset),
                 NSStringFromClass([CocosSellNHAssetOperation class]):@(CocosOperationTypeSellNHAsset),
-                NSStringFromClass([CocosMortgageGasOperation class]):@(CocosOperationTypeMortgageGas),
-                NSStringFromClass([CocosClaimVestingBalanceOperation class]):@(CocosOperationTypeClaimVestingBalance)
-                
+                NSStringFromClass([CocosSellNHAssetCancelOperation class]):@(CocosOperationTypeSellNHAssetCancel),
+                NSStringFromClass([CocosBuyNHOrderOperation class]):@(CocosOperationTypeBuyNHAsset),
+                NSStringFromClass([CocosMortgageGasOperation class]):@(CocosOperationTypeMortgageGas)
                 };
     }
     return dic;

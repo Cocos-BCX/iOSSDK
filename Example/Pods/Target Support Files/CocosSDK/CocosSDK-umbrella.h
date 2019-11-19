@@ -43,6 +43,7 @@
 #import "CocosBuyNHOrderOperation.h"
 #import "CocosCallContractOperation.h"
 #import "CocosClaimVestingBalanceOperation.h"
+#import "CocosCreateSonAccountOperation.h"
 #import "CocosDeleteNHOperation.h"
 #import "CocosMortgageGasOperation.h"
 #import "CocosOperationContent.h"
