@@ -1547,60 +1547,83 @@
     } Error:errorBlock];
 }
 
+- (NSDictionary *)handleVestingBalance:(NSDictionary *)vestingbalance
+{
+    
+    ChainVestingBalance *vesting = [ChainVestingBalance generateFromObject:vestingbalance];
+    // balance key
+    ChainAssetAmountObject *gasBalance = vesting.balance;
+    long return_cash = gasBalance.amount;;
+    
+    // policy key
+    ChainVestingBalancePolicy *gasPolicy = [ChainVestingBalancePolicy generateFromObject:[vesting.policy lastObject]];
+    
+    // current date
+    NSInteger currentTimeInteger = [[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]] integerValue];
+    
+    // 服务器时间戳
+    NSInteger timeSp = ({
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        // 获得日期对象
+        formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
+        NSTimeZone* timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+        [formatter setTimeZone:timeZone];
+        NSDate *createDate = [formatter dateFromString:gasPolicy.coin_seconds_earned_last_update];
+        
+        // 获取系统时区
+        NSTimeZone *zone1 = [NSTimeZone systemTimeZone];
+        [formatter setTimeZone:zone1];
+        NSString *formatTime = [formatter stringFromDate:createDate];
+        NSDate* date = [formatter dateFromString:formatTime];
+        //时间转时间戳的方法:
+        NSInteger timeSp = [[NSNumber numberWithDouble:[date timeIntervalSince1970]] integerValue];
+        timeSp;
+    });
+    // 相差秒数
+    NSInteger past_sconds = currentTimeInteger - timeSp;
+    
+    float vesting_seconds = gasPolicy.vesting_seconds;
+    float total_earned = vesting_seconds * return_cash;
+    float new_earned = (past_sconds / vesting_seconds)*(total_earned);
+    float old_earned = gasPolicy.coin_seconds_earned;
+    float earned = old_earned + new_earned;
+    float availablePercent = 0;
+    if (return_cash == 0) {
+        availablePercent = 0;
+    }else {
+        availablePercent = (earned / (vesting_seconds * return_cash) > 1)?1:earned / (vesting_seconds * return_cash);
+    }
+    long available_balance_amount = (long)(availablePercent * return_cash);//精度
+    float remaining_hours = vesting_seconds * (1 - availablePercent)/3600;
+    
+    return @{
+             @"available_balance_amount":[NSNumber numberWithLong:available_balance_amount],
+             @"remaining_hours":[NSNumber numberWithFloat:remaining_hours],
+             @"return_cash":[NSNumber numberWithLong:return_cash],
+             @"availablePercent":[NSNumber numberWithFloat:availablePercent]
+             };
+}
+
 /** lookup Block Rewards */
 - (void)Cocos_QueryVestingBalance:(NSString *)account
-                         Success:(SuccessBlock)successBlock
-                           Error:(Error)errorBlock
+                          Success:(SuccessBlock)successBlock
+                            Error:(Error)errorBlock
 {
     [self Cocos_GetVestingBalances:account Success:^(NSArray * result) {
         
         NSMutableArray *vestingArray = [NSMutableArray array];
-        
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             dispatch_semaphore_t disp = dispatch_semaphore_create(0);
             for (NSDictionary *vestingbalance in result) {
-
                 ChainVestingBalance *vesting = [ChainVestingBalance generateFromObject:vestingbalance];
-                
                 // balance key
                 ChainAssetAmountObject *gasBalance = vesting.balance;
-                long return_cash = gasBalance.amount;;
                 
-                // policy key
-                ChainVestingBalancePolicy *gasPolicy = [ChainVestingBalancePolicy generateFromObject:[vesting.policy lastObject]];
-                
-                // current date
-                NSInteger currentTimeInteger = [[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]] integerValue];
-                
-                // 服务器时间戳
-                NSInteger timeSp = ({
-                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                    // 获得日期对象
-                    formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
-                    NSTimeZone* timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
-                    [formatter setTimeZone:timeZone];
-                    NSDate *createDate = [formatter dateFromString:gasPolicy.coin_seconds_earned_last_update];
-                    
-                    // 获取系统时区
-                    NSTimeZone *zone1 = [NSTimeZone systemTimeZone];
-                    [formatter setTimeZone:zone1];
-                    NSString *formatTime = [formatter stringFromDate:createDate];
-                    NSDate* date = [formatter dateFromString:formatTime];
-                    //时间转时间戳的方法:
-                    NSInteger timeSp = [[NSNumber numberWithDouble:[date timeIntervalSince1970]] integerValue];
-                    timeSp;
-                });
-                // 相差秒数
-                NSInteger past_sconds = currentTimeInteger - timeSp;
-                
-                float vesting_seconds = gasPolicy.vesting_seconds;
-                float total_earned = vesting_seconds * return_cash;
-                float new_earned = (past_sconds / vesting_seconds)*(total_earned);
-                float old_earned = gasPolicy.coin_seconds_earned;
-                float earned = old_earned + new_earned;
-                float availablePercent = earned / (vesting_seconds * return_cash);
-                float available_balance_amount = availablePercent * return_cash;//精度
-                float remaining_hours = vesting_seconds * (1 - availablePercent)/3600;
+                NSDictionary *vestingBalance = [self handleVestingBalance:vestingbalance];
+                long return_cash = [vestingBalance[@"return_cash"] longValue];
+                long available_balance_amount = [vestingBalance[@"available_balance_amount"] longValue];
+                float remaining_hours = [vestingBalance[@"remaining_hours"] floatValue];
+                float availablePercent = [vestingBalance[@"availablePercent"] floatValue];
                 
                 [self Cocos_GetAsset:[gasBalance.assetId generateToTransferObject] Success:^(id responseObject) {
                     ChainAssetObject *opAssetModel = [ChainAssetObject generateFromObject:responseObject];
@@ -1617,11 +1640,11 @@
                     successData[@"remaining_hours"] = @(remaining_hours);
                     
                     successData[@"available_balance"] = @{
-                        @"amount":amount_demicimal.stringValue,
-                        @"asset_id":[opAssetModel.identifier generateToTransferObject],
-                        @"symbol":opAssetModel.symbol,
-                        @"precision":@(opAssetModel.precision)
-                    };
+                                                          @"amount":amount_demicimal.stringValue,
+                                                          @"asset_id":[opAssetModel.identifier generateToTransferObject],
+                                                          @"symbol":opAssetModel.symbol,
+                                                          @"precision":@(opAssetModel.precision)
+                                                          };
                     [vestingArray addObject:successData];
                     // 释放信号
                     dispatch_semaphore_signal(disp);
@@ -1629,19 +1652,19 @@
                 // 2. 等待信号
                 dispatch_semaphore_wait(disp, DISPATCH_TIME_FOREVER);
             }
-           
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (vestingArray.count) {
                     NSDictionary *successDic = @{
-                        @"code":@(1),
-                        @"data":vestingArray
-                    };
+                                                 @"code":@(1),
+                                                 @"data":vestingArray
+                                                 };
                     !successBlock?:successBlock(successDic);
                 }else{
                     NSError *error = [NSError errorWithDomain:@"No reward available" code:SDKErrorNoRewardAvailable userInfo:@{@"account":account}];
                     !errorBlock?:errorBlock(error);
                 }
-                           
+                
             });
         });
     } Error:errorBlock];
@@ -1661,25 +1684,8 @@
         callBackModel.successResult = successBlock;
         callBackModel.errorResult = errorBlock;
         [self sendWithChainApi:WebsocketBlockChainApiDataBase method:(WebsocketBlockChainMethodApiCall) params:uploadParams callBack:callBackModel];
-        
     } Error:errorBlock];
 }
-
-/** 截取NSString变量的后几位 */
-- (NSString *)decimalSubScaleString:(NSString *)stringValue scale:(NSInteger)scale
-{
-    NSDecimalNumber *decimaNumer = [NSDecimalNumber decimalNumberWithString:stringValue];
-    NSDecimalNumberHandler *roundUp = [NSDecimalNumberHandler
-                                       decimalNumberHandlerWithRoundingMode:NSRoundPlain
-                                       scale:scale
-                                       raiseOnExactness:NO
-                                       raiseOnOverflow:NO
-                                       raiseOnUnderflow:NO
-                                       raiseOnDivideByZero:YES];
-    NSDecimalNumber * number = [decimaNumer decimalNumberByRoundingAccordingToBehavior:roundUp];
-    return number.stringValue;
-}
-
 
 /**
  claim vesting balance
@@ -1709,44 +1715,9 @@
                         if ([vestingbalance.identifier.description isEqualToString:vesting_id]) {
                             CocosClaimVestingBalanceOperation *operation = [[CocosClaimVestingBalanceOperation alloc] init];
                             operation.owner = ownerAccount.identifier;
-                            operation.vesting_balance = vestingbalance.identifier;
-                            ChainVestingBalancePolicy *policy = [ChainVestingBalancePolicy generateFromObject:[vestingbalance.policy lastObject]];
+                            NSDictionary *vestingBalance = [self handleVestingBalance:vestingDic];
+                            long available_balance_amount = [vestingBalance[@"available_balance_amount"] longValue];
                             
-                            // balance key
-                            ChainAssetAmountObject *gasBalance = vestingbalance.balance;
-                            long return_cash = gasBalance.amount;
-                            
-                            // current date
-                            NSInteger currentTimeInteger = [[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]] integerValue];
-                            
-                            // 服务器时间戳
-                            NSInteger timeSp = ({
-                                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                                // 获得日期对象
-                                formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
-                                NSTimeZone* timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
-                                [formatter setTimeZone:timeZone];
-                                NSDate *createDate = [formatter dateFromString:policy.coin_seconds_earned_last_update];
-                                
-                                // 获取系统时区
-                                NSTimeZone *zone1 = [NSTimeZone systemTimeZone];
-                                [formatter setTimeZone:zone1];
-                                NSString *formatTime = [formatter stringFromDate:createDate];
-                                NSDate* date = [formatter dateFromString:formatTime];
-                                //时间转时间戳的方法:
-                                NSInteger timeSp = [[NSNumber numberWithDouble:[date timeIntervalSince1970]] integerValue];
-                                timeSp;
-                            });
-                            // 相差秒数
-                            NSInteger past_sconds = currentTimeInteger - timeSp;
-                            
-                            float vesting_seconds = policy.vesting_seconds;
-                            float total_earned = vesting_seconds * return_cash;
-                            float new_earned = (past_sconds / vesting_seconds)*(total_earned);
-                            float old_earned = policy.coin_seconds_earned;
-                            float earned = old_earned + new_earned;
-                            float availablePercent = earned / (vesting_seconds * return_cash);
-                            float available_balance_amount = availablePercent * return_cash;//精度
                             ChainAssetAmountObject *amount = [[ChainAssetAmountObject alloc] initFromAssetId:vestingbalance.balance.assetId amount:available_balance_amount];
                             operation.amount = amount;
                             operation.requiredAuthority = ownerAccount.active.publicKeys;
@@ -1929,25 +1900,25 @@
 }
 
 /**
-Votes CommitteeMember , Witness
+ Votes CommitteeMember , Witness
  
-@param accountName accountName
-@param password account password
-@param type  1 -> Witness,0 -> CommitteeMember
-@param voteids witnessesIds or committeeIds
-@param votes votes
-*/
+ @param accountName accountName
+ @param password account password
+ @param type  1 -> Witness,0 -> CommitteeMember
+ @param voteids witnessesIds or committeeIds
+ @param votes votes
+ */
 - (void)Cocos_PublishVotes:(NSString *)accountName
                   Password:(NSString *)password
                       Type:(int)type
-                  VoteIds:(NSArray *)voteids
+                   VoteIds:(NSArray *)voteids
                      Votes:(NSString *)votes
                    Success:(SuccessBlock)successBlock
                      Error:(Error)errorBlock
 {
     // 1. Validation parameters
     [self validateAccount:accountName Password:password Success:^(NSDictionary *keyDic) {
-       if (keyDic[@"owner_key"]){
+        if (keyDic[@"owner_key"]){
             // 2. Declassified private key
             CocosPrivateKey *private = [[CocosPrivateKey alloc] initWithPrivateKey:keyDic[@"owner_key"]];
             
@@ -1971,16 +1942,16 @@ Votes CommitteeMember , Witness
                     }
                     NSArray *sortVoteIds = [vote_ids sortedArrayUsingComparator:
                                             ^NSComparisonResult(NSString *obj1, NSString *obj2) {
-                        // 排序
-                        NSString *obj1id = [[obj1 componentsSeparatedByString:@":"] lastObject];
-                        NSString *obj2id = [[obj2 componentsSeparatedByString:@":"] lastObject];
-                        if ([obj1id integerValue] > [obj2id integerValue]) {
-                            return NSOrderedDescending;
-                        } else if ([obj1id integerValue] < [obj2id integerValue]) {
-                            return NSOrderedAscending;
-                        }
-                        return NSOrderedSame;
-                    }];
+                                                // 排序
+                                                NSString *obj1id = [[obj1 componentsSeparatedByString:@":"] lastObject];
+                                                NSString *obj2id = [[obj2 componentsSeparatedByString:@":"] lastObject];
+                                                if ([obj1id integerValue] > [obj2id integerValue]) {
+                                                    return NSOrderedDescending;
+                                                } else if ([obj1id integerValue] < [obj2id integerValue]) {
+                                                    return NSOrderedAscending;
+                                                }
+                                                return NSOrderedSame;
+                                            }];
                     [self PublishVotes:accountName VoteIds:sortVoteIds Votes:votes Type:@(type) Private:private Success:successBlock Error:errorBlock];
                 } Error:errorBlock];
             } Error:errorBlock];
