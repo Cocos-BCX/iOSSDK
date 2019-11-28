@@ -1,5 +1,5 @@
 //
-//  ChainMemo.h
+//  ChainEncryptionMemo.h
 //  CocosSDK
 //
 //  Created by SYLing on 2019/3/6.
@@ -10,7 +10,7 @@
 
 @class CocosPublicKey,CocosPrivateKey;
 
-@interface ChainMemo : NSObject<ObjectToDataProtocol>
+@interface ChainEncryptionMemo : NSObject<ObjectToDataProtocol>
 
 @property (nonatomic, strong, readonly) CocosPublicKey *from;
 

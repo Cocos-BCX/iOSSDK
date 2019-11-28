@@ -849,6 +849,7 @@
                          Password:(NSString *)password
                     TransferAsset:(NSString *)transferAsset
                       AssetAmount:(NSString *)assetAmount
+                 IsEncryptionMemo:(BOOL)encryption
                              Memo:(NSString *)memo
                           Success:(SuccessBlock)successBlock
                             Error:(Error)errorBlock
@@ -858,7 +859,7 @@
         if (keyDic[@"active_key"]) {
             // 2. Generating Private Key Transfer
             CocosPrivateKey *private = [[CocosPrivateKey alloc] initWithPrivateKey:keyDic[@"active_key"]];
-            [self transferFromAccount:fromName toAccount:toName activePrivate:private transferAsset:transferAsset assetAmount:assetAmount memo:memo Success:successBlock Error:errorBlock];
+            [self transferFromAccount:fromName toAccount:toName activePrivate:private transferAsset:transferAsset assetAmount:assetAmount IsEncryptionMemo:encryption memo:memo Success:successBlock Error:errorBlock];
         }else if (keyDic[@"owner_key"]){
             NSError *error = [NSError errorWithDomain:@"Please import the active private key" code:SDKErrorCodePrivateisNull userInfo:nil];
             !errorBlock?:errorBlock(error);
@@ -1628,7 +1629,7 @@
                     CocosMortgageGasOperation *operation = [[CocosMortgageGasOperation alloc] init];
                     operation.mortgager = mortgager.identifier;
                     operation.beneficiary = beneficiary.identifier;
-                    operation.collateral = collateral;
+                    operation.collateral = collateral*100000;
                     operation.requiredAuthority = mortgager.active.publicKeys;
                     CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
                     SignedTransaction *signedTran = [[SignedTransaction alloc] init];
@@ -2330,6 +2331,7 @@ Votes CommitteeMember , Witness
               activePrivate:(CocosPrivateKey *)private
               transferAsset:(NSString *)transferAsset
                 assetAmount:(NSString *)assetAmount
+           IsEncryptionMemo:(BOOL)encryption
                        memo:(NSString *)memo
                     Success:(SuccessBlock)successBlock
                       Error:(Error)errorBlock
@@ -2340,7 +2342,7 @@ Votes CommitteeMember , Witness
         ChainAccountModel *fromModel = operationObj[@"fromModel"];
         ChainAccountModel *toModel = operationObj[@"toModel"];
         ChainAssetObject *assetModel = operationObj[@"assetModel"];
-        ChainMemo *memoData = operationObj[@"memoData"];
+        ChainEncryptionMemo *memoData = operationObj[@"memoData"];
         
         // 2. Stitching transfer data
         CocosTransferOperation *operation = [[CocosTransferOperation alloc] init];
@@ -2348,9 +2350,16 @@ Votes CommitteeMember , Witness
         operation.to = toModel.identifier;
         operation.amount = [assetModel getAmountFromNormalFloatString:[NSString stringWithFormat:@"%@",assetAmount]];
         operation.requiredAuthority = fromModel.active.publicKeys;
-        if (memoData) {
-            operation.memo = memoData;
+        if (encryption) {
+            if (memoData) {
+                operation.memo = @[@(1),memoData];
+            }
+        }else{
+            if (memo.length > 0) {
+                operation.memo = @[@(0),memo];
+            }
         }
+        
         CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
         SignedTransaction *signedTran = [[SignedTransaction alloc] init];
         signedTran.operations = @[content];
@@ -2397,9 +2406,9 @@ Votes CommitteeMember , Witness
             // 3. Search for asset information
             [self Cocos_GetAsset:transferAsset Success:^(id assetObject) {
                 ChainAssetObject *assetModel = [ChainAssetObject generateFromObject:assetObject];
-                ChainMemo *memoData = nil;
+                ChainEncryptionMemo *memoData = nil;
                 if (memo.length > 0) {
-                    memoData = [[ChainMemo alloc] initWithPrivateKey:private anotherPublickKey:toModel.options.memo_key customerNonce:nil totalMessage:memo];
+                    memoData = [[ChainEncryptionMemo alloc] initWithPrivateKey:private anotherPublickKey:toModel.options.memo_key customerNonce:nil totalMessage:memo];
                 }
                 // 4. Return the desired object
                 NSMutableDictionary *operationObj = [NSMutableDictionary dictionary];

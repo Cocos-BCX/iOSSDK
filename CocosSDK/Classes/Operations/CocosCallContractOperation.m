@@ -9,7 +9,6 @@
 #import "CocosCallContractOperation.h"
 #import "ChainAssetAmountObject.h"
 #import "ChainObjectId.h"
-#import "ChainMemo.h"
 #import "CocosPackData.h"
 #import "NSData+HashData.h"
 #import "ChainAssetObject.h"

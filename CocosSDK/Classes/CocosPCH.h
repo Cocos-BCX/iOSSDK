@@ -15,7 +15,7 @@
 #import "WebsocketClient.h"
 #import "CocosConstkey.h"
 #import "ChainObjectId.h"
-#import "ChainMemo.h"
+#import "ChainEncryptionMemo.h"
 #import "ChainAccountModel.h"
 #import "ChainAssetObject.h"
 #import "CocosTransferOperation.h"

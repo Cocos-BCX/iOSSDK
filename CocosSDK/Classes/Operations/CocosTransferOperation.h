@@ -8,7 +8,7 @@
 #import "CocosBaseOperation.h"
 #import "ObjectToDataProtocol.h"
 
-@class ChainObjectId,ChainAssetAmountObject,ChainMemo;
+@class ChainObjectId,ChainAssetAmountObject;
 
 @interface CocosTransferOperation : CocosBaseOperation
 
@@ -20,8 +20,9 @@
 
 @property (nonatomic, strong, nonnull) ChainAssetAmountObject *amount;
 
-@property (nonatomic, strong, nullable) ChainMemo *memo;
+@property (nonatomic, strong, nullable) NSArray *memo;
 
 @property (nonatomic, strong, nonnull) NSArray *extensions;
+
 
 @end

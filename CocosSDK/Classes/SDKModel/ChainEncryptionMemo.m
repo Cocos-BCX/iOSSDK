@@ -1,11 +1,11 @@
 //
-//  ChainMemo.m
+//  ChainEncryptionMemo.m
 //  CocosSDK
 //
 //  Created by SYLing on 2019/3/6.
 //
 
-#import "ChainMemo.h"
+#import "ChainEncryptionMemo.h"
 #import "CocosPublicKey.h"
 #import "CocosPrivateKey.h"
 #import "NSData+HashData.h"
@@ -13,7 +13,7 @@
 #import "NSData+Base16.h"
 #import "CocosPackData.h"
 
-@interface ChainMemo ()
+@interface ChainEncryptionMemo ()
 
 @property (nonatomic, copy) NSString *nonce;
 
@@ -21,7 +21,7 @@
 
 @end
 
-@implementation ChainMemo
+@implementation ChainEncryptionMemo
 
 - (instancetype)initWithPrivateKey:(CocosPrivateKey *)priKey anotherPublickKey:(CocosPublicKey *)anotherPubKey customerNonce:(NSString *)customerNonce totalMessage:(NSString *)totalMessage {
     if (self = [super init]) {
@@ -63,6 +63,7 @@
 }
 
 - (NSString *)getMessageWithPrivateKey:(CocosPrivateKey *)privateKey {
+    
     NSData *sha512SharedSecret = nil;
     
     if ([privateKey.publicKey isEqual:_from]) {
@@ -131,9 +132,9 @@
 + (instancetype)generateFromObject:(NSDictionary *)object {
     if (![object isKindOfClass:[NSDictionary class]]) return nil;
     
-    ChainMemo *memo = [[ChainMemo alloc] init];
+    ChainEncryptionMemo *memo = [[ChainEncryptionMemo alloc] init];
 
-    [ChainMemo setValuesForKeysWithDictionary:object];
+    [ChainEncryptionMemo setValuesForKeysWithDictionary:object];
     
     return memo;
 }

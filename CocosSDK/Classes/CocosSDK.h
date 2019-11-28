@@ -11,7 +11,7 @@
 #import "CocosDataBase+Account.h"
 #import "UploadBaseModel.h"
 
-@class CallBackModel,ChainAccountModel,ChainAssetObject,ChainMemo,CocosBaseOperation,CocosCallContractOperation;
+@class CallBackModel,ChainAccountModel,ChainAssetObject,ChainEncryptionMemo,CocosBaseOperation,CocosCallContractOperation;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -292,6 +292,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param password        Password
  @param transferAsset   Asset's name(eg. COCOS)
  @param assetAmount     assetAmount Transfer amount
+ @param encryption      encryption memo
  @param memo            Memo String
  */
 - (void)Cocos_TransferFromAccount:(NSString *)fromName
@@ -299,6 +300,7 @@ NS_ASSUME_NONNULL_BEGIN
                          Password:(NSString *)password
                     TransferAsset:(NSString *)transferAsset
                       AssetAmount:(NSString *)assetAmount
+                 IsEncryptionMemo:(BOOL)encryption
                              Memo:(NSString *)memo
                           Success:(SuccessBlock)successBlock
                             Error:(Error)errorBlock;
