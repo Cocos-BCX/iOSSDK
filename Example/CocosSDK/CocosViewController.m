@@ -411,7 +411,7 @@
     NSString *assetID = self.transfer_assetIDTF.text; // @"COCOS"
     NSString *note = self.transfer_noteTF.text;// 备注
     NSString *password = self.transfer_password.text;// 备注
-    [[CocosSDK shareInstance] Cocos_TransferFromAccount:frome ToAccount:to Password:password TransferAsset:assetID AssetAmount:count Memo:note Success:^(id responseObject) {
+    [[CocosSDK shareInstance] Cocos_TransferFromAccount:frome ToAccount:to Password:password TransferAsset:assetID AssetAmount:count IsEncryptionMemo:NO Memo:note Success:^(id responseObject) {
         NSLog(@"transferClick success :%@",responseObject);
     } Error:^(NSError *error) {
         NSLog(@"transferClick error :%@",error);

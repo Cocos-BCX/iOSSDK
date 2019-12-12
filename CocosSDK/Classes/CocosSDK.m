@@ -2122,7 +2122,7 @@ Votes CommitteeMember , Witness
             ChainAssetAmountObject *pendingAmout = [opAssetModel getAmountFromNormalFloatString:pendingFeeAmount];
             CocosSellNHAssetOperation *operation = [[CocosSellNHAssetOperation alloc] init];
             operation.seller = accountModel.identifier;
-            operation.otcaccount = [ChainObjectId generateFromObject:@"1.2.25"];
+            operation.otcaccount = [ChainObjectId generateFromObject:@"1.2.35"];
             operation.pending_orders_fee = pendingAmout;
             operation.nh_asset = [ChainObjectId generateFromObject:nhAssetid];
             operation.memo = memo;

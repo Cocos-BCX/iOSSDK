@@ -69,7 +69,7 @@
 #import "ChainAssetAmountObject.h"
 #import "ChainContract.h"
 #import "ChainDynamicGlobalProperties.h"
-#import "ChainMemo.h"
+#import "ChainEncryptionMemo.h"
 #import "ChainObjectId.h"
 #import "ChainPrice.h"
 #import "ChainVestingBalance.h"
