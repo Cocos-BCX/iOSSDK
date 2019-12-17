@@ -10,7 +10,7 @@
 #import "CocosCallContractOperation.h"
 #import "CocosTransferNHOperation.h"
 #import "CocosBuyNHOrderOperation.h"
-#import "CocosVoteOperation.h"
+#import "CocosUpdateAccountOperation.h"
 #import "CocosUpgradeMemberOperation.h"
 #import "CocosDeleteNHOperation.h"
 #import "CocosSellNHAssetCancelOperation.h"
@@ -46,7 +46,7 @@ typedef NS_ENUM(NSInteger,CocosOperationType) {
         dic = @{
                 NSStringFromClass([CocosTransferOperation class]):@(CocosOperationTypeTransfer),
                 NSStringFromClass([CocosCreateSonAccountOperation class]):@(CocosOperationTypeCreateAccount),
-                NSStringFromClass([CocosVoteOperation class]):@(CocosOperationTypeVote),
+                NSStringFromClass([CocosUpdateAccountOperation class]):@(CocosOperationTypeVote),
                 NSStringFromClass([CocosUpgradeMemberOperation class]):@(CocosOperationTypeUpgradeMember),
                 NSStringFromClass([CocosClaimVestingBalanceOperation class]):@(CocosOperationTypeClaimVestingBalance),
                 NSStringFromClass([CocosCallContractOperation class]):@(CocosOperationTypeCallContract),

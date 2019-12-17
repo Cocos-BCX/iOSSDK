@@ -9,17 +9,21 @@
 #import "CocosBaseOperation.h"
 #import "VoteOptionsObject.h"
 
-@class ChainAssetAmountObject,ChainObjectId;
+@class ChainAssetAmountObject,ChainObjectId,AuthorityObject;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CocosVoteOperation : CocosBaseOperation
+@interface CocosUpdateAccountOperation : CocosBaseOperation
 
-@property (nonatomic, strong, nonnull) NSArray *lock_with_vote;
+@property (nonatomic, strong) NSArray *lock_with_vote;
 
 @property (nonatomic, strong, nonnull) ChainObjectId *account;
 
-@property (nonatomic, strong, nonnull) VoteOptionsObject *options;
+@property (nonatomic, strong, nonnull) AuthorityObject *owner;
+
+@property (nonatomic, strong) AuthorityObject *active;
+
+@property (nonatomic, strong) VoteOptionsObject *options;
 
 @property (nonatomic, strong, nonnull) NSArray *extensions;
 

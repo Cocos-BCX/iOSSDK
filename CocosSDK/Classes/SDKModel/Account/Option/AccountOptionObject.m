@@ -84,6 +84,10 @@
 - (NSData *)transformToData {
     NSMutableData *data = [NSMutableData data];
     
+    // 判断memo 是否有值，有值为1 ，无值为0
+    // 有值
+    [data appendData:[CocosPackData packBool:YES]];
+    
     [data appendData:self.memo_key.keyData];
     
     [data appendData:[CocosPackData packUnsigedInteger:self.votes.count]];
@@ -100,6 +104,5 @@
     
     return data.copy;
 }
-
 
 @end

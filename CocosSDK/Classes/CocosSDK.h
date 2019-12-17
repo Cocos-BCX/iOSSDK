@@ -152,6 +152,19 @@ NS_ASSUME_NONNULL_BEGIN
                            Success:(SuccessBlock)successBlock
                              Error:(Error)errorBlock;
 
+/**
+ ChangePassword Account mode
+ 
+ @param account            Account
+ @param oldpassword        oldpassword
+ @param currentPassword    currentPassword
+ */
+- (void)Cocos_ChangePassword:(NSString *)account
+                 OldPassword:(NSString *)oldpassword
+             CurrentPassword:(NSString *)currentPassword
+                     Success:(SuccessBlock)successBlock
+                       Error:(Error)errorBlock;
+
 #pragma mark - Information Operation of Accounts
 /**
  Get private key

@@ -337,6 +337,67 @@
     } Error:errorBlock];
 }
 
+/**
+ ChangePassword Account mode
+ 
+ @param account            Account
+ @param oldpassword        oldpassword
+ @param currentPassword    currentPassword
+ */
+- (void)Cocos_ChangePassword:(NSString *)account
+                 OldPassword:(NSString *)oldpassword
+             CurrentPassword:(NSString *)currentPassword
+                     Success:(SuccessBlock)successBlock
+                       Error:(Error)errorBlock
+{
+    // 1. account info
+    [self Cocos_GetAccount:account Success:^(id responseObject) {
+        ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:responseObject];
+        // 2. valida password
+        [self validateAccount:accountModel.name Password:oldpassword Success:^(NSDictionary *keyDic) {
+            if (keyDic[@"owner_key"]){
+                // 2. Declassified private key
+                CocosPrivateKey *private = [[CocosPrivateKey alloc] initWithPrivateKey:keyDic[@"owner_key"]];
+                
+                // 4. Stitching transfer data
+                CocosUpdateAccountOperation *operation = [[CocosUpdateAccountOperation alloc] init];
+                operation.lock_with_vote = nil;
+                operation.account = accountModel.identifier;
+                
+                NSString *ownerSeed = [NSString stringWithFormat:@"%@owner%@",accountModel.name,currentPassword];
+                NSString *activeSeed = [NSString stringWithFormat:@"%@active%@",accountModel.name,currentPassword];
+                NSString *owner_pubkey = [Cocos_Key_Account publicKey_with_seed:ownerSeed];
+                NSString *active_pubkey = [Cocos_Key_Account publicKey_with_seed:activeSeed];
+                
+                owner_pubkey = [owner_pubkey substringFromIndex:[CocosConfig prefix].length];
+                active_pubkey = [active_pubkey substringFromIndex:[CocosConfig prefix].length];
+                
+                CocosPublicKey *active_pub = [[CocosPublicKey alloc] initWithPubkeyString:active_pubkey];
+                CocosPublicKey *owner_pub = [[CocosPublicKey alloc] initWithPubkeyString:owner_pubkey];
+                accountModel.active.key_auths = @[[[PublicKeyAuthorityObject alloc] initWithPublicKey:active_pub weightThreshold:1]];
+                accountModel.owner.key_auths = @[[[PublicKeyAuthorityObject alloc] initWithPublicKey:owner_pub weightThreshold:1]];
+                operation.active = accountModel.active;
+                operation.owner = accountModel.owner;
+                accountModel.options.memo_key = [accountModel.active.key_auths firstObject].key;
+                operation.options = (VoteOptionsObject *)accountModel.options;
+                
+                CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
+                SignedTransaction *signedTran = [[SignedTransaction alloc] init];
+                signedTran.operations = @[content];
+                // 7. Transfer
+                [self signedTransaction:signedTran activePrivate:private Success:successBlock Error:errorBlock];
+                
+            }else if (keyDic[@"active_key"]) {
+                NSError *error = [NSError errorWithDomain:@"Please import the owner private key" code:SDKErrorCodePrivateisNull userInfo:nil];
+                !errorBlock?:errorBlock(error);
+            }else{
+                NSError *error = [NSError errorWithDomain:@"Please enter the correct original/temporary password" code:SDKErrorCodePasswordwrong userInfo:@{@"password":oldpassword}];
+                !errorBlock?:errorBlock(error);
+            }
+        } Error:errorBlock];
+    } Error:errorBlock];
+}
+
 #pragma mark - Information Operation of Accounts
 /** Get private key */
 - (void)Cocos_GetPrivateWithName:(NSString *)accountName
@@ -1816,6 +1877,7 @@
                         
                         if ([vestingbalance.identifier.description isEqualToString:vesting_id]) {
                             CocosClaimVestingBalanceOperation *operation = [[CocosClaimVestingBalanceOperation alloc] init];
+                            operation.vesting_balance = [ChainObjectId createFromString:vesting_id];
                             operation.owner = ownerAccount.identifier;
                             NSDictionary *vestingBalance = [self handleVestingBalance:vestingDic];
                             long available_balance_amount = [vestingBalance[@"available_balance_amount"] longValue];
@@ -2085,12 +2147,14 @@ Votes CommitteeMember , Witness
             ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:responseObject];
             
             // 4. Stitching transfer data
-            CocosVoteOperation *operation = [[CocosVoteOperation alloc] init];
+            CocosUpdateAccountOperation *operation = [[CocosUpdateAccountOperation alloc] init];
             operation.lock_with_vote = @[type,voteAmout];
             operation.account = accountModel.identifier;
             VoteOptionsObject *voteOptions = [[VoteOptionsObject alloc] init];
             voteOptions.memo_key = [accountModel.active.key_auths firstObject].key;
             voteOptions.votes = voteids;
+            operation.active = nil;
+            operation.owner = nil;
             operation.options = voteOptions;
             CocosOperationContent *content = [[CocosOperationContent alloc] initWithOperation:operation];
             SignedTransaction *signedTran = [[SignedTransaction alloc] init];

@@ -23,7 +23,7 @@
 #import "CocosTransferNHOperation.h"
 #import "CocosBuyNHOrderOperation.h"
 #import "CocosCreateSonAccountOperation.h"
-#import "CocosVoteOperation.h"
+#import "CocosUpdateAccountOperation.h"
 #import "CocosUpgradeMemberOperation.h"
 #import "CocosDeleteNHOperation.h"
 #import "CocosSellNHAssetCancelOperation.h"

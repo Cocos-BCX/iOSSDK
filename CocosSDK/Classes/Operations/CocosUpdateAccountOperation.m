@@ -1,18 +1,19 @@
 //
-//  CocosVoteOperation.m
+//  CocosUpdateAccountOperation.m
 //  CocosSDKDemo
 //
 //  Created by 邵银岭 on 2019/10/15.
 //  Copyright © 2019 邵银岭. All rights reserved.
 //
 
-#import "CocosVoteOperation.h"
+#import "CocosUpdateAccountOperation.h"
 #import "NSObject+DataToObject.h"
 #import "CocosPackData.h"
 #import "ChainAssetAmountObject.h"
 #import "ChainObjectId.h"
+#import "AuthorityObject.h"
 
-@implementation CocosVoteOperation
+@implementation CocosUpdateAccountOperation
 
 - (instancetype)init
 {
@@ -70,20 +71,32 @@
     
     NSMutableData *mutableData = [NSMutableData dataWithCapacity:300];
   
-    [mutableData appendData:[CocosPackData packBool:(self.lock_with_vote.count>0)]];
-    [mutableData appendData:[CocosPackData packUInt32_T:[self.lock_with_vote.firstObject integerValue]]];
-    
-    [mutableData appendData:[self.lock_with_vote.lastObject transformToData]];
-    
+    if (self.lock_with_vote) {
+        [mutableData appendData:[CocosPackData packBool:YES]];
+        [mutableData appendData:[CocosPackData packUInt32_T:[self.lock_with_vote.firstObject integerValue]]];
+        [mutableData appendData:[self.lock_with_vote.lastObject transformToData]];
+    }else{
+        [mutableData appendData:[CocosPackData packBool:NO]];
+    }
     
     [mutableData appendData:[self.account transformToData]];
     
     // 先判断owner 是否有值，有值为1 ，无值为0
+    if (self.owner) {
+        [mutableData appendData:[CocosPackData packBool:YES]];
+        [mutableData appendData:[self.owner transformToData]];
+    }else{
+        [mutableData appendData:[CocosPackData packBool:NO]];
+    }
+    
+    if (self.active) {
+        [mutableData appendData:[CocosPackData packBool:YES]];
+        [mutableData appendData:[self.active transformToData]];
+    }else{
+        [mutableData appendData:[CocosPackData packBool:NO]];
+    }
     // 再判断owner 是否有值，有值为1 ，无值为0
     // 两个都没值
-    [mutableData appendData:[CocosPackData packBool:NO]];
-    
-    [mutableData appendData:[CocosPackData packBool:NO]];
     
     [mutableData appendData:[self.options transformToData]];
     
