@@ -604,7 +604,7 @@
 
 - (IBAction)mortgageGetGas {
     
-    [[CocosSDK shareInstance] Cocos_GasWithMortgager:self.mortgage_mortgager.text Beneficiary:self.mortgage_beneficiary.text Collateral:[self.mortgage_amout.text longLongValue] Password:self.mortgage_password.text Success:^(id responseObject) {
+    [[CocosSDK shareInstance] Cocos_GasWithMortgager:self.mortgage_mortgager.text Beneficiary:self.mortgage_beneficiary.text Collateral:[self.mortgage_amout.text float] Password:self.mortgage_password.text Success:^(id responseObject) {
         NSLog(@"Cocos_GasWithMortgager \n%@",responseObject);
     } Error:^(NSError *error) {
         NSLog(@"Cocos_GasWithMortgager error \n%@",error);

@@ -547,7 +547,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)Cocos_GasWithMortgager:(NSString *)mortgager
                    Beneficiary:(NSString *)beneficiary
-                    Collateral:(long)collateral
+                    Collateral:(float)collateral
                       Password:(NSString *)password
                        Success:(SuccessBlock)successBlock
                          Error:(Error)errorBlock;

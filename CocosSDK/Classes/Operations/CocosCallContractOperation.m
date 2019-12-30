@@ -89,8 +89,14 @@
         [mutableData appendData:[CocosPackData packUnsigedInteger:[arr_value.firstObject integerValue]]];
         NSDictionary *baseValueDic = arr_value.lastObject;
         NSString *baseValue = baseValueDic[@"v"];
-        //        NSData *baseValueData = [CocosPackData packString:baseValue];
-        NSData *baseValueData = [CocosPackData packString:[NSString stringWithFormat:@"%@",baseValue]];
+        NSData *baseValueData = [NSData data];
+        if ([baseValue isKindOfClass:[NSString class]]) {
+            baseValueData = [CocosPackData packString:baseValue];
+        }else if ([baseValue isKindOfClass:[NSNumber class]]) {
+            baseValueData = [CocosPackData packLongValue:[baseValue longLongValue]];
+        } else {
+            baseValueData = [CocosPackData packString:[NSString stringWithFormat:@"%@",baseValue]];
+        }
         [mutableData appendData:baseValueData];
     }
     
