@@ -1242,20 +1242,20 @@
                 [self Cocos_GetAccount:account Success:^(id accountRes) {
                     NSString *accountName = accountRes[@"name"];
                     [self Cocos_GetAsset:assetDic[@"asset_id"] Success:^(id affectedRes) {
-                        NSNumber *amount = assetDic[@"amount"];
+                        NSString *amountStr = [NSString stringWithFormat:@"%@",assetDic[@"amount"]];
                         
                         long tempAmount = 0;
-                        if ([amount intValue]<0) {
-                            tempAmount = - [amount longValue];
+                        if ([amountStr intValue]<0) {
+                            tempAmount = - [amountStr longValue];
                         }else{
-                            tempAmount = [amount longValue];
+                            tempAmount = [amountStr longValue];
                         }
                         ChainAssetObject *affectedModel = [ChainAssetObject generateFromObject:affectedRes];
                         
                         ChainAssetAmountObject *chainAssetAmount = [[ChainAssetAmountObject alloc] initFromAssetId:affectedModel.identifier amount:tempAmount];
                         NSString *assetsAmount = [affectedModel getRealAmountFromAssetAmount:chainAssetAmount];
                         
-                        NSString *ass_amount = [NSString stringWithFormat:@"%@%@ %@",([amount intValue]<0)?@"-":@"+",assetsAmount,affectedModel.symbol];
+                        NSString *ass_amount = [NSString stringWithFormat:@"%@%@ %@",([amountStr intValue]<0)?@"-":@"+",assetsAmount,affectedModel.symbol];
                         affectedDic[@"result"] = @{
                                                    @"affected_account":accountName,
                                                    @"aseet_amount":ass_amount
