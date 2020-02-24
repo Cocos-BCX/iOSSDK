@@ -13,6 +13,8 @@
 //#import "ChainId.h"
 #import "CocosOperationContent.h"
 #import "CocosBaseOperation.h"
+#import "CocosPackData.h"
+
 @implementation SignedTransaction
 
 - (instancetype)init {
@@ -30,6 +32,14 @@
     [array addObject:[prikey signedCompact:[data sha256Data] requireCanonical:YES]];
     
     self.signatures = array;
+}
+
+// 签名字符串
+- (NSString *)signString:(NSString *)string WithPrikey:(CocosPrivateKey *)prikey;
+{
+    NSData *data = [CocosPackData packString:string];
+    
+    return [prikey signedCompact:[data sha256Data] requireCanonical:YES];   
 }
 
 + (instancetype)generateFromObject:(id)object {
