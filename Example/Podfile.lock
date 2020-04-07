@@ -29,7 +29,7 @@ DEPENDENCIES:
   - CocosSDK (from `../`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - AFNetworking
     - FMDB
     - Secp256k1_A
@@ -48,4 +48,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 894788e1de7c949f351e117ccea0e6fcbc4ca4fc
 
-COCOAPODS: 1.7.0
+COCOAPODS: 1.9.1

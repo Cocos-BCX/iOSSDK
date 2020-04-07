@@ -116,6 +116,13 @@
         return;
     }
     
+    // 1.3 Verify password
+    if (![self regexPasswordValidate:password]) {
+        NSError *error = [NSError errorWithDomain:@"Please enter the correct password(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.]).{12,}$)" code:SDKErrorCodePasswordError userInfo:@{@"password":password}];
+        !errorBlock?:errorBlock(error);
+        return;
+    }
+    
     NSString *owner_key;
     NSString *active_key;
     NSString *owner_pubkey;
@@ -129,6 +136,7 @@
         owner_pubkey = [Cocos_Key_Account publicKey_with_seed:ownerSeed];
         active_pubkey = [Cocos_Key_Account publicKey_with_seed:activeSeed];
     }else if(walletMode == CocosWalletModeAccount){
+       
         NSString *owner = @"owner";
         NSString *active = @"active";
         NSString *ownerSeed = [NSString stringWithFormat:@"%@%@%@",accountName,owner,password];
@@ -167,6 +175,14 @@
     // 1.Validation parameters
     if (IsStrEmpty(private_key) || IsStrEmpty(tempPassword)) {
         NSError *error = [NSError errorWithDomain:@"Parameter ‘private‘ or ‘tempPassword‘ is missing" code:SDKErrorCodeErrorParameterError userInfo:nil];
+        !errorBlock?:errorBlock(error);
+        return;
+    }
+    
+    
+    // 1.3 Verify password
+    if (![self regexPasswordValidate:tempPassword]) {
+        NSError *error = [NSError errorWithDomain:@"Please enter the correct password(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.]).{12,}$)" code:SDKErrorCodePasswordError userInfo:@{@"password":tempPassword}];
         !errorBlock?:errorBlock(error);
         return;
     }
@@ -350,6 +366,13 @@
                      Success:(SuccessBlock)successBlock
                        Error:(Error)errorBlock
 {
+    // 1.0 Verify password
+    if (![self regexPasswordValidate:currentPassword]) {
+        NSError *error = [NSError errorWithDomain:@"Please enter the correct password(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.]).{12,}$)" code:SDKErrorCodePasswordError userInfo:@{@"password":currentPassword}];
+        !errorBlock?:errorBlock(error);
+        return;
+    }
+    
     // 1. account info
     [self Cocos_GetAccount:account Success:^(id responseObject) {
         ChainAccountModel *accountModel =[ChainAccountModel generateFromObject:responseObject];
@@ -733,6 +756,14 @@
         !errorBlock?:errorBlock(error);
         return;
     }
+    
+    // 1.3 Verify password
+    if (![self regexPasswordValidate:password]) {
+        NSError *error = [NSError errorWithDomain:@"Please enter the correct password(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.]).{12,}$)" code:SDKErrorCodePasswordError userInfo:@{@"password":password}];
+        !errorBlock?:errorBlock(error);
+        return;
+    }
+    
     // 2. Generating parameters
     NSString *owner = @"owner";
     NSString *active = @"active";
@@ -1201,10 +1232,10 @@
                     NSMutableArray *tempArray = [NSMutableArray array];
                     
                     if (param.count == 0) {
-                        NSMutableArray *array = [NSMutableArray array];
-                        [array addObject:@(2)];
-                        [array addObject:@{@"v":@""}];
-                        [tempArray addObject:array];
+//                        NSMutableArray *array = [NSMutableArray array];
+//                        [array addObject:@(2)];
+//                        [array addObject:@{@"v":@""}];
+//                        [tempArray addObject:array];
                     }else{
                         for (NSString *paramStr in param) {
                             NSMutableArray *array = [NSMutableArray array];
@@ -2616,6 +2647,13 @@ Votes CommitteeMember , Witness
 // Verify username validity
 - (BOOL)regexAccountNameValidate:(NSString *)string {
     NSPredicate *myRegex = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[a-z][a-z0-9.-]{3,63}$"];
+    return [myRegex evaluateWithObject:string];
+}
+
+
+// Verify password validity
+- (BOOL)regexPasswordValidate:(NSString *)string {
+    NSPredicate *myRegex = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.]).{12,}$"];
     return [myRegex evaluateWithObject:string];
 }
 @end
