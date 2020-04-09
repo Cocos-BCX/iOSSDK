@@ -182,7 +182,7 @@
     
     // 1.3 Verify password
     if (![self regexPasswordValidate:tempPassword]) {
-        NSError *error = [NSError errorWithDomain:@"Please enter the correct password(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.]).{12,}$)" code:SDKErrorCodePasswordError userInfo:@{@"password":tempPassword}];
+        NSError *error = [NSError errorWithDomain:@"Please enter the correct password(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.-]).{12,}$)" code:SDKErrorCodePasswordError userInfo:@{@"password":tempPassword}];
         !errorBlock?:errorBlock(error);
         return;
     }
@@ -368,7 +368,7 @@
 {
     // 1.0 Verify password
     if (![self regexPasswordValidate:currentPassword]) {
-        NSError *error = [NSError errorWithDomain:@"Please enter the correct password(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.]).{12,}$)" code:SDKErrorCodePasswordError userInfo:@{@"password":currentPassword}];
+        NSError *error = [NSError errorWithDomain:@"Please enter the correct password(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.-]).{12,}$)" code:SDKErrorCodePasswordError userInfo:@{@"password":currentPassword}];
         !errorBlock?:errorBlock(error);
         return;
     }
@@ -759,7 +759,7 @@
     
     // 1.3 Verify password
     if (![self regexPasswordValidate:password]) {
-        NSError *error = [NSError errorWithDomain:@"Please enter the correct password(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.]).{12,}$)" code:SDKErrorCodePasswordError userInfo:@{@"password":password}];
+        NSError *error = [NSError errorWithDomain:@"Please enter the correct password(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.-]).{12,}$)" code:SDKErrorCodePasswordError userInfo:@{@"password":password}];
         !errorBlock?:errorBlock(error);
         return;
     }
@@ -2653,7 +2653,7 @@ Votes CommitteeMember , Witness
 
 // Verify password validity
 - (BOOL)regexPasswordValidate:(NSString *)string {
-    NSPredicate *myRegex = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.]).{12,}$"];
+    NSPredicate *myRegex = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.-]).{12,}$"];
     return [myRegex evaluateWithObject:string];
 }
 @end
