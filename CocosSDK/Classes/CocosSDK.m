@@ -1093,7 +1093,7 @@
                 NSString *signature = [signedTran signString:signString WithPrikey:private];
                 NSDictionary *result = @{
                                          @"signature" : signature,
-                                         @"signString" : signString
+                                         @"message" : signString
                                          };
                 !successBlock?:successBlock(result);
             }else if (keyDic[@"owner_key"]){

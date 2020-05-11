@@ -41,6 +41,7 @@
 		169B3FC2BD33B8FBC2D4C35A1C1DC6BF /* AFHTTPSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D26368B4AD5B4F945FBD31693E3D9373 /* AFHTTPSessionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		17D6A066C5F987FEFF8B89D7EFDFD375 /* AFURLRequestSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 1AF7B2A9617F645F7784000A422C153C /* AFURLRequestSerialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		182436B08600C829D6047579D8788F2A /* NSDate+UTCDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6827B70C12C01DF5555E29FC11487E7C /* NSDate+UTCDate.m */; };
+		18DDC665227D6457A4D36AD115CA275A /* libsecp256k1_arm64.a in Sources */ = {isa = PBXBuildFile; fileRef = 767139BE29B57FD4C860E1FCCB6FED34 /* libsecp256k1_arm64.a */; };
 		1A61DBE8620CC11AB067E7B0C0DFFDD8 /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC6B0A6301CB19456E0DDD4115B128B /* AFNetworking.framework */; };
 		1A9EC05D47E498E4F8D4C2F6C2E65F04 /* CocosDeleteNHOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = A92CF0C825FA0FDCFBC0B01BE27AB900 /* CocosDeleteNHOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1AC36159DEDD4452C304D5B1FFB688D1 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9A36F09917BE017C90A9CD5F22C9D52 /* MobileCoreServices.framework */; };
@@ -56,14 +57,11 @@
 		2A742F3F77C616F31C3E45DC709FF183 /* CocosBitAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5F8C32C49955B5EDD093F8B57547A6 /* CocosBitAddress.m */; };
 		2AC81344342BEE5E85191CAB9EEF0A7F /* WordList.h in Headers */ = {isa = PBXBuildFile; fileRef = 57D3388C85D7885BC16922AED60D4B80 /* WordList.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2AE1F29F045D02727E815DBBAC8C7B4F /* AFNetworkActivityIndicatorManager.h in Headers */ = {isa = PBXBuildFile; fileRef = FBF195D429B2918797311C1EEB54FD93 /* AFNetworkActivityIndicatorManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2B6F2EF08B23A89FB2C2F51AD184B997 /* libsecp256k1.a in Sources */ = {isa = PBXBuildFile; fileRef = CAFDBF114F6D9C21378EDEE550C82BA6 /* libsecp256k1.a */; };
 		2BEDEA635591E1EC87EDA1ADEB3A6C5F /* KeystoneFile.h in Headers */ = {isa = PBXBuildFile; fileRef = CD8F7E8B886EB3E15A4CA26E585F23D2 /* KeystoneFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D688D70DD9A4F5598C84229B134AF73 /* SHA256Diggest.h in Headers */ = {isa = PBXBuildFile; fileRef = EF903C40D92C823F67B8EE260BD87010 /* SHA256Diggest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3033C2DE9CB2085ECBB95717CFB6425A /* AFAutoPurgingImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = E89A19A97708F6F145731073C3D03EA7 /* AFAutoPurgingImageCache.m */; };
 		3180AAE113050B1CA3C217B8EFE1BDF4 /* AuthorityObject.h in Headers */ = {isa = PBXBuildFile; fileRef = CA19A77B9A5491AE574CC19DCD77FE2E /* AuthorityObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		31CD5DDD243F02AE00B4247B /* libsecp256k1_arm64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 31CD5DD9243F02AE00B4247B /* libsecp256k1_arm64.a */; };
-		31CD5DDE243F02AE00B4247B /* libsecp256k1_armv7.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 31CD5DDA243F02AE00B4247B /* libsecp256k1_armv7.a */; };
-		31CD5DDF243F02AE00B4247B /* libsecp256k1_i386.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 31CD5DDB243F02AE00B4247B /* libsecp256k1_i386.a */; };
-		31CD5DE0243F02AE00B4247B /* libsecp256k1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 31CD5DDC243F02AE00B4247B /* libsecp256k1.a */; };
 		3313AA6820DC1CB63AA93F77319CE520 /* ChainNHAssetOrder.h in Headers */ = {isa = PBXBuildFile; fileRef = CCE008386CF57F388DF00D88F02BC857 /* ChainNHAssetOrder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		332674B33D1C041E2092D7257A46FB6C /* CocosBase58Object.m in Sources */ = {isa = PBXBuildFile; fileRef = CAD73F5F9F2D20F7E7E0FE584E5E0E42 /* CocosBase58Object.m */; };
 		34A7C5747B4C0825465453E196E57FAA /* UIButton+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA472C512274744A3C5BAACF78642B7 /* UIButton+AFNetworking.m */; };
@@ -194,6 +192,7 @@
 		B5A467AE4081960DC2C380B1A905441C /* KeystoneFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E55D8B24758BA32ADDD2449A2DCBAB /* KeystoneFile.m */; };
 		B5AD0B8F0F9304975A01978B2908B62F /* UIActivityIndicatorView+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CCAC34A1B73EB135A059BE4CA8695B3 /* UIActivityIndicatorView+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B660BBB719EC3E0C6E785AF763BC850F /* CocosSDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 14697F67E24263C68ECA1FD80F30A435 /* CocosSDK-dummy.m */; };
+		B68234BBDD180DFCFEE2BEC305845304 /* libsecp256k1_i386.a in Sources */ = {isa = PBXBuildFile; fileRef = 97E020CAD371AF1B305B4C0938A33E37 /* libsecp256k1_i386.a */; };
 		B6D6DE2D9CA002D4EBBC0A06A01CBF53 /* CocosPublicKey.h in Headers */ = {isa = PBXBuildFile; fileRef = C6A780E01F8A73E32E236DF9DF8849EE /* CocosPublicKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B7A78D5753924BB3939137FF71291A1E /* CocosSellNHAssetOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 336E4393E6770E93FC1FC319F1D3956B /* CocosSellNHAssetOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B831E0ED54410187A98BFBE4C7306CEA /* SocketRocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38FE677442D7519F37B4B56FE2C71CE9 /* SocketRocket.framework */; };
@@ -206,6 +205,7 @@
 		C4667AA88BB31FE8EF44CFE9C7173A65 /* CocosClaimVestingBalanceOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 641435C59326E8B3DE50A9228B58932C /* CocosClaimVestingBalanceOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C475AC489FE3A5384174359F9289EFED /* Diggest.h in Headers */ = {isa = PBXBuildFile; fileRef = 2915D329CEFC8C4159B05AC9D00D30EB /* Diggest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C617FC8BCA5D5C9826C115FF5454A3E7 /* Transaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 264B1E7242179FC111D24121A1441FE6 /* Transaction.m */; };
+		C68203C930D61827908093A5D2047005 /* libsecp256k1_armv7.a in Sources */ = {isa = PBXBuildFile; fileRef = 3CA76E121413F438F35A7173BC997F63 /* libsecp256k1_armv7.a */; };
 		C943121498147704B800191246C7E8C0 /* CocosCallContractOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F76EDD062645A5F716C114A238EF3B2 /* CocosCallContractOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C995E93ED416E8D09B9615F01912F7DF /* NSObject+DataToObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFC477DD085E0475476AA975AB6CC92 /* NSObject+DataToObject.m */; };
 		CBD5A6A82A8945CDA8EF54AEA9E0B381 /* CocosBuyNHOrderOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 50DC1ABB84315854C5A2340620DF4E3A /* CocosBuyNHOrderOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -358,9 +358,9 @@
 		1F0E2720041FFD17838A166A1E349ABD /* FMDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FMDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F63C60FFC474AB2DD3A60778D25BBAD /* CallBackModel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CallBackModel.h; sourceTree = "<group>"; };
 		20E650F3C86613C2A977BF8007FBBC8E /* UIActivityIndicatorView+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIActivityIndicatorView+AFNetworking.m"; path = "UIKit+AFNetworking/UIActivityIndicatorView+AFNetworking.m"; sourceTree = "<group>"; };
-		2130A975FD4AB301DF50C75CEABFC709 /* rmd160.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = rmd160.c; sourceTree = "<group>"; };
+		2130A975FD4AB301DF50C75CEABFC709 /* rmd160.c */ = {isa = PBXFileReference; includeInIndex = 1; path = rmd160.c; sourceTree = "<group>"; };
 		21377587EBB78868EA1744DCA1B1BD39 /* SignedTransaction.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SignedTransaction.m; sourceTree = "<group>"; };
-		2204A1B3D69F151BBF951944C40E25FE /* Pods_CocosSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CocosSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2204A1B3D69F151BBF951944C40E25FE /* Pods_CocosSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_CocosSDK_Example.framework; path = "Pods-CocosSDK_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2325B04B8C0757BB3FD1D68BB0A9A65E /* BitAddressAuthorityObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = BitAddressAuthorityObject.h; sourceTree = "<group>"; };
 		23AB46979AE2382094511332BAD61F77 /* AFNetworkReachabilityManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFNetworkReachabilityManager.h; path = AFNetworking/AFNetworkReachabilityManager.h; sourceTree = "<group>"; };
 		259FC2B234C0A6D11691DD45014D540C /* PublicKeyAuthorityObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = PublicKeyAuthorityObject.h; sourceTree = "<group>"; };
@@ -376,20 +376,16 @@
 		2FDA16D1CDCEC208185E5BB86082EF8D /* CocosDataBase.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CocosDataBase.m; sourceTree = "<group>"; };
 		306759AAA2A53CC926493324E1C54015 /* AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFNetworking.h; path = AFNetworking/AFNetworking.h; sourceTree = "<group>"; };
 		313EA7E2DC74B83A3F1577097D165261 /* FMDatabasePool.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FMDatabasePool.m; path = src/fmdb/FMDatabasePool.m; sourceTree = "<group>"; };
-		31CD5DD9243F02AE00B4247B /* libsecp256k1_arm64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsecp256k1_arm64.a; path = Secp256k1_A/Classes/secp256k1/libsecp256k1_arm64.a; sourceTree = "<group>"; };
-		31CD5DDA243F02AE00B4247B /* libsecp256k1_armv7.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsecp256k1_armv7.a; path = Secp256k1_A/Classes/secp256k1/libsecp256k1_armv7.a; sourceTree = "<group>"; };
-		31CD5DDB243F02AE00B4247B /* libsecp256k1_i386.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsecp256k1_i386.a; path = Secp256k1_A/Classes/secp256k1/libsecp256k1_i386.a; sourceTree = "<group>"; };
-		31CD5DDC243F02AE00B4247B /* libsecp256k1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsecp256k1.a; path = Secp256k1_A/Classes/secp256k1/libsecp256k1.a; sourceTree = "<group>"; };
 		31F53DA8FE7C7D6338337D62E1854EB8 /* CocosBaseOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CocosBaseOperation.m; sourceTree = "<group>"; };
 		31F669599271AFFF944EECD286D86FC2 /* FMDB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FMDB.debug.xcconfig; sourceTree = "<group>"; };
 		32D011C74FF986E83BCA4CB7E97BEDDA /* Secp256k1_A.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Secp256k1_A.modulemap; sourceTree = "<group>"; };
 		336E4393E6770E93FC1FC319F1D3956B /* CocosSellNHAssetOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CocosSellNHAssetOperation.h; sourceTree = "<group>"; };
-		34048766545366A9FC15DB19253B60BB /* CocosPrivateKey.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = CocosPrivateKey.mm; sourceTree = "<group>"; };
+		34048766545366A9FC15DB19253B60BB /* CocosPrivateKey.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = CocosPrivateKey.mm; sourceTree = "<group>"; };
 		344FD0EA1C6C71D24C4A1DDD5525C356 /* Secp256k1_A-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Secp256k1_A-prefix.pch"; sourceTree = "<group>"; };
 		347648E06A996CFF9F64EFA8CD4F57DF /* CocosTransferOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CocosTransferOperation.h; sourceTree = "<group>"; };
 		34877E38872DD03B2244CD41DAF4898B /* AFNetworking.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AFNetworking.debug.xcconfig; sourceTree = "<group>"; };
 		3639FC45C4E115E11CDB87217DD65CDA /* AFURLRequestSerialization.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFURLRequestSerialization.m; path = AFNetworking/AFURLRequestSerialization.m; sourceTree = "<group>"; };
-		372DB072E6ACDAE29D381189693D38D6 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		372DB072E6ACDAE29D381189693D38D6 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
 		37357123748C7B24934BA5D1E71CED59 /* ChainContract.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ChainContract.m; sourceTree = "<group>"; };
 		38B5291F8A4551F5921FCF7AB71E6377 /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImageView+AFNetworking.h"; path = "UIKit+AFNetworking/UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
 		38FE677442D7519F37B4B56FE2C71CE9 /* SocketRocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SocketRocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -397,6 +393,7 @@
 		3AA00A73567DE72FABC3437DD67A3748 /* FMDB.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = FMDB.modulemap; sourceTree = "<group>"; };
 		3C5F8C32C49955B5EDD093F8B57547A6 /* CocosBitAddress.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CocosBitAddress.m; sourceTree = "<group>"; };
 		3C84101ED3CC16EF66321B1F5110C4F4 /* CocosSDK.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = CocosSDK.m; path = CocosSDK/Classes/CocosSDK.m; sourceTree = "<group>"; };
+		3CA76E121413F438F35A7173BC997F63 /* libsecp256k1_armv7.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libsecp256k1_armv7.a; path = Secp256k1_A/Classes/secp256k1/libsecp256k1_armv7.a; sourceTree = "<group>"; };
 		3CCAC34A1B73EB135A059BE4CA8695B3 /* UIActivityIndicatorView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIActivityIndicatorView+AFNetworking.h"; path = "UIKit+AFNetworking/UIActivityIndicatorView+AFNetworking.h"; sourceTree = "<group>"; };
 		3D035FB8231A29CC6276E3974F483365 /* ChainAssetOption.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ChainAssetOption.h; sourceTree = "<group>"; };
 		3E52E149B3693505A66CAD8D9DA303FF /* ChainAssetAmountObject.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ChainAssetAmountObject.m; sourceTree = "<group>"; };
@@ -452,7 +449,7 @@
 		644C2AEF4E0B70B114D15FBE9BB453F0 /* Pods-CocosSDK_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-CocosSDK_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
 		6493FD19FC2B626157995BA1DC1BC0F9 /* AccountAuthoriyObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = AccountAuthoriyObject.h; sourceTree = "<group>"; };
 		6761AF71144A861B07306878A95299F0 /* Sha256.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = Sha256.m; sourceTree = "<group>"; };
-		67E2E1074D2E3AE118779949E6D79B4A /* uECC.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = uECC.c; sourceTree = "<group>"; };
+		67E2E1074D2E3AE118779949E6D79B4A /* uECC.c */ = {isa = PBXFileReference; includeInIndex = 1; path = uECC.c; sourceTree = "<group>"; };
 		6827B70C12C01DF5555E29FC11487E7C /* NSDate+UTCDate.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "NSDate+UTCDate.m"; sourceTree = "<group>"; };
 		689AC4095FD2963907B6291667C98267 /* NSData+HashData.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "NSData+HashData.m"; sourceTree = "<group>"; };
 		69672238C26BF5A75CB75D49BDE03130 /* Diggest.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = Diggest.m; sourceTree = "<group>"; };
@@ -473,6 +470,7 @@
 		7348EFCFCBE487A9E6CC4333EFA7CF34 /* WebsocketResultModel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = WebsocketResultModel.m; sourceTree = "<group>"; };
 		738FCC2E2D917A30D3D0A3889B88374D /* FMDatabasePool.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDatabasePool.h; path = src/fmdb/FMDatabasePool.h; sourceTree = "<group>"; };
 		7534323C8D47F9BA38542ACDCEEF77FD /* CocosOperationContent.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CocosOperationContent.m; sourceTree = "<group>"; };
+		767139BE29B57FD4C860E1FCCB6FED34 /* libsecp256k1_arm64.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libsecp256k1_arm64.a; path = Secp256k1_A/Classes/secp256k1/libsecp256k1_arm64.a; sourceTree = "<group>"; };
 		76A518C73DEAE19CBBA3D1AA9756EB13 /* CocosBase58Object.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CocosBase58Object.h; sourceTree = "<group>"; };
 		783E4A31B40AAE93D99AFDBEBF3C6BA6 /* SHA256Diggest.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SHA256Diggest.m; sourceTree = "<group>"; };
 		78E781049835D9AC6C979D896CD11D31 /* AFNetworking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AFNetworking.release.xcconfig; sourceTree = "<group>"; };
@@ -488,24 +486,25 @@
 		821E4DE46D357AB22097B10C4FD47AAA /* CocosSDK.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CocosSDK.h; path = CocosSDK/Classes/CocosSDK.h; sourceTree = "<group>"; };
 		8370DD0B8ECDEEBDB3600108DF59A7FC /* NSData+CopyWithRange.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "NSData+CopyWithRange.m"; sourceTree = "<group>"; };
 		84F2AF9CE88BB429CBC4C3F0380473C5 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+AFNetworking.m"; path = "UIKit+AFNetworking/UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
-		85A01882ED06DFEA2E0CE78BCDB204A7 /* SocketRocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SocketRocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		85A01882ED06DFEA2E0CE78BCDB204A7 /* SocketRocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SocketRocket.framework; path = SocketRocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		86061E33167C0F3131D8469222F34532 /* Secp256k1_A.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Secp256k1_A.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8767FC1384D5D3108BB71FA47388CCD1 /* AFNetworking-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AFNetworking-prefix.pch"; sourceTree = "<group>"; };
 		894102ABB348985DC1CB36BAD55C8567 /* PublicKeyAuthorityObject.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = PublicKeyAuthorityObject.m; sourceTree = "<group>"; };
-		8BECC7EF19DCAB240DF6050CDFA5879D /* Pods_CocosSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CocosSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BECC7EF19DCAB240DF6050CDFA5879D /* Pods_CocosSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_CocosSDK_Tests.framework; path = "Pods-CocosSDK_Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F02D1BDD94E20EB7D289418C390F4CB /* Pods-CocosSDK_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-CocosSDK_Tests-umbrella.h"; sourceTree = "<group>"; };
 		8F34BECC54572FBEE99A5C3B8B5B861B /* AFURLResponseSerialization.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFURLResponseSerialization.m; path = AFNetworking/AFURLResponseSerialization.m; sourceTree = "<group>"; };
 		8F3D16500C09DEEC0D418B783DDBE6AA /* AFURLSessionManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFURLSessionManager.m; path = AFNetworking/AFURLSessionManager.m; sourceTree = "<group>"; };
 		907AE255F3B89CC24C078CE9ECFAB45B /* VoteIdObject.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = VoteIdObject.m; sourceTree = "<group>"; };
 		90824E19C595341E2636E675D8703777 /* WebsocketResultErrorParse.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = WebsocketResultErrorParse.h; sourceTree = "<group>"; };
 		97265006FA59DBA873727AAA4571FA00 /* FMDB-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "FMDB-dummy.m"; sourceTree = "<group>"; };
+		97E020CAD371AF1B305B4C0938A33E37 /* libsecp256k1_i386.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libsecp256k1_i386.a; path = Secp256k1_A/Classes/secp256k1/libsecp256k1_i386.a; sourceTree = "<group>"; };
 		9836956A1619972AB9FF6D5BA25F1073 /* SocketRocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SocketRocket.h; path = SocketRocket/SocketRocket.h; sourceTree = "<group>"; };
 		9905D6F0EDF23D2E65C69D24EFD4952E /* Base64.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
 		99523A91F3EDED6C48A5152839744D6F /* CocosDataBase+Account.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CocosDataBase+Account.h"; sourceTree = "<group>"; };
 		99E7D794B9136656985D294E1C408DD5 /* CocosCreateSonAccountOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CocosCreateSonAccountOperation.m; sourceTree = "<group>"; };
 		99F0D0D26FB900E0C18806E48D5FFE27 /* ChainAccountHistory.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ChainAccountHistory.m; sourceTree = "<group>"; };
 		9BC98FD39B4440762A92A16E57B0571A /* SocketRocket.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SocketRocket.modulemap; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9DB037609C99B2487CB1B016F67AF841 /* SRWebSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SRWebSocket.h; path = SocketRocket/SRWebSocket.h; sourceTree = "<group>"; };
 		9DDF894D6A6E88AC1F1DB725690EB962 /* SocketRocket.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SocketRocket.debug.xcconfig; sourceTree = "<group>"; };
 		9E90C591D112C4AD1BA657E0FF6B6D10 /* UIProgressView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIProgressView+AFNetworking.h"; path = "UIKit+AFNetworking/UIProgressView+AFNetworking.h"; sourceTree = "<group>"; };
@@ -514,12 +513,12 @@
 		A338E4941929066339DF26B9A8C3EBBF /* UIRefreshControl+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIRefreshControl+AFNetworking.m"; path = "UIKit+AFNetworking/UIRefreshControl+AFNetworking.m"; sourceTree = "<group>"; };
 		A3416073A3D6303053957AB7C5027212 /* NSData+HashData.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "NSData+HashData.h"; sourceTree = "<group>"; };
 		A36DA014EFB6869D1C99F730832905F0 /* Secp256k1_A-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Secp256k1_A-dummy.m"; sourceTree = "<group>"; };
-		A3A80BA70CFB7F75C5391BEBBBA8C9DA /* FMDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FMDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3A80BA70CFB7F75C5391BEBBBA8C9DA /* FMDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = FMDB.framework; path = FMDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4141B04D84FB719E0A98EDA7E443EAA /* AFImageDownloader.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFImageDownloader.m; path = "UIKit+AFNetworking/AFImageDownloader.m"; sourceTree = "<group>"; };
-		A4FA15D44DF6BAC7550EDEED10862AA3 /* AFNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AFNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A4FA15D44DF6BAC7550EDEED10862AA3 /* AFNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = AFNetworking.framework; path = AFNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5451B0CB3B7B7917CF5DD5112EB9A8D /* CocosPrivateKey.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CocosPrivateKey.h; sourceTree = "<group>"; };
 		A76AF3629B5A0B1FC65DD54A6D5259B9 /* CocosTransferOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CocosTransferOperation.m; sourceTree = "<group>"; };
-		A7A62C64A51831C67EAD2BAC8866A96D /* CocosSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CocosSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7A62C64A51831C67EAD2BAC8866A96D /* CocosSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = CocosSDK.framework; path = CocosSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7CC639424D707ACE10B4584055738F8 /* Pods-CocosSDK_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-CocosSDK_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		A834F7351D07F54A60BC8C06FDE9AA84 /* ChainVestingBalance.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ChainVestingBalance.m; sourceTree = "<group>"; };
 		A92CF0C825FA0FDCFBC0B01BE27AB900 /* CocosDeleteNHOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CocosDeleteNHOperation.h; sourceTree = "<group>"; };
@@ -560,7 +559,8 @@
 		CA0449263B4221AFCC2C62989230D422 /* Secp256k1_A-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Secp256k1_A-Info.plist"; sourceTree = "<group>"; };
 		CA19A77B9A5491AE574CC19DCD77FE2E /* AuthorityObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = AuthorityObject.h; sourceTree = "<group>"; };
 		CAD73F5F9F2D20F7E7E0FE584E5E0E42 /* CocosBase58Object.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CocosBase58Object.m; sourceTree = "<group>"; };
-		CB7D462599A853120872A7AEB7B7BE96 /* CocosSDK.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = CocosSDK.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		CAFDBF114F6D9C21378EDEE550C82BA6 /* libsecp256k1.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libsecp256k1.a; path = Secp256k1_A/Classes/secp256k1/libsecp256k1.a; sourceTree = "<group>"; };
+		CB7D462599A853120872A7AEB7B7BE96 /* CocosSDK.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = CocosSDK.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		CBDE7F28CC540CD347248EDCD09A5DE1 /* CocosClaimVestingBalanceOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CocosClaimVestingBalanceOperation.m; sourceTree = "<group>"; };
 		CCE008386CF57F388DF00D88F02BC857 /* ChainNHAssetOrder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ChainNHAssetOrder.h; sourceTree = "<group>"; };
 		CCFDA3D115916E020DF168C2D64C7803 /* Secp256k1_A.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Secp256k1_A.debug.xcconfig; sourceTree = "<group>"; };
@@ -572,11 +572,11 @@
 		D234738EB9808BEFF73658B4458F39D0 /* SocketRocket-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "SocketRocket-Info.plist"; sourceTree = "<group>"; };
 		D2560AE53F8669991E58A06EB2FC9005 /* SocketRocket-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SocketRocket-umbrella.h"; sourceTree = "<group>"; };
 		D26368B4AD5B4F945FBD31693E3D9373 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFHTTPSessionManager.h; path = AFNetworking/AFHTTPSessionManager.h; sourceTree = "<group>"; };
-		D5A445BBC2029E9149C0BE880327AAAB /* sha2.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = sha2.c; sourceTree = "<group>"; };
+		D5A445BBC2029E9149C0BE880327AAAB /* sha2.c */ = {isa = PBXFileReference; includeInIndex = 1; path = sha2.c; sourceTree = "<group>"; };
 		D75790E684F8E64B47C07BEC36C3F532 /* CocosSellNHAssetCancelOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CocosSellNHAssetCancelOperation.m; sourceTree = "<group>"; };
 		D7973A14CC4D957CF7DAAAF75E69023A /* CocosDataBase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CocosDataBase.h; sourceTree = "<group>"; };
 		D80D7D98EDFCAF7603C87A50FEC9F973 /* Secp256k1_A.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Secp256k1_A.release.xcconfig; sourceTree = "<group>"; };
-		DA012469766B1ABE5B49A7EA549A49FD /* Secp256k1_A.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Secp256k1_A.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA012469766B1ABE5B49A7EA549A49FD /* Secp256k1_A.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Secp256k1_A.framework; path = Secp256k1_A.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAAAFC92F7620CE45387B26813B48AD3 /* SocketRocket-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SocketRocket-dummy.m"; sourceTree = "<group>"; };
 		DBBF9FBC7E6B4FE50ED7CC79A4124587 /* CocosSDK.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = CocosSDK.modulemap; sourceTree = "<group>"; };
 		DF2F145B14F82B45AD776E35914F378D /* UIProgressView+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIProgressView+AFNetworking.m"; path = "UIKit+AFNetworking/UIProgressView+AFNetworking.m"; sourceTree = "<group>"; };
@@ -587,9 +587,9 @@
 		E21EF85D46A576D29192923A1D232165 /* VoteOptionsObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = VoteOptionsObject.h; sourceTree = "<group>"; };
 		E2965A2B68BAFECAE1FEB2682776B228 /* Cocos_Key_Account.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = Cocos_Key_Account.m; sourceTree = "<group>"; };
 		E2E37414B7AF5CFCA04D73906E55D7B0 /* PlainKey.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = PlainKey.m; sourceTree = "<group>"; };
-		E4460B68E08D22EB2C9C9229CE51B144 /* base58.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = base58.c; sourceTree = "<group>"; };
+		E4460B68E08D22EB2C9C9229CE51B144 /* base58.c */ = {isa = PBXFileReference; includeInIndex = 1; path = base58.c; sourceTree = "<group>"; };
 		E502D35F559D447162013513508A97C4 /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFNetworkActivityIndicatorManager.m; path = "UIKit+AFNetworking/AFNetworkActivityIndicatorManager.m"; sourceTree = "<group>"; };
-		E7C0D280D7B2ABA62B3B557CF8B7079D /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		E7C0D280D7B2ABA62B3B557CF8B7079D /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
 		E7D5B8BBB6BB5160174F403B658F9442 /* ChainDynamicGlobalProperties.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ChainDynamicGlobalProperties.h; sourceTree = "<group>"; };
 		E89A19A97708F6F145731073C3D03EA7 /* AFAutoPurgingImageCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFAutoPurgingImageCache.m; path = "UIKit+AFNetworking/AFAutoPurgingImageCache.m"; sourceTree = "<group>"; };
 		EA3673A06888C5ADB2B457F64AC2A923 /* AFURLResponseSerialization.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFURLResponseSerialization.h; path = AFNetworking/AFURLResponseSerialization.h; sourceTree = "<group>"; };
@@ -621,14 +621,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A61DBE8620CC11AB067E7B0C0DFFDD8 /* AFNetworking.framework in Frameworks */,
-				31CD5DDE243F02AE00B4247B /* libsecp256k1_armv7.a in Frameworks */,
 				7D73A238816ED294E1A6DEFFC3A2B565 /* FMDB.framework in Frameworks */,
 				54577DBC6A42F19838420D5FF5B09A7A /* Foundation.framework in Frameworks */,
-				31CD5DDD243F02AE00B4247B /* libsecp256k1_arm64.a in Frameworks */,
 				CD48819A7DD408CDEAD9FDF937B73191 /* Secp256k1_A.framework in Frameworks */,
-				31CD5DDF243F02AE00B4247B /* libsecp256k1_i386.a in Frameworks */,
 				B831E0ED54410187A98BFBE4C7306CEA /* SocketRocket.framework in Frameworks */,
-				31CD5DE0243F02AE00B4247B /* libsecp256k1.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -718,6 +714,7 @@
 				4175F9816084CBD1B77656C6A0C9A0FB /* NSObject+DataToObject.h */,
 				0EFC477DD085E0475476AA975AB6CC92 /* NSObject+DataToObject.m */,
 			);
+			name = CocosPackData;
 			path = CocosPackData;
 			sourceTree = "<group>";
 		};
@@ -729,6 +726,7 @@
 				0A2EA26A90AC39CDDE045446B0D44623 /* WebsocketResultModel.h */,
 				7348EFCFCBE487A9E6CC4333EFA7CF34 /* WebsocketResultModel.m */,
 			);
+			name = WebsocketResultModel;
 			path = WebsocketResultModel;
 			sourceTree = "<group>";
 		};
@@ -787,6 +785,7 @@
 				6ABE1316A8E97B18F4155C42E2ED872F /* Support Files */,
 				70AFDD3DFA5459E2A17C782E3307691D /* UIKit */,
 			);
+			name = AFNetworking;
 			path = AFNetworking;
 			sourceTree = "<group>";
 		};
@@ -796,19 +795,21 @@
 				4E2ABF1716DD39A4A19929CE7C41F7AC /* NSData+CopyWithRange.h */,
 				8370DD0B8ECDEEBDB3600108DF59A7FC /* NSData+CopyWithRange.m */,
 			);
+			name = "NSData+CopyWithRange";
 			path = "NSData+CopyWithRange";
 			sourceTree = "<group>";
 		};
 		32209BC0C66296B31A73590E04817AFB /* Secp256k1_A */ = {
 			isa = PBXGroup;
 			children = (
-				31CD5DD9243F02AE00B4247B /* libsecp256k1_arm64.a */,
-				31CD5DDA243F02AE00B4247B /* libsecp256k1_armv7.a */,
-				31CD5DDB243F02AE00B4247B /* libsecp256k1_i386.a */,
-				31CD5DDC243F02AE00B4247B /* libsecp256k1.a */,
+				CAFDBF114F6D9C21378EDEE550C82BA6 /* libsecp256k1.a */,
+				767139BE29B57FD4C860E1FCCB6FED34 /* libsecp256k1_arm64.a */,
+				3CA76E121413F438F35A7173BC997F63 /* libsecp256k1_armv7.a */,
+				97E020CAD371AF1B305B4C0938A33E37 /* libsecp256k1_i386.a */,
 				B370073E2A16961DE0F403295D534C80 /* secp256k1.h */,
 				24F83AAECFDE0DB5FB94522ACC0865B3 /* Support Files */,
 			);
+			name = Secp256k1_A;
 			path = Secp256k1_A;
 			sourceTree = "<group>";
 		};
@@ -818,6 +819,7 @@
 				EF903C40D92C823F67B8EE260BD87010 /* SHA256Diggest.h */,
 				783E4A31B40AAE93D99AFDBEBF3C6BA6 /* SHA256Diggest.m */,
 			);
+			name = Sha256Diggest;
 			path = Sha256Diggest;
 			sourceTree = "<group>";
 		};
@@ -840,6 +842,7 @@
 				5E6455E265E3FABFC00FE7EAD11FE616 /* UploadParams.h */,
 				7026DD0708D5A60CACC19F5830678281 /* UploadParams.m */,
 			);
+			name = UploadBaseModel;
 			path = UploadBaseModel;
 			sourceTree = "<group>";
 		};
@@ -912,6 +915,7 @@
 				C6A780E01F8A73E32E236DF9DF8849EE /* CocosPublicKey.h */,
 				ABC3D59BA37DA8DAA173DD454A421785 /* CocosPublicKey.m */,
 			);
+			name = CocosKeyType;
 			path = CocosKeyType;
 			sourceTree = "<group>";
 		};
@@ -971,6 +975,7 @@
 				4C6F7473D9F3022B182BFF693383D7B1 /* ChainAssetObject.m */,
 				D58EA04A5B6F1DC0BCE9B8E78299389A /* AssetOptions */,
 			);
+			name = Asset;
 			path = Asset;
 			sourceTree = "<group>";
 		};
@@ -1042,6 +1047,7 @@
 				7BDCB0055EC8FBDBE5111EDC850D62B5 /* SRWebSocket.m */,
 				CE81749C2976A1A5AE52B9F082BB6F6B /* Support Files */,
 			);
+			name = SocketRocket;
 			path = SocketRocket;
 			sourceTree = "<group>";
 		};
@@ -1051,6 +1057,7 @@
 				7CE0380BB0FD64D8153FF4EF342DB3EF /* RIPEMD160Diggest.h */,
 				AED42E063ACE3A135E034C496DFF91FF /* RIPEMD160Diggest.m */,
 			);
+			name = RIPEMD160Diggest;
 			path = RIPEMD160Diggest;
 			sourceTree = "<group>";
 		};
@@ -1181,6 +1188,7 @@
 				5D61B09016147B5826A19752F71E8EC5 /* RIPEMD160Diggest */,
 				367A122F85BFA1B2B2C23F27843293C7 /* Sha256Diggest */,
 			);
+			name = Diggest;
 			path = Diggest;
 			sourceTree = "<group>";
 		};
@@ -1198,6 +1206,7 @@
 				2A34EC417C5BFF71EEFB04AEC032DC80 /* SpecialAuthorityObject.h */,
 				4F5C97E6EC7B012C93B766740928F61C /* SpecialAuthorityObject.m */,
 			);
+			name = Authority;
 			path = Authority;
 			sourceTree = "<group>";
 		};
@@ -1211,6 +1220,7 @@
 				E21EF85D46A576D29192923A1D232165 /* VoteOptionsObject.h */,
 				79EA548536969A7FEDA1F52A1C315DAA /* VoteOptionsObject.m */,
 			);
+			name = Option;
 			path = Option;
 			sourceTree = "<group>";
 		};
@@ -1251,6 +1261,7 @@
 				64CA7D0AC69C9C46A7BD90F82FAFC4D7 /* standard */,
 				1DAFD903FEB3460F482A905DF8EC5981 /* Support Files */,
 			);
+			name = FMDB;
 			path = FMDB;
 			sourceTree = "<group>";
 		};
@@ -1282,6 +1293,7 @@
 				5909B680CACB04036B2736BF2A3F222D /* NSDate+UTCDate.h */,
 				6827B70C12C01DF5555E29FC11487E7C /* NSDate+UTCDate.m */,
 			);
+			name = "NSDate+UTCDate";
 			path = "NSDate+UTCDate";
 			sourceTree = "<group>";
 		};
@@ -1291,6 +1303,7 @@
 				CCE008386CF57F388DF00D88F02BC857 /* ChainNHAssetOrder.h */,
 				444E5B57025371B68981C3C6BEB85BFB /* ChainNHAssetOrder.m */,
 			);
+			name = NHAsset;
 			path = NHAsset;
 			sourceTree = "<group>";
 		};
@@ -1311,6 +1324,7 @@
 				1F63C60FFC474AB2DD3A60778D25BBAD /* CallBackModel.h */,
 				469CDF4FE5A0614615B16F9D007AB4FA /* CallBackModel.m */,
 			);
+			name = CallBackModel;
 			path = CallBackModel;
 			sourceTree = "<group>";
 		};
@@ -1322,6 +1336,7 @@
 				A3416073A3D6303053957AB7C5027212 /* NSData+HashData.h */,
 				689AC4095FD2963907B6291667C98267 /* NSData+HashData.m */,
 			);
+			name = "NSData+HashData";
 			path = "NSData+HashData";
 			sourceTree = "<group>";
 		};
@@ -1360,6 +1375,7 @@
 				91118629593BF21A99FEAF4F3A08592C /* Authority */,
 				918880144E06152EAF2FE97CADE2DBAA /* Option */,
 			);
+			name = Account;
 			path = Account;
 			sourceTree = "<group>";
 		};
@@ -1371,6 +1387,7 @@
 				2C6591EDC8D9A4CD5CAFAE8440452BAB /* ChainAssetPermissionObject.h */,
 				ABF4FFE2EA78F22C0F3E9745BC5C7449 /* ChainAssetPermissionObject.m */,
 			);
+			name = AssetOptions;
 			path = AssetOptions;
 			sourceTree = "<group>";
 		};
@@ -1380,6 +1397,7 @@
 				76A518C73DEAE19CBBA3D1AA9756EB13 /* CocosBase58Object.h */,
 				CAD73F5F9F2D20F7E7E0FE584E5E0E42 /* CocosBase58Object.m */,
 			);
+			name = Base58;
 			path = Base58;
 			sourceTree = "<group>";
 		};
@@ -1428,6 +1446,7 @@
 				57D3388C85D7885BC16922AED60D4B80 /* WordList.h */,
 				CDE5EC718C651656A0A6AD0DB5D1ABBF /* WordList.m */,
 			);
+			name = Crypto;
 			path = Crypto;
 			sourceTree = "<group>";
 		};
@@ -1829,6 +1848,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B6F2EF08B23A89FB2C2F51AD184B997 /* libsecp256k1.a in Sources */,
+				18DDC665227D6457A4D36AD115CA275A /* libsecp256k1_arm64.a in Sources */,
+				C68203C930D61827908093A5D2047005 /* libsecp256k1_armv7.a in Sources */,
+				B68234BBDD180DFCFEE2BEC305845304 /* libsecp256k1_i386.a in Sources */,
 				06F8A92A481A48253D72DF49ACE4D09D /* Secp256k1_A-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2257,7 +2280,8 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};
@@ -2503,10 +2527,6 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Secp256k1_A/Secp256k1_A/Classes/secp256k1",
-				);
 				MODULEMAP_FILE = "Target Support Files/CocosSDK/CocosSDK.modulemap";
 				PRODUCT_MODULE_NAME = CocosSDK;
 				PRODUCT_NAME = CocosSDK;
@@ -2600,10 +2620,6 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Secp256k1_A/Secp256k1_A/Classes/secp256k1",
-				);
 				MODULEMAP_FILE = "Target Support Files/CocosSDK/CocosSDK.modulemap";
 				PRODUCT_MODULE_NAME = CocosSDK;
 				PRODUCT_NAME = CocosSDK;
