@@ -552,6 +552,8 @@
 /** Get account history about one account */
 - (void)Cocos_GetAccountHistory:(NSString *)accountID
                           Limit:(NSInteger)limit
+                        StartID:(NSString *)startID
+                          EndID:(NSString *)endID
                         Success:(SuccessBlock)successBlock
                           Error:(Error)errorBlock
 {
@@ -559,7 +561,7 @@
     
     uploadParams.methodName = kCocosGetAccountHistory;
     
-    uploadParams.totalParams = @[accountID,@"1.11.0",@(limit),@"1.11.0"];
+    uploadParams.totalParams = @[accountID,startID,@(limit),endID];
     
     CallBackModel *callBackModel = [[CallBackModel alloc] init];
     

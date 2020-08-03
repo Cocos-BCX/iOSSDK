@@ -335,7 +335,7 @@
 // 账户操作记录
 - (IBAction)account_option_historyClick:(id)sender {
     NSString *accountName = _account_optionTF.text;
-    [[CocosSDK shareInstance] Cocos_GetAccountHistory:accountName Limit:10 Success:^(NSArray *responseObject) {
+    [[CocosSDK shareInstance] Cocos_GetAccountHistory:accountName Limit:10 StartID:@"1.11.0" EndID:@"1.11.0" Success:^(NSArray *responseObject) {
         NSLog(@"account_option_historyClick success :%@",responseObject);
     } Error:^(NSError *error) {
         NSLog(@"account_option_historyClick error :%@",error);

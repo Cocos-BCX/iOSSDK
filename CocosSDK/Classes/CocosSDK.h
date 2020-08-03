@@ -208,9 +208,13 @@ NS_ASSUME_NONNULL_BEGIN
  
  @param accountID   Account ID
  @param limit       Amount
+ @param startID 开始账户记录id,如果查询范围是整个账户记录，则最开始的账户记录则是startId；
+ @param endID 结束账户记录id,如果查询范围是整个账户记录，则最新的账户记录则是endId；
  */
 - (void)Cocos_GetAccountHistory:(NSString *)accountID
                           Limit:(NSInteger)limit
+                        StartID:(NSString *)startID
+                          EndID:(NSString *)endID
                         Success:(SuccessBlock)successBlock
                           Error:(Error)errorBlock;
 /**
