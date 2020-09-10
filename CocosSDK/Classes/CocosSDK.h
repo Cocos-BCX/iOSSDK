@@ -399,11 +399,18 @@ NS_ASSUME_NONNULL_BEGIN
  @param worldViewIDArray World view
  @param pageSize         pageSize
  @param page             page
+ @param type
+         only_active = 0,target with NHA active permission only
+         only_owner = 1 ,target with NHA owner permission only
+         all_active = 2 ,target with NHA active permission
+         all_owner = 3, target with NHA active permission
+         owner_and_active = 4 ,target with NHA both active and owner permission
  */
 - (void)Cocos_ListAccountNHAsset:(NSString *)accountID
                        WorldView:(NSArray *)worldViewIDArray
                         PageSize:(NSInteger)pageSize
                             Page:(NSInteger)page
+                            type:(NSInteger)type
                          Success:(SuccessBlock)successBlock
                            Error:(Error)errorBlock;
 /**

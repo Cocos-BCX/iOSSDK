@@ -1472,12 +1472,13 @@
                        WorldView:(NSArray *)worldViewIDArray
                         PageSize:(NSInteger)pageSize
                             Page:(NSInteger)page
+                            type:(NSInteger)type
                          Success:(SuccessBlock)successBlock
                            Error:(Error)errorBlock
 {
     UploadParams *uploadParams = [[UploadParams alloc] init];
     uploadParams.methodName = kCocosListAccountNHAssets;
-    uploadParams.totalParams = @[accountID,worldViewIDArray,@(pageSize),@(page),@(4)];
+    uploadParams.totalParams = @[accountID,worldViewIDArray,@(pageSize),@(page),@(type)];
     CallBackModel *callBackModel = [[CallBackModel alloc] init];
     callBackModel.successResult = successBlock;
     callBackModel.errorResult = errorBlock;
